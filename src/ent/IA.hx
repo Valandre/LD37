@@ -3,7 +3,6 @@ package ent;
 
 class IA extends Entity
 {
-	var w = 1;
 	public function new(x = 0., y = 0., z = 0., scale = 1.)	{
 		super(IA, x, y, z, scale);
 		this.z += w * 0.5;

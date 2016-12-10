@@ -44,6 +44,8 @@ class Entity
 	var light : h3d.scene.PointLight;
 	var lightColor : Int = 0xFF00FF;
 	var canMove = true;
+	var w = 1;
+	var wallSize = 0.4;
 
 	public function new(kind, x = 0., y = 0., z = 0., scale = 1.) {
 		game = Game.inst;
@@ -64,18 +66,53 @@ class Entity
 	}
 
 	function init() {
+
+		var res = hxd.Res.load("Elf/Model.FBX").toModel();
+		if( res == null ) return;
+		model = res;
+		obj = game.modelCache.loadModel(res);
+		obj.inheritCulled = true;
+		game.s3d.addChild(obj);
+
+		for(m in obj.getMeshes()) {
+			m.material.mainPass.enableLights = true;
+			m.material.receiveShadows = false;
+			//m.material.castShadows = true;
+			m.material.allocPass("depth");
+			m.material.allocPass("normal");
+		}
+
+		meshRotate(obj);
+		play("fly");
+
+		/*
+		var c = new h3d.prim.Cube(w, w, w);
+		c.unindex();
+		c.addNormals();
+		c.addUVs();
+		c.translate( -w * 0.5, -w * 0.5, -w * 0.5);
+
+		obj = new h3d.scene.Mesh(c, game.s3d);
+		var m = obj.toMesh();
+		m.material.mainPass.enableLights = true;
+		m.material.receiveShadows = true;
+		m.material.texture = h2d.Tile.fromColor(0xFF00FF).getTexture();
+		*/
+
 		light = new h3d.scene.PointLight();
 		light.color.setColor(lightColor);
+		light.params = new h3d.Vector(0.2, 0.05, 0.025);
+		obj.addChild(light);
 	}
 
 	public function createWall() {
 		if(wall != null) lastwall = wall;
 
 		var n = worldNormal;
-		var c = new h3d.prim.Cube(1, 0.4, 1);
+		var c = new h3d.prim.Cube(1, wallSize, 1);
 		c.addNormals();
 		c.addUVs();
-		c.translate(0, -0.2, -0.5);
+		c.translate(0, -wallSize * 0.5, -0.5);
 
 		wall = new h3d.scene.Mesh(c, game.s3d);
 		wall.material.mainPass.culling = None;
@@ -90,7 +127,7 @@ class Entity
 		wall.z = z - dir.z * 0.05;
 		game.world.walls.push(wall);
 
-		wallRotate();
+		meshRotate(wall);
 	}
 
 	function move(dt : Float) {
@@ -119,27 +156,31 @@ class Entity
 
 		var tmp = dir.clone();
 		dir = worldNormal;
-		tmp.scale( -1);
+		tmp.scale(-1);
 		worldNormal = tmp;
 		speed = speedRef * 0.5;
 		createWall();
+
+		meshRotate(obj);
 	}
 
 
-	function wallRotate() {
+	function meshRotate(m : h3d.scene.Object) {
 		var a = Math.PI * 0.5;
 		var n = worldNormal;
 
 		if(n.z != 0)
-			wall.setRotate(0, 0, dir.x != 0 ? a * (dir.x - 1) : a * dir.y);
+			m.setRotate(0, 0, dir.x != 0 ? a * (dir.x - 1) : a * dir.y);
 		else if(n.x != 0) {
-			wall.rotate(0, dir.y * a - dir.z * a, 0);
-			if(dir.y != 0) wall.rotate(a, 0, 0);
+			m.setRotate(0, 0, 0);
+			m.rotate(0, dir.y * a - dir.z * a, 0);
+			if(dir.y != 0) m.rotate(a, 0, 0);
 		}
 		else if(n.y != 0) {
-			wall.rotate(0, -dir.z * a, -n.y * a);
+			m.setRotate(0, 0, 0);
+			m.rotate(0, -dir.z * a, -n.y * a);
 			if(dir.x != 0)
-				wall.rotate(0, dir.x * a, n.y * dir.x * a);
+				m.rotate(0, dir.x * a, n.y * dir.x * a);
 		}
 	}
 
