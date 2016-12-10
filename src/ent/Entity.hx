@@ -24,22 +24,21 @@ class Entity
 	public var x(default, set) : Float;
 	public var y(default, set) : Float;
 	public var z(default, set) : Float;
-	public var rotation(default, set) : Float;
 
 	var scale(default, set) : Float;
 	var model : hxd.res.Model;
 	var obj : h3d.scene.Object;
 	var color : Int = 0xFFFFFF;
-	var speed = 0.15;
-	var rotSpeed = 0.3;
-	var targetRotation = 0.;
+	var speedRef = 0.3;
+	var speed = 0.;
+	public var dir = new h3d.col.Point(1, 0, 0);
 
 	var currentAnim(default,set) : { opts : PlayOptions, name : String };
 	var currentAnimEnd : h3d.anim.Animation;
 	var cachedAnims = new Map<String,AnimationCommand>();
 	var sfxCache : Sfx.SfxContext;
 
-	public function new(kind, x = 0., y = 0., z = 0., scale = 1., rotation = 0.) {
+	public function new(kind, x = 0., y = 0., z = 0., scale = 1.) {
 		game = Game.inst;
 		game.entities.push(this);
 		init();
@@ -48,7 +47,7 @@ class Entity
 		this.y = y;
 		this.z = z;
 		this.scale = scale;
-		targetRotation = this.rotation = rotation;
+		speed = speedRef;
 	}
 
 	public function remove() {
@@ -231,13 +230,6 @@ class Entity
 		return scale = v;
 	}
 
-	function set_rotation(v : Float) {
-		if(obj != null)
-			obj.setRotate(0, 0, v);
-		return rotation = v;
-	}
-
 	public function update(dt : Float) {
-		rotation = hxd.Math.angleLerp(rotation, targetRotation, rotSpeed * dt);
 	}
 }

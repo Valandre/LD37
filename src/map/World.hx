@@ -3,9 +3,43 @@ package map;
 
 class World {
 
-	public function new()
-	{
+	var game : Game;
+	var obj : h3d.scene.Object;
+	var size : Int;
+	public var bounds : h3d.col.Bounds;
 
+	public function new(size : Int) {
+		game = Game.inst;
+		this.size = size;
+		init();
 	}
 
+	function init() {
+		var res = hxd.Res.load("Room/Model.FBX").toModel();
+		if( res == null ) return;
+		obj = game.modelCache.loadModel(res);
+		obj.inheritCulled = true;
+		game.s3d.addChild(obj);
+
+		for(m in obj.getMeshes()) {
+			m.material.mainPass.enableLights = true;
+			m.material.receiveShadows = false;
+			m.material.castShadows = true;
+			m.material.allocPass("depth");
+			m.material.allocPass("normal");
+		}
+
+		var w = size - 1;
+		bounds = new h3d.col.Bounds();
+		bounds.addPoint(new h3d.col.Point( -w * 0.5, -w * 0.5, -w * 0.5));
+		bounds.addPoint(new h3d.col.Point( w * 0.5, w * 0.5, w * 0.5));
+	}
+
+	public function inBounds(x : Float, y : Float, z : Float) {
+		return bounds.contains(new h3d.col.Point(x, y, z));
+	}
+
+	public function inBoundsBox(b : h3d.col.Bounds) {
+		return bounds.collide(b);
+	}
 }
