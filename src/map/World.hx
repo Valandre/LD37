@@ -7,7 +7,7 @@ class World {
 	var obj : h3d.scene.Object;
 	var size : Int;
 	public var bounds : h3d.col.Bounds;
-	public var walls : Array<h3d.scene.Object>;
+	public var walls : Array<h3d.scene.Mesh>;
 	public var lights : Array<h3d.scene.PointLight>;
 
 	public function new(size : Int) {
@@ -38,6 +38,13 @@ class World {
 		bounds = new h3d.col.Bounds();
 		bounds.addPoint(new h3d.col.Point( -w * 0.5, -w * 0.5, -w * 0.5));
 		bounds.addPoint(new h3d.col.Point( w * 0.5, w * 0.5, w * 0.5));
+	}
+
+	public function reset() {
+		while(walls.length > 0)
+			walls.pop().remove();
+		while(lights.length > 0)
+			lights.pop().remove();
 	}
 
 	public function inBounds(x : Float, y : Float, z : Float) {

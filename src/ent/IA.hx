@@ -1,14 +1,11 @@
 package ent;
 
 
-class Player extends Entity
+class IA extends Entity
 {
 	var w = 1;
-	public function new(dir, scale = 1.)	{
-		game = Game.inst;
-		this.dir = dir;
-		var size = game.size >> 1;
-		super(Player, -size * 0.65 * dir.x, -size * 0.65 * dir.y, -size, scale);
+	public function new(x = 0., y = 0., z = 0., scale = 1.)	{
+		super(IA, x, y, z, scale);
 		this.z += w * 0.5;
 
 		createWall();
@@ -35,14 +32,16 @@ class Player extends Entity
 
 	function updateKeys() {
 		var v = 0;
-		if(game.keys.pressed.xAxis < 0) v = -1;
-		if(game.keys.pressed.xAxis > 0) v = 1;
+
+		//if(game.keys.pressed.xAxis < 0) v = -1;
+		//if(game.keys.pressed.xAxis > 0) v = 1;
+
 		if(v == 0) return;
 
 		if(wall != null)
 			wall.scaleX = hxd.Math.distance(x + dir.x * 0.2 - wall.x, y + dir.y * 0.2 - wall.y, z + dir.z * 0.2 - wall.z);
 
-		var n = worldNormal;
+		var n = game.worldNormal;
 		if(n.z != 0) {
 			var tmp = dir.x;
 			dir.x = dir.y * v * -n.z;

@@ -31,15 +31,16 @@ class Entity
 	var color : Int = 0xFFFFFF;
 	var speedRef = 0.3;
 	var speed = 0.;
-	public var dir = new h3d.col.Point(1, 0, 0);
+	public var dir : h3d.col.Point;
+	public var worldNormal = new h3d.col.Point(0, 0, 1);
 
 	var currentAnim(default,set) : { opts : PlayOptions, name : String };
 	var currentAnimEnd : h3d.anim.Animation;
 	var cachedAnims = new Map<String,AnimationCommand>();
 	var sfxCache : Sfx.SfxContext;
 
-	var currWall : h3d.scene.Object;
 	var wall : h3d.scene.Mesh;
+	var lastwall : h3d.scene.Mesh;
 	var light : h3d.scene.PointLight;
 	var lightColor : Int = 0xFF00FF;
 
@@ -67,11 +68,13 @@ class Entity
 	}
 
 	public function createWall() {
-		var n = game.worldNormal;
-		var c = new h3d.prim.Cube(1, 0.2, 1);
+		if(wall != null) lastwall = wall;
+
+		var n = worldNormal;
+		var c = new h3d.prim.Cube(1, 0.4, 1);
 		c.addNormals();
 		c.addUVs();
-		c.translate(0, -0.1, -0.5);
+		c.translate(0, -0.2, -0.5);
 
 		wall = new h3d.scene.Mesh(c, game.s3d);
 		wall.material.mainPass.culling = None;
@@ -81,19 +84,50 @@ class Entity
 		wall.scaleX = 0;
 		wall.scaleZ = 0.95;
 
-		currWall = new h3d.scene.Object(game.s3d);
-		currWall.x = x - dir.x * 0.05;
-		currWall.y = y - dir.y * 0.05;
-		currWall.z = z - dir.z * 0.05;
-		currWall.addChild(wall);
-		game.world.walls.push(currWall);
+		wall.x = x - dir.x * 0.05;
+		wall.y = y - dir.y * 0.05;
+		wall.z = z - dir.z * 0.05;
+		game.world.walls.push(wall);
 
 		wallRotate();
 	}
 
+	function move(dt : Float) {
+		speed = Math.min(speedRef, speed + 0.01 * dt);
+		x += dir.x * speed * dt;
+		y += dir.y * speed * dt;
+		z += dir.z * speed * dt;
+
+		if(checkFaceHit()) faceRotate();
+	}
+
+	function checkFaceHit() {
+		if(game.world.inBounds(x, y, z)) return false;
+		do {
+			x -= dir.x * speed * 0.01;
+			y -= dir.y * speed * 0.01;
+			z -= dir.z * speed * 0.01;
+		}
+		while(!game.world.inBounds(x, y, z));
+		return true;
+	}
+
+	function faceRotate() {
+		if(wall != null)
+			wall.scaleX = hxd.Math.distance(x + dir.x * 0.5 - wall.x, y + dir.y * 0.5 - wall.y, z + dir.z * 0.5 - wall.z);
+
+		var tmp = dir.clone();
+		dir = worldNormal;
+		tmp.scale( -1);
+		worldNormal = tmp;
+		speed = speedRef * 0.5;
+		createWall();
+	}
+
+
 	function wallRotate() {
 		var a = Math.PI * 0.5;
-		var n = game.worldNormal;
+		var n = worldNormal;
 
 		if(n.z != 0)
 			wall.setRotate(0, 0, dir.x != 0 ? a * (dir.x - 1) : a * dir.y);
@@ -281,6 +315,19 @@ class Entity
 
 	public function update(dt : Float) {
 		if(wall != null)
-			wall.scaleX = hxd.Math.distance(x - currWall.x, y - currWall.y, z - currWall.z);
+			wall.scaleX = hxd.Math.distance(x - wall.x, y - wall.y, z - wall.z);
+
+		var n = worldNormal;
+		var colBounds = obj.getBounds();
+		colBounds.scaleCenter(0.1);
+		colBounds.offset((dir.x - n.x) * 0.4, (dir.y - n.y) * 0.4, (dir.z - n.z) * 0.4);
+		for(w in game.world.walls) {
+			if(w == wall) continue;
+			if(w == lastwall) continue;
+			if(w.getBounds().collide(colBounds)) {
+				//trace("hit", Math.random());
+				game.restart();
+			}
+		}
 	}
 }
