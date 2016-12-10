@@ -38,6 +38,11 @@ class Entity
 	var cachedAnims = new Map<String,AnimationCommand>();
 	var sfxCache : Sfx.SfxContext;
 
+	var currWall : h3d.scene.Object;
+	var wall : h3d.scene.Mesh;
+	var light : h3d.scene.PointLight;
+	var lightColor : Int = 0xFF00FF;
+
 	public function new(kind, x = 0., y = 0., z = 0., scale = 1.) {
 		game = Game.inst;
 		game.entities.push(this);
@@ -57,6 +62,50 @@ class Entity
 	}
 
 	function init() {
+		light = new h3d.scene.PointLight();
+		light.color.setColor(lightColor);
+	}
+
+	public function createWall() {
+		var n = game.worldNormal;
+		var c = new h3d.prim.Cube(1, 0.2, 1);
+		c.addNormals();
+		c.addUVs();
+		c.translate(0, -0.1, -0.5);
+
+		wall = new h3d.scene.Mesh(c, game.s3d);
+		wall.material.mainPass.culling = None;
+		wall.material.blendMode = Add;
+		wall.material.texture = hxd.Res.wall.toTexture();
+		wall.material.texture.wrap = Repeat;
+		wall.scaleX = 0;
+		wall.scaleZ = 0.95;
+
+		currWall = new h3d.scene.Object(game.s3d);
+		currWall.x = x - dir.x * 0.05;
+		currWall.y = y - dir.y * 0.05;
+		currWall.z = z - dir.z * 0.05;
+		currWall.addChild(wall);
+		game.world.walls.push(currWall);
+
+		wallRotate();
+	}
+
+	function wallRotate() {
+		var a = Math.PI * 0.5;
+		var n = game.worldNormal;
+
+		if(n.z != 0)
+			wall.setRotate(0, 0, dir.x != 0 ? a * (dir.x - 1) : a * dir.y);
+		else if(n.x != 0) {
+			wall.rotate(0, dir.y * a - dir.z * a, 0);
+			if(dir.y != 0) wall.rotate(a, 0, 0);
+		}
+		else if(n.y != 0) {
+			wall.rotate(0, -dir.z * a, -n.y * a);
+			if(dir.x != 0)
+				wall.rotate(0, dir.x * a, n.y * dir.x * a);
+		}
 	}
 
 	public function play( anim : String, ?opts : PlayOptions ) {
@@ -231,5 +280,7 @@ class Entity
 	}
 
 	public function update(dt : Float) {
+		if(wall != null)
+			wall.scaleX = hxd.Math.distance(x - currWall.x, y - currWall.y, z - currWall.z);
 	}
 }

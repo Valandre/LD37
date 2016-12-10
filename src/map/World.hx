@@ -7,11 +7,16 @@ class World {
 	var obj : h3d.scene.Object;
 	var size : Int;
 	public var bounds : h3d.col.Bounds;
+	public var walls : Array<h3d.scene.Object>;
+	public var lights : Array<h3d.scene.PointLight>;
 
 	public function new(size : Int) {
 		game = Game.inst;
 		this.size = size;
 		init();
+
+		walls = [];
+		lights = [];
 	}
 
 	function init() {

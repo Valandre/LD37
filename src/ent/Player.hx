@@ -8,9 +8,12 @@ class Player extends Entity
 	public function new(x = 0., y = 0., z = 0., scale = 1.)	{
 		super(Player, x, y, z, scale);
 		this.z += w * 0.5;
+		createWall();
 	}
 
 	override function init() {
+		super.init();
+
 		var c = new h3d.prim.Cube(w, w, w);
 		c.unindex();
 		c.addNormals();
@@ -20,8 +23,11 @@ class Player extends Entity
 		obj = new h3d.scene.Mesh(c, game.s3d);
 		var m = obj.toMesh();
 		m.material.mainPass.enableLights = true;
-		//m.material.shadows = true;
+		m.material.receiveShadows = true;
 		m.material.texture = h2d.Tile.fromColor(0xFF00FF).getTexture();
+
+		obj.addChild(light);
+		light.params = new h3d.Vector(0.5, 0.2, 0.1);
 	}
 
 	function updateKeys() {
@@ -46,7 +52,7 @@ class Player extends Entity
 			dir.z = dir.x * v * -n.y;
 			dir.x = -tmp * v * -n.y;
 		}
-
+		createWall();
 	}
 
 	function move(dt : Float) {
@@ -75,6 +81,7 @@ class Player extends Entity
 		tmp.scale( -1);
 		game.worldNormal = tmp;
 		speed = speedRef * 0.5;
+		createWall();
 	}
 
 	override public function update(dt:Float) {
