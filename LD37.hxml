@@ -1,0 +1,13 @@
+-cp src
+-swf LD37.swf
+-swf-header 1366:768:60:FFFFFF
+--flash-strict
+-swf-version 15.0
+-main Game
+-lib heaps
+-lib air3
+-lib castle
+-lib hscript
+-D native-trace
+-D advanced-telemetry
+-dce full
