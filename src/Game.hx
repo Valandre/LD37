@@ -84,7 +84,6 @@ class Game extends hxd.App {
 	function start(){
 		entities = [];
 
-		//players.push(new ent.Player( -35, 0, -(size >> 1), 1));
 		players.push(new ent.Player(new h3d.col.Point(1, 0, 0), 1));
 
 		updateCamera(1);

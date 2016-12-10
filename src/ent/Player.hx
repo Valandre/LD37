@@ -61,10 +61,18 @@ class Player extends Entity
 		createWall();
 	}
 
+	override function hitTest() {
+		var b = super.hitTest();
+		if(b) game.event.wait(0.5,  game.restart);
+		canMove = !b;
+		return b;
+	}
 
 	override public function update(dt:Float) {
 		super.update(dt);
-		updateKeys();
-		move(dt);
+		if(canMove) {
+			updateKeys();
+			move(dt);
+		}
 	}
 }

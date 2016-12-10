@@ -43,6 +43,7 @@ class Entity
 	var lastwall : h3d.scene.Mesh;
 	var light : h3d.scene.PointLight;
 	var lightColor : Int = 0xFF00FF;
+	var canMove = true;
 
 	public function new(kind, x = 0., y = 0., z = 0., scale = 1.) {
 		game = Game.inst;
@@ -313,10 +314,13 @@ class Entity
 		return scale = v;
 	}
 
-	public function update(dt : Float) {
+	function destroy() {
 		if(wall != null)
-			wall.scaleX = hxd.Math.distance(x - wall.x, y - wall.y, z - wall.z);
+			wall.scaleX = hxd.Math.distance(x + dir.x * 0.5 - wall.x, y + dir.y * 0.5 - wall.y, z + dir.z * 0.5 - wall.z);
+		remove();
+	}
 
+	function hitTest() {
 		var n = worldNormal;
 		var colBounds = obj.getBounds();
 		colBounds.scaleCenter(0.1);
@@ -325,9 +329,16 @@ class Entity
 			if(w == wall) continue;
 			if(w == lastwall) continue;
 			if(w.getBounds().collide(colBounds)) {
-				//trace("hit", Math.random());
-				game.restart();
+				destroy();
+				return true;
 			}
 		}
+		return false;
+	}
+
+	public function update(dt : Float) {
+		if(wall != null)
+			wall.scaleX = hxd.Math.distance(x - wall.x, y - wall.y, z - wall.z);
+		hitTest();
 	}
 }
