@@ -80,6 +80,7 @@ class Entity
 			//m.material.castShadows = true;
 			m.material.allocPass("depth");
 			m.material.allocPass("normal");
+			m.setScale(1.2);
 		}
 
 		meshRotate(obj);
