@@ -60,8 +60,8 @@ class Entity
 
 		init();
 		this.kind = kind;
-		this.x = x;
-		this.y = y;
+		this.x = x + Std.random(5) - 2;
+		this.y = y + Std.random(5) - 2;
 		this.z = z;
 		this.scale = scale;
 
@@ -192,7 +192,6 @@ class Entity
 		if(wall != null)
 			wall.scaleX = hxd.Math.distance(x + dir.x * wallSize * 0.5 - wall.x, y + dir.y * wallSize * 0.5 - wall.y, z + dir.z * wallSize * 0.5 - wall.z);
 		dir = setDir(dir, v);
-
 		createWall();
 		meshRotate(obj);
 	}

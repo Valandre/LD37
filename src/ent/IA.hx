@@ -6,6 +6,7 @@ class IA extends Entity
 	var sensor : h3d.col.Ray;
 	var dray = 5;
 	var pt = new h3d.col.Point();
+	var time = 0.;
 
 	public function new(dir, scale = 1.)	{
 		game = Game.inst;
@@ -19,36 +20,65 @@ class IA extends Entity
 	}
 
 	function updateKeys() {
-		var v = 0;
 		if(Math.random() < 0.01)
-			v = Math.random() < 0.5 ? -1 : 1;
-		if(v == 0) return;
-		changeDir(v);
+			checkSensors(false);
 	}
 
-	function checkSensors() {
-		sensor.px = x; sensor.py = y; sensor.pz = z;
-		sensor.lx = dray * dir.x; sensor.ly = dray * dir.y; sensor.lz = dray * dir.z;
+	//var g : h3d.scene.Graphics;
+	function checkSensors(testFront = true ) {
 
-		var col = sensorCollide();
-		if(col && Math.random() < 0.05) {
+		/*if(g == null)
+			g = new h3d.scene.Graphics(game.s3d);
+		g.clear();*/
+
+		var col = true;
+		sensor.px = x; sensor.py = y; sensor.pz = z;
+
+		if(testFront) {
+			sensor.lx = dray * dir.x; sensor.ly = dray * dir.y; sensor.lz = dray * dir.z;
+			col = sensorCollide(false);
+/*
+			if(this == game.players[0]) {
+				g.lineStyle(3, col ? 0xFF0000 : 0x00FF00);
+				g.moveTo(sensor.px, sensor.py,sensor.pz);
+				g.lineTo(sensor.px + sensor.lx, sensor.py + sensor.ly, sensor.pz + sensor.lz);
+				g.lineStyle();
+			}*/
+		}
+
+		if(col) {
 			var d = setDir(dir, -1);
 			sensor.lx = dray * d.x; sensor.ly = dray * d.y; sensor.lz = dray * d.z;
 			var lcol = sensorCollide();
+/*
+			if(this == game.players[0]) {
+				g.lineStyle(3, lcol ? 0xFF0000 : 0x00FF00);
+				g.moveTo(sensor.px, sensor.py,sensor.pz);
+				g.lineTo(sensor.px + sensor.lx, sensor.py + sensor.ly, sensor.pz + sensor.lz);
+				g.lineStyle();
+			}*/
 
 			var d = setDir(dir, 1);
 			sensor.lx = dray * d.x; sensor.ly = dray * d.y; sensor.lz = dray * d.z;
 			var rcol = sensorCollide();
+/*
+			if(this == game.players[0]) {
+				g.lineStyle(3, rcol ? 0xFF0000 : 0x00FF00);
+				g.moveTo(sensor.px, sensor.py,sensor.pz);
+				g.lineTo(sensor.px + sensor.lx, sensor.py + sensor.ly, sensor.pz + sensor.lz);
+				g.lineStyle();
+			}*/
 
-			if(lcol && rcol) changeDir(Math.random() < 0.5 ? -1 : 1);
-			if(lcol) changeDir(1);
-			if(rcol) changeDir( -1);
+			if(lcol && rcol) return false;
+			if(!lcol && !rcol) changeDir(Math.random() < 0.5 ? -1 : 1);
+			else if(lcol) changeDir(1);
+			else if(rcol) changeDir( -1);
 			return true;
 		}
 		return false;
 	}
 
-	function sensorCollide() {
+	function sensorCollide(dotTest = true ) {
 		var n = worldNormal;
 		for(w in game.world.walls) {
 			if(w.w == wall) continue;
@@ -57,22 +87,31 @@ class IA extends Entity
 			if(w.w.getBounds().rayIntersection(sensor, pt) != null) {
 				var n = new h3d.col.Point(pt.x - sensor.px, pt.y - sensor.py, pt.z - sensor.pz);
 				if(hxd.Math.distanceSq(n.x, n.y, n.z) > dray * dray) continue;
+				if(!dotTest) return true;
 				n.normalize();
 				var v = sensor.getDir();
 				v.normalize();
-				if(v.dot(pt) >= 0)
+				if(v.dot(pt) > 0)
 					return true;
 			}
 		}
 		return false;
 	}
 
+	override function changeDir(v:Int) {
+		super.changeDir(v);
+		time = 10;
+	}
 
 	override public function update(dt:Float) {
 		super.update(dt);
-		updateKeys();
 
+		move(dt);
+
+		time -= dt;
+		if(time > 0) return;
 		if(!checkSensors())
-			move(dt);
+			updateKeys();
+
 	}
 }

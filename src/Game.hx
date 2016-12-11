@@ -171,6 +171,12 @@ class Game extends hxd.App {
 			}
 		}
 
+		if(K.isPressed(K.BACKSPACE))
+			restart();
+
+		if(IAOnly && K.isPressed(K.TAB))
+			players.push(players.shift());
+
 		if(K.isPressed("P".code))
 			pause = !pause;
 	}
