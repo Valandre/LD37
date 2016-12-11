@@ -15,7 +15,6 @@ class IA extends Entity
 		super(IA, -size * 0.65 * dir.x, -size * 0.65 * dir.y, -size, scale);
 		this.z += w * 0.5;
 
-		createWall();
 		sensor = h3d.col.Ray.fromValues(x, y, z, 0, 0, 0);
 	}
 
@@ -108,12 +107,13 @@ class IA extends Entity
 	override public function update(dt:Float) {
 		if(dead) return;
 		super.update(dt);
-		move(dt);
+		if(canMove) {
+			move(dt);
 
-		time -= dt;
-		if(time > 0) return;
-		if(!checkSensors())
-			updateKeys();
-
+			time -= dt;
+			if(time > 0) return;
+			if(!checkSensors())
+				updateKeys();
+		}
 	}
 }

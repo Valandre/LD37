@@ -46,13 +46,14 @@ class Entity
 	var wall : h3d.scene.Mesh;
 	var lastwall : h3d.scene.Mesh;
 	var light : h3d.scene.PointLight;
-	var canMove = true;
+	public var canMove = false;
 	var w = 1;
 	var wallSize = 0.4;
 	var wallTex : h3d.mat.Texture;
 	var dead = false;
 
 	var id = 0;
+	var stars = 0;
 
 	public function new(kind, x = 0., y = 0., z = 0., scale = 1.) {
 		game = Game.inst;
@@ -135,6 +136,7 @@ class Entity
 				var fx = addFx(name);
 				if( fx != null ) {
 					fx.getGroup(name).texture = hxd.Res.load("Fx/Drop0" + id + "[ADD].jpg").toTexture();
+					fx.visible = canMove;
 					o.addChild(fx);
 
 					var g = fx.getGroup(name);
@@ -617,5 +619,14 @@ class Entity
 		if(wall != null)
 			wall.scaleX = hxd.Math.distance(x - wall.x, y - wall.y, z - wall.z);
 		hitTest();
+
+		if(canMove && wall == null) {
+			createWall();
+			if(fxParts != null) {
+				var fx = fxParts.get("TrailStart");
+				if(fx != null)
+					fx.visible = canMove;
+			}
+		}
 	}
 }

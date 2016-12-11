@@ -3,38 +3,45 @@ import hxd.Key in K;
 
 private class Button extends h2d.Flow {
 	var game : Game;
-	var tf : h2d.Text;
 	public var selected(default, set) = false;
+	public var tiles = [];
+	public var bt : h2d.Bitmap;
+	var str : String;
 
 	public function new (name : String, ?parent : h2d.Sprite) {
 		super(parent);
 		game = Game.inst;
 
-		tf = new h2d.Text(hxd.Res.font.berlin_sans_fb_bold_48.toFont(), this);
-		tf.text = name;
-		tf.textColor = 0xFFFFFF;
-		tf.alpha = 0.5;
+		str = name;
 
+		switch(name) {
+			case "BACK":
+				tiles.push(hxd.Res.UI.Bt_Back0.toTile());
+				tiles.push(hxd.Res.UI.Bt_Back1.toTile());
+			case "READY":
+				tiles.push(hxd.Res.UI.Bt_Ready0.toTile());
+				tiles.push(hxd.Res.UI.Bt_Ready1.toTile());
+		}
+
+		bt = new h2d.Bitmap(tiles[0], this);
+		bt.blendMode = Alpha;
 		enableInteractive = true;
 	}
 
 	function onOver() {
-		var v = 0.;
-		game.event.waitUntil(function(dt) {
-			if(!selected || tf == null) return true;
-			tf.alpha = 0.75 + 0.25 * Math.sin(v);
-			v += 0.25 * dt;
-			return false;
-		});
-
+		bt.tile = tiles[1];
 	}
 
 	function onOut() {
-		tf.alpha = 0.5;
+		bt.tile = tiles[0];
 	}
 
 	public function onclick() {
 		interactive.onClick(null);
+	}
+
+	public function setAlpha(v : Float) {
+		bt.alpha = v;
 	}
 
 	function set_selected(b : Bool) {
@@ -55,35 +62,8 @@ private class Player extends h2d.Flow {
 	public function new (id : Int, ?parent : h2d.Flow) {
 		super(parent);
 		game = Game.inst;
-
 		this.id = id;
-
-
-		//this.getProperties(bg).isAbsolute = true;
-/*
-		if(id > 0) {
-			tf = new h2d.Text(hxd.Res.font.berlin_sans_fb_bold_32.toFont(), this);
-			tf.text = "PRESS START";
-			tf.textColor = 0xFFFFFF;
-			tf.alpha = 0.5;
-
-			var v = 0.;
-			game.event.waitUntil(function(dt) {
-				if(enable) return true;
-				tf.alpha = 0.75 + 0.25 * Math.sin(v);
-				v += 0.25 * dt;
-				return false;
-			});
-		}*/
-
 		enableInteractive = true;
-		needReflow = true;
-	}
-
-	public function resize(w : Int, h : Int) {
-		if(bg != null) bg.remove();
-		bg = new h2d.Bitmap(h2d.Tile.fromColor(game.COLORS[id + 1], w, h), this);
-		needReflow = true;
 	}
 }
 
@@ -93,13 +73,13 @@ class ChoosePlayers extends h2d.Sprite
 	var game : Game;
 	var root : h2d.Flow;
 	var selectId = 0;
+	var title : h2d.Bitmap;
 
 	var players = [];
 	var contLeft : h2d.Flow;
 	var contRight : h2d.Flow;
 
-
-	var buttons = [];
+	var buttons : Array<Button> = [];
 	var onRemove : Void -> Void;
 
 	public function new(?parent, onRemove : Void -> Void) {
@@ -108,7 +88,15 @@ class ChoosePlayers extends h2d.Sprite
 
 		this.onRemove = onRemove;
 
-		bg = new h2d.Bitmap(h2d.Tile.fromColor(0), this);
+		bg = new h2d.Bitmap(hxd.Res.UI.Bg01.toTile(), this);
+		bg.blendMode = Add;
+		bg.filter = true;
+
+		title = new h2d.Bitmap(hxd.Res.UI.Title.toTile(), this);
+		title.blendMode = Alpha;
+		title.filter = true;
+		title.x = 50;
+		title.y = 50;
 
 		root = new h2d.Flow(this);
 		root.horizontalAlign = Left;
@@ -117,7 +105,75 @@ class ChoosePlayers extends h2d.Sprite
 		root.verticalSpacing = 0;
 
 		init();
+		slideIn();
+	}
 
+	function slideOut(?onEnd : Void -> Void) {
+		var bmp = new h2d.Bitmap(h2d.Tile.fromColor(0xFFFFFF));
+		bmp.scaleY = game.s2d.height;
+		addChildAt(bmp, 0);
+
+		var a = 1.;
+		var sp = 10.;
+		game.event.waitUntil(function(dt){
+			a = Math.max(0, a - 0.1 * dt);
+			title.alpha = a;
+			for(b in buttons)
+				b.setAlpha(a);
+			bg.x += sp;
+			sp += 15;
+			bmp.scaleX = bg.x;
+			if(bmp.scaleX > game.s2d.width) {
+				contLeft.visible = false;
+				contRight.visible = false;
+				bmp.remove();
+				bg.visible = false;
+				if(onEnd != null) onEnd();
+				return true;
+			}
+			return false;
+		});
+	}
+
+	function slideIn(?onEnd : Void -> Void) {
+		bg.x = game.s2d.width + 100;
+		bg.visible = true;
+		contLeft.visible = true;
+		contRight.visible = true;
+
+		title.alpha = 0;
+		for( b in buttons)
+			b.setAlpha(0);
+
+		var bmp = new h2d.Bitmap(h2d.Tile.fromColor(0xFFFFFF));
+		bmp.scaleX = bg.x;
+		bmp.scaleY = game.s2d.height;
+		addChildAt(bmp, 0);
+
+		var sp = 10.;
+		game.event.waitUntil(function(dt){
+			bg.x -= sp;
+			sp += 15;
+			bmp.scaleX = bg.x;
+			if(bmp.scaleX <= 0) {
+				bg.x = 0;
+				bmp.remove();
+				var a = 0.;
+				game.event.waitUntil(function(dt){
+					a = Math.min(1, a + 0.1 * dt);
+					title.alpha = a;
+					for(b in buttons)
+						b.setAlpha(a);
+					if(a == 1) {
+						if(onEnd != null) onEnd();
+						return true;
+					}
+					return false;
+				});
+				return true;
+			}
+			return false;
+		});
 	}
 
 	function init() {
@@ -127,18 +183,25 @@ class ChoosePlayers extends h2d.Sprite
 		contLeft.verticalAlign = Middle;
 		contLeft.verticalSpacing = 30;
 		contLeft.isVertical = true;
+		contLeft.paddingLeft = 170;
+		contLeft.paddingTop = 300;
+
 
 		var back = new Button("BACK", contLeft);
 		back.interactive.onClick = function(e) {
-			onRemove();
-			remove();
+			slideOut(function() {
+				onRemove();
+				remove();
+			});
 		}
 		buttons.push(back);
 
-		var ready = new Button("READY!", contLeft);
+		var ready = new Button("READY", contLeft);
 		ready.interactive.onClick = function(e) {
-			remove();
-			game.restart();
+			slideOut(function() {
+				remove();
+				game.restart();
+			});
 		}
 		buttons.push(ready);
 
@@ -150,11 +213,11 @@ class ChoosePlayers extends h2d.Sprite
 		contRight.verticalSpacing = 1;
 		contRight.isVertical = true;
 		contRight.debug = true;
-
+/*
 		for(i in 0...4) {
 			var pl = new Player(i, contRight);
 			players.push(pl);
-		}
+		}*/
 
 		onResize();
 	}
@@ -166,23 +229,22 @@ class ChoosePlayers extends h2d.Sprite
 	}
 
 	public function onResize() {
-		bg.scaleX = game.s2d.width * 0.3;
-		bg.scaleY = game.s2d.height;
+		var sc = game.s2d.height / bg.tile.height;
+		bg.setScale(sc);
 
-		root.minWidth = root.maxWidth = game.s2d.width;
+		root.minWidth = root.maxWidth = Std.int(bg.scaleX);
 		root.minHeight = root.maxHeight = game.s2d.height;
+		root.needReflow = true;
 
-		contLeft.minWidth = contLeft.maxWidth = Std.int(game.s2d.width * 0.3);
-		contLeft.minHeight = contLeft.maxHeight = game.s2d.height;
-		contLeft.needReflow = true;
+		title.setScale(sc);
+
+		contLeft.paddingLeft = Std.int(170 * sc);
+		contLeft.paddingTop = Std.int(300 * sc);
 
 		contRight.minWidth = contRight.maxWidth = Std.int(game.s2d.width * 0.7);
 		contRight.minHeight = contRight.maxHeight = game.s2d.height;
 		contRight.needReflow = true;
-/*
-		for(p in players)
-			p.resize(Std.int(game.s2d.width * 0.7) >> 1, game.s2d.height >> 1);
-*/
+
 		root.needReflow = true;
 	}
 

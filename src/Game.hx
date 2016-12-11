@@ -26,6 +26,7 @@ class Game extends hxd.App {
 	var IAOnly = false;
 
 	var menu : Menu;
+	var ui : UI;
 	var blackScreen : h2d.Bitmap;
 
 	override function init() {
@@ -48,16 +49,16 @@ class Game extends hxd.App {
 		entities = [];
 		players = [];
 
-		//menu = new Menu(s2d);
+		menu = new Menu(s2d);
 
-		restart();
+		//restart();
 	}
 
-	public function transition(?onReady : Void -> Void, ?onDone : Void -> Void) {
-		blackScreen = new h2d.Bitmap(h2d.Tile.fromColor(0), s2d);
+	public function transition(?onReady : Void -> Void, ?onDone : Void -> Void, fadeIn = true ) {
+		blackScreen = new h2d.Bitmap(h2d.Tile.fromColor(0xFFFFFF), s2d);
 		blackScreen.scaleX = s2d.width;
 		blackScreen.scaleY = s2d.height;
-		blackScreen.alpha = 0;
+		blackScreen.alpha = fadeIn ? 0 : 1;
 		event.waitUntil(function(dt) {
 			blackScreen.alpha = Math.min(1, blackScreen.alpha + 0.1 * dt);
 			if(blackScreen.alpha == 1) {
@@ -85,7 +86,7 @@ class Game extends hxd.App {
 		transition(function() {
 			reset();
 			start();
-		});
+		}, false);
 	}
 
 	function reset() {
@@ -94,7 +95,6 @@ class Game extends hxd.App {
 		world.reset();
 		while(players.length > 0)
 			players.pop().remove();
-		gameOver = false;
 		if(menu != null) menu.remove();
 	}
 
@@ -120,6 +120,12 @@ class Game extends hxd.App {
 		cam.up.x = 0;
 		cam.up.y = 0;
 		cam.up.z = 1;
+
+		ui = new UI(s2d, function() {
+			for(p in players)
+				p.canMove = true;
+			gameOver = false;
+		});
 	}
 
 	public static function getSfxLevel() {
@@ -170,6 +176,14 @@ class Game extends hxd.App {
 		s3d.camera.up.x += (pn.x - s3d.camera.up.x) * sp;
 		s3d.camera.up.y += (pn.y - s3d.camera.up.y) * sp;
 		s3d.camera.up.z += (pn.z - s3d.camera.up.z) * sp;
+
+
+		cam.target.x += pshake.x;
+		cam.pos.x += pshake.y;
+		cam.target.y += pshake.y;
+		cam.pos.y += pshake.x;
+		cam.target.z += pshake.y;
+		cam.pos.z += pshake.y;
 	}
 
 	function updateKeys(dt : Float) {
@@ -197,9 +211,8 @@ class Game extends hxd.App {
 	}
 
 	override function update(dt:Float) {
-
-		if(menu != null)
-			menu.update(dt);
+		if(menu != null) menu.update(dt);
+		if(ui != null) ui.update(dt);
 
 		if( K.isDown(K.SHIFT)) {
 			var speed = K.isDown(K.CTRL) ? 0.1 : 5;
@@ -241,6 +254,23 @@ class Game extends hxd.App {
 		}
 	}
 
+	var pshake = new h2d.col.Point();
+	public function shake(pow : Float = 0.1) {
+		pshake.x = 0;
+		pshake.y = 0;
+
+		event.waitUntil(function(dt) {
+			pshake.x = hxd.Math.srand(pow);
+			pshake.y = hxd.Math.srand(pow);
+			pow *= Math.pow(0.8, dt);
+			if(pow < 0.01) {
+				pshake.x = pshake.y = 0;
+				return true;
+			}
+			return false;
+		});
+	}
+
 	override function onResize() {
 		super.onResize();
 		if(blackScreen != null) {
@@ -249,6 +279,8 @@ class Game extends hxd.App {
 		}
 		if(menu != null)
 			menu.onResize();
+		if(ui != null)
+			ui.onResize();
 	}
 
 	public static var inst : Game;

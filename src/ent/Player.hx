@@ -10,8 +10,6 @@ class Player extends Entity
 		var size = game.size >> 1;
 		super(Player, -size * 0.65 * dir.x, -size * 0.65 * dir.y, -size, scale);
 		this.z += w * 0.5;
-
-		createWall();
 	}
 
 	function updateKeys() {
@@ -24,7 +22,7 @@ class Player extends Entity
 
 	override function hitTest() {
 		var b = super.hitTest();
-		canMove = !b;
+		if(b) canMove = false;
 
 		//if(this == game.players[0]) trace(game.world.isCollide(this));
 		return b;

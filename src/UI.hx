@@ -1,0 +1,131 @@
+package;
+
+class UI extends h2d.Sprite
+{
+
+	var game : Game;
+	var onReady : Void -> Void;
+
+	var tiles = [];
+	var bmp : h2d.Bitmap;
+	var bmp2 : h2d.Bitmap;
+
+	var stars = [];
+	var scores = [];
+
+	public function new(?parent, ?onReady) {
+		super(parent);
+		game = Game.inst;
+		this.onReady = onReady;
+
+		init();
+	}
+
+	function init() {
+		tiles.push(hxd.Res.UI.num3.toTile());
+		tiles.push(hxd.Res.UI.num2.toTile());
+		tiles.push(hxd.Res.UI.num1.toTile());
+		tiles.push(hxd.Res.UI.Go.toTile());
+
+		for( t in tiles) {
+			t.dx -= t.width >> 1;
+			t.dy -= t.height >> 1;
+		}
+
+		bmp2 = new h2d.Bitmap(null, this);
+		bmp2.blendMode = Alpha;
+		bmp2.filter = true;
+		bmp2.alpha = 0;
+		bmp2.x = game.s2d.width >> 1;
+		bmp2.y = game.s2d.height >> 1;
+		bmp2.colorAdd = new h3d.Vector(1, 1, 1);
+
+		bmp = new h2d.Bitmap(null, this);
+		bmp.blendMode = Alpha;
+		bmp.filter = true;
+		bmp.alpha = 0;
+		bmp.x = game.s2d.width >> 1;
+		bmp.y = game.s2d.height >> 1;
+
+		stars.push(hxd.Res.UI.Star0.toTile());
+		stars.push(hxd.Res.UI.Star1.toTile());
+		stars.push(hxd.Res.UI.Star2.toTile());
+		stars.push(hxd.Res.UI.Star3.toTile());
+		stars.push(hxd.Res.UI.Star4.toTile());
+
+		for(i in 0...4) {
+			var s = new h2d.Flow(this);
+			s.horizontalSpacing = 10;
+			for(i in 0...5) {
+				var b = new h2d.Bitmap(stars[0], s);
+				b.filter = true;
+				b.setScale(0.5);
+			}
+			scores.push(s);
+		}
+
+		game.event.wait(2, function() start(0));
+		onResize();
+	}
+
+	function start(id : Int) {
+		bmp.alpha = 1;
+		bmp2.alpha = 0;
+		bmp.tile = tiles[id];
+		bmp2.tile = tiles[id];
+		bmp2.setScale(1);
+
+		var sc = 5.;
+		bmp.setScale(sc);
+		game.event.waitUntil(function(dt) {
+			sc -= 0.25 * dt;
+			bmp.setScale(sc);
+			if(sc <= 1){
+				game.shake(0.025);
+				bmp2.alpha = 1;
+				game.event.waitUntil(function(dt) {
+					sc += 0.05 * dt;
+					bmp2.setScale(sc);
+					bmp2.alpha -= 0.08 * dt;
+					return bmp2.alpha <= 0;
+				});
+				game.event.wait(0.5, function() {
+					if(id < 3)
+						start(++id);
+					else {
+						if(onReady != null) onReady();
+						game.event.waitUntil(function(dt) {
+							bmp.alpha -= 0.05 * dt;
+							if(bmp.alpha <= 0)
+								return true;
+							return false;
+						});
+					}
+				});
+				return true;
+			}
+			return false;
+		});
+	}
+
+	public function onResize() {
+		bmp.x = game.s2d.width >> 1;
+		bmp.y = game.s2d.height >> 1;
+		bmp2.x = game.s2d.width >> 1;
+		bmp2.y = game.s2d.height >> 1;
+
+		var d = 25;
+		scores[0].x = d;
+		scores[0].y = d;
+		scores[1].x = game.s2d.width - scores[1].getSize().width - d;
+		scores[1].y = d;
+		scores[2].x = d;
+		scores[2].y = game.s2d.height - scores[1].getSize().height - d;
+		scores[3].x = game.s2d.width - scores[1].getSize().width - d;
+		scores[3].y = game.s2d.height - scores[1].getSize().height - d;
+	}
+
+	public function update(dt : Float) {
+
+	}
+}
