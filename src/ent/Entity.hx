@@ -15,6 +15,7 @@ typedef PlayOptions = {
 enum AnimationCommand {
 	ASingle( a : h3d.anim.Animation );
 	AComplex( start : Null<h3d.anim.Animation>, loop : h3d.anim.Animation, end : Null<h3d.anim.Animation> );
+	AFX( a : AnimationCommand, fxMesh : hxd.res.Model, fxAnim : h3d.anim.Animation );
 }
 
 class Entity
@@ -39,6 +40,7 @@ class Entity
 	var currentAnimEnd : h3d.anim.Animation;
 	var cachedAnims = new Map<String,AnimationCommand>();
 	var sfxCache : Sfx.SfxContext;
+	var currFx : h3d.scene.Object;
 
 	var wall : h3d.scene.Mesh;
 	var lastwall : h3d.scene.Mesh;
@@ -263,8 +265,16 @@ class Entity
 			return null;
 
 		var hasEnd = hxd.Res.loader.exists(path + "_end.FBX");
-		if( hasAnim && !hasLoop && !hasEnd )
+		if( hasAnim && !hasLoop && !hasEnd ) {
+			var fxPath = "Fx/";
+			fxPath += "Fx_" + name;
+			var hasFX = hxd.Res.loader.exists(fxPath + ".FBX");
+			if( hasFX ) {
+				var res = hxd.Res.load(fxPath + ".FBX").toModel();
+				return AFX(ASingle(load(path)), res, load(fxPath));
+			}
 			return ASingle(load(path));
+		}
 
 		if( hasLoop && !hasAnim && !hasEnd )
 			return ASingle(load(path + "_loop"));
@@ -273,6 +283,10 @@ class Entity
 	}
 
 	function playImpl( a : AnimationCommand ) {
+		if(currFx != null) {
+			currFx.remove();
+			currFx = null;
+		}
 
 		if( currentAnimEnd != null ) {
 			waitAnimEnd(function() playImpl(a));
@@ -298,6 +312,16 @@ class Entity
 				if( opts.loop ) sfx(currentAnim.name);
 				if( onEnd != null ) onEnd();
 			};
+
+		case AFX(anim, fxModel, fxAnim):
+			playImpl(anim);
+
+			currFx = game.modelCache.loadModel(fxModel);
+			obj.addChild(currFx);
+			currFx.playAnimation(fxAnim);
+			currFx.currentAnimation.loop = false;
+			currFx.currentAnimation.onAnimEnd = currFx.remove;
+			return;
 
 		case AComplex(start, loop, end):
 			if( start == null ) {

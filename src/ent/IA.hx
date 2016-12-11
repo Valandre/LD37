@@ -24,12 +24,13 @@ class IA extends Entity
 			checkSensors(false);
 	}
 
-	//var g : h3d.scene.Graphics;
+	var g : h3d.scene.Graphics;
 	function checkSensors(testFront = true ) {
-
-		/*if(g == null)
+/*
+		if(g == null)
 			g = new h3d.scene.Graphics(game.s3d);
-		g.clear();*/
+		g.clear();
+*/
 
 		var col = true;
 		sensor.px = x; sensor.py = y; sensor.pz = z;
@@ -69,6 +70,8 @@ class IA extends Entity
 				g.lineStyle();
 			}*/
 
+			//if(this == game.players[0])	trace(lcol, rcol, worldNormal, dir, !lcol ? setDir(dir, -1) : null, !rcol ? setDir(dir, 1) : null);
+
 			if(lcol && rcol) return false;
 			if(!lcol && !rcol) changeDir(Math.random() < 0.5 ? -1 : 1);
 			else if(lcol) changeDir(1);
@@ -79,11 +82,10 @@ class IA extends Entity
 	}
 
 	function sensorCollide(dotTest = true ) {
-		var n = worldNormal;
 		for(w in game.world.walls) {
 			if(w.w == wall) continue;
 			if(w.w == lastwall) continue;
-			if(w.n.x != n.x || w.n.y != n.y || w.n.z != n.z) continue;
+			if(w.n.x != worldNormal.x || w.n.y != worldNormal.y || w.n.z != worldNormal.z) continue;
 			if(w.w.getBounds().rayIntersection(sensor, pt) != null) {
 				var n = new h3d.col.Point(pt.x - sensor.px, pt.y - sensor.py, pt.z - sensor.pz);
 				if(hxd.Math.distanceSq(n.x, n.y, n.z) > dray * dray) continue;
@@ -91,7 +93,7 @@ class IA extends Entity
 				n.normalize();
 				var v = sensor.getDir();
 				v.normalize();
-				if(v.dot(pt) > 0)
+				if(v.x != n.x || v.y != n.y || v.z != n.z)
 					return true;
 			}
 		}
