@@ -127,7 +127,10 @@ class Entity
 			if(tmp[0] == "body") {
 				var name = "TrailStart";
 				var fx = addFx(name);
-				if( fx != null ) o.addChild(fx);
+				if( fx != null ) {
+					fx.getGroup("TrailStart").texture = hxd.Res.load("Fx/Drop0" + id + "[ADD].jpg").toTexture();
+					o.addChild(fx);
+				}
 			}
 		}
 	}
