@@ -45,6 +45,8 @@ class Game extends hxd.App {
 		entities = [];
 		players = [];
 		restart();
+
+		//hxd.Pad.wait(function(p) trace(p));
 	}
 
 	public function restart() {

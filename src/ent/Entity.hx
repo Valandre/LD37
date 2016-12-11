@@ -584,6 +584,7 @@ class Entity
 					}
 				}
 			}
+
 			if(parts.count == 0) {
 				remove();
 				parts.remove();
