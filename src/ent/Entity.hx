@@ -19,6 +19,7 @@ enum AnimationCommand {
 
 class Entity
 {
+	var COLORS = [0xFFFFFF, 0xFF511C, 0x02DAD8, 0xA1F522, 0xF5227A];
 	var game : Game;
 	public var kind : EntityKind;
 	public var x(default, set) : Float;
@@ -42,20 +43,29 @@ class Entity
 	var wall : h3d.scene.Mesh;
 	var lastwall : h3d.scene.Mesh;
 	var light : h3d.scene.PointLight;
-	var lightColor : Int = 0xFF00FF;
 	var canMove = true;
 	var w = 1;
 	var wallSize = 0.4;
+	var wallTex : h3d.mat.Texture;
+
+	var id = 0;
 
 	public function new(kind, x = 0., y = 0., z = 0., scale = 1.) {
 		game = Game.inst;
 		game.entities.push(this);
+
+		this.id = game.players.length + 1;
+		//if(kind == IA) this.id = 0;
+		color = COLORS[id];
+
 		init();
 		this.kind = kind;
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		this.scale = scale;
+
+		wallTex = hxd.Res.load("wall0" + id + ".png").toTexture();
 		speed = speedRef;
 	}
 
@@ -63,6 +73,7 @@ class Entity
 		if(obj != null)
 			obj.remove();
 		game.entities.remove(this);
+		game.players.remove(this);
 	}
 
 	function init() {
@@ -76,33 +87,21 @@ class Entity
 
 		for(m in obj.getMeshes()) {
 			m.material.mainPass.enableLights = true;
-			m.material.receiveShadows = false;
-			//m.material.castShadows = true;
+			m.material.shadows = false;
 			m.material.allocPass("depth");
 			m.material.allocPass("normal");
+			m.material.texture = hxd.Res.load("Elf/0" + id + ".jpg").toTexture();
 			m.setScale(1.2);
 		}
 
 		meshRotate(obj);
 		play("fly");
 
-		/*
-		var c = new h3d.prim.Cube(w, w, w);
-		c.unindex();
-		c.addNormals();
-		c.addUVs();
-		c.translate( -w * 0.5, -w * 0.5, -w * 0.5);
-
-		obj = new h3d.scene.Mesh(c, game.s3d);
-		var m = obj.toMesh();
-		m.material.mainPass.enableLights = true;
-		m.material.receiveShadows = true;
-		m.material.texture = h2d.Tile.fromColor(0xFF00FF).getTexture();
-		*/
-
 		light = new h3d.scene.PointLight();
-		light.color.setColor(lightColor);
-		light.params = new h3d.Vector(0.2, 0.05, 0.025);
+		light.color.setColor(color);
+		//light.params = new h3d.Vector(0.5, 0.05, 0.01);
+		light.params = new h3d.Vector(0.8, 0.5, 0.1);
+		light.y += 1;
 		obj.addChild(light);
 	}
 
@@ -118,7 +117,7 @@ class Entity
 		wall = new h3d.scene.Mesh(c, game.s3d);
 		wall.material.mainPass.culling = None;
 		wall.material.blendMode = Add;
-		wall.material.texture = hxd.Res.wall.toTexture();
+		wall.material.texture = wallTex;
 		wall.material.texture.wrap = Repeat;
 		wall.scaleX = 0;
 		wall.scaleZ = 0.95;
@@ -126,7 +125,7 @@ class Entity
 		wall.x = x - dir.x * 0.05;
 		wall.y = y - dir.y * 0.05;
 		wall.z = z - dir.z * 0.05;
-		game.world.walls.push(wall);
+		game.world.walls.push({w : wall, n : n.clone()});
 
 		meshRotate(wall);
 	}
@@ -170,19 +169,53 @@ class Entity
 		var a = Math.PI * 0.5;
 		var n = worldNormal;
 
-		if(n.z != 0)
+		if(n.z != 0) {
 			m.setRotate(0, 0, dir.x != 0 ? a * (dir.x - 1) : a * dir.y);
+			if(n.z < 0) m.rotate(dir.x * 2 * a, dir.y * 2 * a, 0);
+		}
 		else if(n.x != 0) {
 			m.setRotate(0, 0, 0);
-			m.rotate(0, dir.y * a - dir.z * a, 0);
-			if(dir.y != 0) m.rotate(a, 0, 0);
+			if(n.x > 0) m.rotate(0, 0, 2 * a);
+			m.rotate(0, n.x * a, 0);
+			m.rotate( -dir.y * a + (dir.z < 0 ? 2 * a : 0), 0, 0);
 		}
 		else if(n.y != 0) {
 			m.setRotate(0, 0, 0);
 			m.rotate(0, -dir.z * a, -n.y * a);
-			if(dir.x != 0)
-				m.rotate(0, dir.x * a, n.y * dir.x * a);
+			if(dir.x != 0)	m.rotate(0, dir.x * a, n.y * dir.x * a);
+			if(dir.z < 0) m.rotate(0, 0, 2 * a);
 		}
+	}
+
+	function changeDir(v : Int) {
+		if(v == 0) return;
+		if(wall != null)
+			wall.scaleX = hxd.Math.distance(x + dir.x * wallSize * 0.5 - wall.x, y + dir.y * wallSize * 0.5 - wall.y, z + dir.z * wallSize * 0.5 - wall.z);
+		dir = setDir(dir, v);
+
+		createWall();
+		meshRotate(obj);
+	}
+
+	function setDir(dir : h3d.col.Point, v : Int) {
+		var d = dir.clone();
+		var n = worldNormal;
+		if(n.z != 0) {
+			var tmp = d.x;
+			d.x = d.y * v * -n.z;
+			d.y = -tmp * v * -n.z;
+		}
+		else if(n.x != 0) {
+			var tmp = d.y;
+			d.y = d.z * v * -n.x;
+			d.z = -tmp * v * -n.x;
+		}
+		else if(n.y != 0) {
+			var tmp = d.z;
+			d.z = d.x * v * -n.y;
+			d.x = -tmp * v * -n.y;
+		}
+		return d;
 	}
 
 	public function play( anim : String, ?opts : PlayOptions ) {
@@ -365,12 +398,13 @@ class Entity
 	function hitTest() {
 		var n = worldNormal;
 		var colBounds = obj.getBounds();
-		colBounds.scaleCenter(0.1);
-		colBounds.offset((dir.x - n.x) * 0.4, (dir.y - n.y) * 0.4, (dir.z - n.z) * 0.4);
+		colBounds.scaleCenter(0.2);
+		colBounds.offset( -dir.x * 0.5, -dir.y * 0.5, -dir.z * 0.5);
 		for(w in game.world.walls) {
-			if(w == wall) continue;
-			if(w == lastwall) continue;
-			if(w.getBounds().collide(colBounds)) {
+			if(w.w == wall) continue;
+			if(w.w == lastwall) continue;
+			if(w.n.x != n.x || w.n.y != n.y || w.n.z != n.z) continue;
+			if(w.w.getBounds().collide(colBounds)) {
 				destroy();
 				return true;
 			}

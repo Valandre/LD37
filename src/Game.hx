@@ -9,7 +9,7 @@ class Game extends hxd.App {
 	public var keys : Keys;
 	public var entities : Array<ent.Entity>;
 	public var world : map.World;
-	public var players : Array<ent.Player>;
+	public var players : Array<ent.Entity>;
 	public var renderer : Composite;
 	public var inspector : hxd.inspect.Inspector;
 
@@ -20,6 +20,8 @@ class Game extends hxd.App {
 	var camTargetOffset : h3d.col.Point;
 
 	var pause = false;
+	var gameOver = false;
+	var IAOnly = false;
 
 	var blackScreen : h2d.Bitmap;
 
@@ -79,12 +81,17 @@ class Game extends hxd.App {
 		world.reset();
 		while(players.length > 0)
 			players.pop().remove();
+		gameOver = false;
 	}
 
 	function start(){
 		entities = [];
 
-		players.push(new ent.Player(new h3d.col.Point(1, 0, 0), 1));
+		//players.push(new ent.Player(new h3d.col.Point(1, 0, 0))); IAOnly = false;
+		players.push(new ent.IA(new h3d.col.Point(1, 0, 0))); IAOnly = true;
+		players.push(new ent.IA(new h3d.col.Point(-1, 0, 0)));
+		players.push(new ent.IA(new h3d.col.Point(0, 1, 0)));
+		players.push(new ent.IA(new h3d.col.Point(0, -1, 0)));
 
 		updateCamera(1);
 
@@ -106,7 +113,12 @@ class Game extends hxd.App {
 	}
 
 	function updateCamera(dt : Float) {
-		if(players.length == 0) return;
+		if(IAOnly && players.length == 0) return;
+		else if (!IAOnly && players.length < 4) {
+			var hasPlayer = false;
+			for(p in players) if(p.kind == Player) hasPlayer = true;
+			if(!hasPlayer) return;
+		}
 
 		var pl = players[0];
 		var pn = pl.worldNormal;
@@ -188,6 +200,21 @@ class Game extends hxd.App {
 		updateCamera(dt);
 		for(e in entities)
 			e.update(dt);
+
+		if(!gameOver) {
+			if(IAOnly && players.length == 0) {
+				gameOver = true;
+				event.wait(0.5,  restart);
+			}
+			else if (!IAOnly && players.length < 4) {
+				var hasPlayer = false;
+				for(p in players) if(p.kind == Player) hasPlayer = true;
+				if(!hasPlayer) {
+					gameOver = true;
+					event.wait(0.5,  restart);
+				}
+			}
+		}
 	}
 
 	override function onResize() {

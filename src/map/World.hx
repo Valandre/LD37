@@ -7,7 +7,7 @@ class World {
 	var obj : h3d.scene.Object;
 	var size : Int;
 	public var bounds : h3d.col.Bounds;
-	public var walls : Array<h3d.scene.Mesh>;
+	public var walls : Array<{w : h3d.scene.Mesh, n : h3d.col.Point}>;
 	public var lights : Array<h3d.scene.PointLight>;
 
 	public function new(size : Int) {
@@ -42,7 +42,7 @@ class World {
 
 	public function reset() {
 		while(walls.length > 0)
-			walls.pop().remove();
+			walls.pop().w.remove();
 		while(lights.length > 0)
 			lights.pop().remove();
 	}
