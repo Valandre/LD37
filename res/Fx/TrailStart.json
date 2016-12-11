@@ -5,13 +5,13 @@
 		{
 			"fadeOut": 0.6,
 			"sizeRand": 0.3,
-			"sizeIncr": -0.3,
+			"sizeIncr": -1.5,
 			"fadePower": 0.1,
 			"rotSpeedRand": 0,
 			"material": {
 				"shadows": "None",
-				"kind": "Add",
-				"cull": false
+				"cull": false,
+				"kind": "Add"
 			},
 			"rotSpeed": 0,
 			"gravity": -0.475,
@@ -23,7 +23,7 @@
 			"sortMode": 0,
 			"frameDivisionX": 1,
 			"frameDivisionY": 1,
-			"size": 0.3,
+			"size": 1,
 			"emitStartDist": 0,
 			"animationRepeat": 1,
 			"texture": "Fx/Drop01[ADD].jpg",
@@ -51,8 +51,8 @@
 			"rotSpeedRand": 0,
 			"material": {
 				"shadows": "None",
-				"kind": "Add",
-				"cull": false
+				"cull": false,
+				"kind": "Add"
 			},
 			"rotSpeed": 10,
 			"gravity": -5,
