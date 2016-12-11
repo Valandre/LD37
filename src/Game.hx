@@ -87,8 +87,8 @@ class Game extends hxd.App {
 	function start(){
 		entities = [];
 
-		//players.push(new ent.Player(new h3d.col.Point(1, 0, 0))); IAOnly = false;
-		players.push(new ent.IA(new h3d.col.Point(1, 0, 0))); IAOnly = true;
+		players.push(new ent.Player(new h3d.col.Point(1, 0, 0))); IAOnly = false;
+		//players.push(new ent.IA(new h3d.col.Point(1, 0, 0))); IAOnly = true;
 		players.push(new ent.IA(new h3d.col.Point(-1, 0, 0)));
 		players.push(new ent.IA(new h3d.col.Point(0, 1, 0)));
 		players.push(new ent.IA(new h3d.col.Point(0, -1, 0)));

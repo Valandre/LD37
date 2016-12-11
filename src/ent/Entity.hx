@@ -31,7 +31,7 @@ class Entity
 	var model : hxd.res.Model;
 	var obj : h3d.scene.Object;
 	var color : Int = 0xFFFFFF;
-	var speedRef = 0.3;
+	var speedRef = 0.4;
 	var speed = 0.;
 	public var dir : h3d.col.Point;
 	public var worldNormal = new h3d.col.Point(0, 0, 1);
@@ -42,6 +42,7 @@ class Entity
 	var sfxCache : Sfx.SfxContext;
 	var currFx : h3d.scene.Object;
 	var fxParts : Map<String,h3d.parts.GpuParticles>;
+	var fxs = [];
 
 	var wall : h3d.scene.Mesh;
 	var lastwall : h3d.scene.Mesh;
@@ -50,6 +51,7 @@ class Entity
 	var w = 1;
 	var wallSize = 0.4;
 	var wallTex : h3d.mat.Texture;
+	var dead = false;
 
 	var id = 0;
 
@@ -80,10 +82,15 @@ class Entity
 
 		if(fxParts != null)
 			for(k in fxParts.keys()) {
-				fxParts.get(k).remove();
+				var fx = fxParts.get(k);
+				if(fx != null)
+					fx.remove();
 				fxParts.remove(k);
 			}
 		fxParts = null;
+
+		while(fxs.length > 0)
+			fxs.pop().remove();
 	}
 
 	function init() {
@@ -114,12 +121,12 @@ class Entity
 		light.y += 1;
 		obj.addChild(light);
 
-		initFxs();
+		fxParts = new Map();
+		addTrailFx();
+		addHeadFx();
 	}
 
-	function initFxs() {
-		fxParts = new Map();
-
+	function addTrailFx() {
 		for(i in 0...obj.numChildren) {
 			var o = obj.getChildAt(i);
 			if( o.name == null ) continue;
@@ -128,7 +135,36 @@ class Entity
 				var name = "TrailStart";
 				var fx = addFx(name);
 				if( fx != null ) {
-					fx.getGroup("TrailStart").texture = hxd.Res.load("Fx/Drop0" + id + "[ADD].jpg").toTexture();
+					fx.getGroup(name).texture = hxd.Res.load("Fx/Drop0" + id + "[ADD].jpg").toTexture();
+					o.addChild(fx);
+
+					var g = fx.getGroup(name);
+					//g.displayedParts = 0;
+					var sc = 0.;
+					fx.setScale(0);
+					game.event.waitUntil(function(dt) {
+						if(fx == null) return true;
+						//g.displayedParts = hxd.Math.imin(g.nparts, g.displayedParts + 10);
+						sc = Math.min(1, sc + 0.01 * dt);
+						fx.setScale(sc);
+						return sc == 1;
+					});
+				}
+			}
+		}
+	}
+
+	function addHeadFx() {
+		for(i in 0...obj.numChildren) {
+			var o = obj.getChildAt(i);
+			if( o.name == null ) continue;
+			var tmp = o.name.split("_");
+			if(tmp[0] == "body") {
+				var name = "ElfHead";
+				var fx = addFx(name);
+				if( fx != null ) {
+					fx.getGroup(name).texture = hxd.Res.load("Fx/Flame0" + id + "[ADD].jpg").toTexture();
+					fx.x += 0.8;
 					o.addChild(fx);
 				}
 			}
@@ -136,6 +172,7 @@ class Entity
 	}
 
 	public function addFx(name : String, ?alias : String, ?addToFxs = true ) {
+		if(fxParts == null) return null;
 		var f : hxd.fs.FileEntry = try hxd.Res.load("Fx/" + name + ".json").entry catch( e : Dynamic ) return null;
 		var p = new h3d.parts.GpuParticles();
 		p.name = alias != null ? alias : name;
@@ -183,6 +220,7 @@ class Entity
 		game.world.walls.push({w : wall, n : n.clone()});
 
 		meshRotate(wall);
+		addTrailFx();
 	}
 
 	function move(dt : Float) {
@@ -209,8 +247,10 @@ class Entity
 		if(wall != null)
 			wall.scaleX = hxd.Math.distance(x + dir.x * 0.5 - wall.x, y + dir.y * 0.5 - wall.y, z + dir.z * 0.5 - wall.z);
 
+		fadeTrailFx();
+
 		var tmp = dir.clone();
-		dir = worldNormal;
+		dir = worldNormal.clone();
 		tmp.scale(-1);
 		worldNormal = tmp;
 		speed = speedRef * 0.5;
@@ -246,6 +286,7 @@ class Entity
 		if(v == 0) return;
 		if(wall != null)
 			wall.scaleX = hxd.Math.distance(x + dir.x * wallSize * 0.5 - wall.x, y + dir.y * wallSize * 0.5 - wall.y, z + dir.z * wallSize * 0.5 - wall.z);
+		fadeTrailFx();
 		dir = setDir(dir, v);
 		createWall();
 		meshRotate(obj);
@@ -270,6 +311,30 @@ class Entity
 			d.x = -tmp * v * -n.y;
 		}
 		return d;
+	}
+
+	function fadeTrailFx() {
+		if(fxParts == null) return;
+		var fx = fxParts.get("TrailStart");
+		if(fx == null) return;
+		fxParts.set("TrailStart", null);
+
+		//
+		fx.remove();
+		return;
+		//
+
+		game.s3d.addChild(fx);
+		fxs.push(fx);
+		fx.follow = null;
+		if(obj == null) {
+			fx.remove();
+			return;
+		}
+		fx.x = x;
+		fx.y = y;
+		fx.z = z;
+		meshRotate(fx);
 	}
 
 	public function play( anim : String, ?opts : PlayOptions ) {
@@ -411,7 +476,7 @@ class Entity
 		}
 	}
 
-	function waitAnimEnd( f : Void -> Void ) {
+	function waitAnimEnd( f ) {
 		if( currentAnimEnd == null ) {
 			f();
 			return;
@@ -466,9 +531,69 @@ class Entity
 	}
 
 	function destroy() {
+		dead = true;
 		if(wall != null)
 			wall.scaleX = hxd.Math.distance(x + dir.x * 0.5 - wall.x, y + dir.y * 0.5 - wall.y, z + dir.z * 0.5 - wall.z);
-		remove();
+
+		obj.visible = false;
+		fadeTrailFx();
+		//
+		var parts = new h3d.parts.Particles();
+		parts.x = x;
+		parts.y = y;
+		parts.z = z;
+		parts.material.texture = hxd.Res.load("Fx/Drop0" + id + "[ADD].jpg").toTexture();
+		parts.material.blendMode = Add;
+		game.s3d.addChild(parts);
+
+		for(i in 0...200) {
+			var p = parts.alloc();
+			p.size = 0.1 + Math.random() * 0.2;
+
+			var pow = i > 100 ? 0.5 : 1.5;
+			var n = new h3d.Vector(dir.x + hxd.Math.srand(pow), dir.y + hxd.Math.srand(pow), dir.z + hxd.Math.srand(pow));
+			n.normalize();
+			p.dx = n.x;
+			p.dy = n.y;
+			p.dz = n.z;
+			p.fx = (i > 150 ? 0.5 : 0.1) + Math.random() * 0.5; //speed
+			p.fy = -0.003; //growth
+			p.fz = 0;	//gravity
+		}
+
+		var wsize = game.size >> 1;
+		game.event.waitUntil(function(dt) {
+			for(p in parts.getParticles()) {
+				p.x += p.dx * p.fx;
+				p.y += p.dy * p.fx;
+				p.z += p.dz * p.fx;
+				p.fx *= Math.pow(0.99, dt);
+
+				p.z += p.fz;
+				p.fz -= 0.005 * dt;
+				if(p.z < -wsize) {
+					p.z = -wsize + 0.2;
+					p.fz = -p.fz * 0.5;
+				}
+
+				if(p.size > 0) {
+					p.size += p.fy * dt;
+					if(p.size <= 0.05) {
+						p.size = 0;
+						p.remove();
+					}
+				}
+			}
+			if(parts.count == 0) {
+				remove();
+				parts.remove();
+				parts.dispose();
+				return true;
+			}
+			return false;
+		});
+
+		//remove();
 	}
 
 	function hitTest() {

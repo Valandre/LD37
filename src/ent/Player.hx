@@ -29,6 +29,7 @@ class Player extends Entity
 	}
 
 	override public function update(dt:Float) {
+		if(dead) return;
 		super.update(dt);
 		if(canMove) {
 			updateKeys();

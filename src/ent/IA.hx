@@ -106,8 +106,8 @@ class IA extends Entity
 	}
 
 	override public function update(dt:Float) {
+		if(dead) return;
 		super.update(dt);
-
 		move(dt);
 
 		time -= dt;
