@@ -11,7 +11,7 @@ class UI extends h2d.Sprite
 	var bmp2 : h2d.Bitmap;
 
 	var stars = [];
-	var scores = [];
+	var scores : Array<h2d.Flow> = [];
 
 	public function new(?parent, ?onReady) {
 		super(parent);
@@ -55,9 +55,9 @@ class UI extends h2d.Sprite
 
 		for(i in 0...4) {
 			var s = new h2d.Flow(this);
-			s.horizontalSpacing = 10;
-			for(i in 0...5) {
-				var b = new h2d.Bitmap(stars[0], s);
+			s.horizontalSpacing = -30;
+			for(j in 0...5) {
+				var b = new h2d.Bitmap(stars[game.stars[i] > j ? game.players[i].id : 0], s);
 				b.filter = true;
 				b.setScale(0.5);
 			}
@@ -101,6 +101,85 @@ class UI extends h2d.Sprite
 							return false;
 						});
 					}
+				});
+				return true;
+			}
+			return false;
+		});
+	}
+
+	public function nextRound(pl : ent.Entity) {
+		var t = hxd.Res.UI.Winner.toTile();
+		var bmp = new h2d.Bitmap(t, this);
+		bmp.filter = true;
+		var sc = 0.7;
+		bmp.setScale(sc);
+
+		var d = 25;
+		var s = scores[pl.id - 1];
+		var to = 0.;
+		switch(pl.id) {
+			case 1 :
+				bmp.x = -t.width * sc - 100;
+				bmp.y = s.y + s.getSize().height + d;
+				to = d;
+			case 2 :
+				bmp.x = game.s2d.width + 100;
+				bmp.y = s.y + s.getSize().height + d;
+				to = game.s2d.width - t.width * sc - d;
+			case 3 :
+				bmp.x = -t.width * sc - 100;
+				bmp.y = s.y - t.height * sc - d;
+				to = d;
+			case 4 :
+				bmp.x = game.s2d.width + 100;
+				bmp.y = s.y - t.height * sc - d;
+				to = game.s2d.width - t.width * sc - d;
+			default :
+		}
+
+		game.event.waitUntil(function(dt) {
+			bmp.x += (to - bmp.x) * 0.25 * dt;
+			if(Math.abs(to - bmp.x) < 1) {
+				var c = 1.;
+				bmp.colorAdd = new h3d.Vector(c, c, c);
+				game.event.waitUntil(function(dt) {
+					c -= 0.05 * dt;
+					bmp.colorAdd.x = bmp.colorAdd.y = bmp.colorAdd.y = c;
+					if(c <= 0) {
+						bmp.colorAdd = null;
+
+						var t = stars[pl.id].clone();
+						t.dx -= t.width >> 1;
+						t.dy -= t.height >> 1;
+						var star = new h2d.Bitmap(t, this);
+						var sc = 3.;
+						star.setScale(sc);
+						var target = s.getChildAt(game.stars[pl.id-1]);
+						Std.instance(target, h2d.Bitmap).tile = stars[pl.id];
+						star.x = target.absX;
+						star.y = target.absY + 25;
+
+						game.event.waitUntil(function(dt) {
+							sc -= 0.25 * dt;
+							star.setScale(sc);
+							if(sc <= 1) {
+								star.remove();
+								game.event.wait(2, function() {
+									bmp.remove();
+									game.stars[pl.id - 1]++;
+									if(game.stars[pl.id - 1] == 5)
+										game.endGame();
+									else game.restart();
+								});
+								return true;
+							}
+							return false;
+						});
+
+						return true;
+					}
+					return false;
 				});
 				return true;
 			}

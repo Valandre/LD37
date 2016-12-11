@@ -29,6 +29,8 @@ class Game extends hxd.App {
 	var ui : UI;
 	var blackScreen : h2d.Bitmap;
 
+	public var stars : Array<Int>;
+
 	override function init() {
 		renderer = new Composite();
 		s3d.renderer = renderer;
@@ -48,6 +50,7 @@ class Game extends hxd.App {
 		world = new map.World(size);
 		entities = [];
 		players = [];
+		stars = [0, 0, 0, 0];
 
 		menu = new Menu(s2d);
 
@@ -82,6 +85,15 @@ class Game extends hxd.App {
 		});
 	}
 
+	public function endGame() {
+		transition(function() {
+			reset();
+			stars = [0, 0, 0, 0];
+			gameOver = true;
+			menu = new Menu(s2d);
+		}, false);
+	}
+
 	public function restart() {
 		transition(function() {
 			reset();
@@ -96,6 +108,7 @@ class Game extends hxd.App {
 		while(players.length > 0)
 			players.pop().remove();
 		if(menu != null) menu.remove();
+		if(ui != null) ui.remove();
 	}
 
 	function start(){
@@ -121,6 +134,7 @@ class Game extends hxd.App {
 		cam.up.y = 0;
 		cam.up.z = 1;
 
+		if(ui != null) ui.remove();
 		ui = new UI(s2d, function() {
 			for(p in players)
 				p.canMove = true;
@@ -133,12 +147,12 @@ class Game extends hxd.App {
 	}
 
 	function updateCamera(dt : Float) {
-		if(IAOnly && players.length == 0) return;
-		else if (!IAOnly && players.length < 4) {
+		if(/*IAOnly &&*/ players.length == 0) return;
+		/*else if (!IAOnly && players.length < 4) {
 			var hasPlayer = false;
 			for(p in players) if(p.kind == Player) hasPlayer = true;
 			if(!hasPlayer) return;
-		}
+		}*/
 
 		var pl = players[0];
 		var pn = pl.worldNormal;
@@ -239,6 +253,11 @@ class Game extends hxd.App {
 			e.update(dt);
 
 		if(!gameOver) {
+			if(players.length == 1) {
+				gameOver = true;
+				ui.nextRound(players[0]);
+			}
+			/*
 			if(IAOnly && players.length == 0) {
 				gameOver = true;
 				event.wait(0.5,  restart);
@@ -250,7 +269,7 @@ class Game extends hxd.App {
 					gameOver = true;
 					event.wait(0.5,  restart);
 				}
-			}
+			}*/
 		}
 	}
 

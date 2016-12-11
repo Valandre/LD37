@@ -80,9 +80,9 @@ class ChoosePlayers extends h2d.Sprite
 	var contRight : h2d.Flow;
 
 	var buttons : Array<Button> = [];
-	var onRemove : Void -> Void;
+	var onRemove : Bool -> Void;
 
-	public function new(?parent, onRemove : Void -> Void) {
+	public function new(?parent, onRemove : Bool -> Void) {
 		super(parent);
 		game = Game.inst;
 
@@ -190,7 +190,7 @@ class ChoosePlayers extends h2d.Sprite
 		var back = new Button("BACK", contLeft);
 		back.interactive.onClick = function(e) {
 			slideOut(function() {
-				onRemove();
+				onRemove(false);
 				remove();
 			});
 		}
@@ -199,6 +199,7 @@ class ChoosePlayers extends h2d.Sprite
 		var ready = new Button("READY", contLeft);
 		ready.interactive.onClick = function(e) {
 			slideOut(function() {
+				onRemove(true);
 				remove();
 				game.restart();
 			});

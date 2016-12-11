@@ -70,6 +70,7 @@ class Menu extends h2d.Sprite
 	var choose : ChoosePlayers;
 	var title : h2d.Bitmap;
 	var cont : h2d.Flow;
+	var lock = false;
 
 
 	public function new(?parent) {
@@ -109,7 +110,8 @@ class Menu extends h2d.Sprite
 		var start = new Button("START", cont);
 		start.interactive.onClick = function(e) {
 			slideOut(function() {
-				choose = new ChoosePlayers(game.s2d, function() {
+				choose = new ChoosePlayers(game.s2d, function(start : Bool) {
+					lock = start;
 					choose = null;
 					slideIn();
 				});
@@ -228,6 +230,7 @@ class Menu extends h2d.Sprite
 	}
 
 	public function update(dt : Float) {
+		if(lock) return;
 		if(choose != null)
 			choose.update(dt);
 		else {

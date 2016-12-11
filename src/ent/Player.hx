@@ -29,7 +29,15 @@ class Player extends Entity
 	}
 
 	override public function update(dt:Float) {
-		if(dead) return;
+		if(dead) {
+			var hasPlayer = false;
+			for(p in game.players) if(p.kind == Player) hasPlayer = true;
+			if(!hasPlayer) {
+				if(K.isPressed(K.LEFT) || game.keys.pressed.xAxis < 0) game.players.unshift(game.players.pop());
+				if(K.isPressed(K.RIGHT) || game.keys.pressed.xAxis > 0) game.players.push(game.players.shift());
+			}
+			return;
+		}
 		super.update(dt);
 		if(canMove) {
 			updateKeys();

@@ -52,8 +52,7 @@ class Entity
 	var wallTex : h3d.mat.Texture;
 	var dead = false;
 
-	var id = 0;
-	var stars = 0;
+	public var id = 0;
 
 	public function new(kind, x = 0., y = 0., z = 0., scale = 1.) {
 		game = Game.inst;
@@ -587,7 +586,8 @@ class Entity
 			}
 
 			if(parts.count == 0) {
-				remove();
+				//remove();
+				game.players.remove(this);
 				parts.remove();
 				parts.dispose();
 				return true;
