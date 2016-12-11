@@ -41,6 +41,7 @@ class Entity
 	var cachedAnims = new Map<String,AnimationCommand>();
 	var sfxCache : Sfx.SfxContext;
 	var currFx : h3d.scene.Object;
+	var fxParts : Map<String,h3d.parts.GpuParticles>;
 
 	var wall : h3d.scene.Mesh;
 	var lastwall : h3d.scene.Mesh;
@@ -76,6 +77,13 @@ class Entity
 			obj.remove();
 		game.entities.remove(this);
 		game.players.remove(this);
+
+		if(fxParts != null)
+			for(k in fxParts.keys()) {
+				fxParts.get(k).remove();
+				fxParts.remove(k);
+			}
+		fxParts = null;
 	}
 
 	function init() {
@@ -105,6 +113,48 @@ class Entity
 		light.params = new h3d.Vector(0.8, 0.5, 0.1);
 		light.y += 1;
 		obj.addChild(light);
+
+		initFxs();
+	}
+
+	function initFxs() {
+		fxParts = new Map();
+
+		for(i in 0...obj.numChildren) {
+			var o = obj.getChildAt(i);
+			if( o.name == null ) continue;
+			var tmp = o.name.split("_");
+			if(tmp[0] == "body") {
+				var name = "TrailStart";
+				var fx = addFx(name);
+				if( fx != null ) o.addChild(fx);
+			}
+		}
+	}
+
+	public function addFx(name : String, ?alias : String, ?addToFxs = true ) {
+		var f : hxd.fs.FileEntry = try hxd.Res.load("Fx/" + name + ".json").entry catch( e : Dynamic ) return null;
+		var p = new h3d.parts.GpuParticles();
+		p.name = alias != null ? alias : name;
+		try p.load(haxe.Json.parse(f.getText()), f.path) catch( e : Dynamic ) {
+			trace(f.path + ":" + e);
+			p.remove();
+			return null;
+		}
+		var prev = fxParts.get(p.name);
+		if( prev != null )
+			prev.remove();
+		if(addToFxs) fxParts.set(p.name, p);
+		return p;
+	}
+
+	public function removeFx(name : String) {
+		if(fxParts == null) return;
+		var fx = fxParts.get(name);
+		if(fx != null) {
+			fx.remove();
+			fxParts.remove(name);
+		}
 	}
 
 	public function createWall() {
