@@ -27,7 +27,10 @@ class Composite extends h3d.scene.Renderer {
 	var envColorBlur = new h3d.pass.Blur(2, 3, 1.4);
 	var ambient : h3d.pass.ScreenFx<shaders.Composite>;
 
-	var final : h3d.mat.Texture;
+	public var final : h3d.mat.Texture;
+
+	public var width = 0;
+	public var height = 0;
 
 	public function new() {
 		game = Game.inst;
@@ -62,25 +65,18 @@ class Composite extends h3d.scene.Renderer {
 		game.s3d.lightSystem.ambientLight.setColor(0xB1BECE);
 		game.s3d.lightSystem.perPixelLighting = true;
 		game.s3d.lightSystem.shadowLight = light;
+	}
 
-		var shadow = Std.instance(getPass("shadow"), h3d.pass.ShadowMap);
-		shadow.size = 2048;
-		shadow.power = 30;
-		shadow.blur.passes = 2;
-		shadow.bias = 0;
-		shadow.color.setColor(0x556596);
-		shadow.calcShadowBounds = function(cam) {
-			cam.orthoBounds = h3d.col.Bounds.fromValues(-100, -100, -100,  200, 200, 200);
-		}
+	function myAllocTarget( name : String, ?size = 0, depth = true ) {
+		return tcache.allocTarget(name, ctx, ctx.engine.width >> width + size, ctx.engine.height >> width + size, depth);
 	}
 
 	override function render() {
-		shadow.draw(get("shadow"));
 
 		var colorTex, depthTex, normalTex;
 		depth.draw(get("depth"));
 		normal.draw(get("normal"));
-		colorTex = allocTarget("color");
+		colorTex = myAllocTarget("color");
 		depthTex = depth.getTexture();
 		normalTex = normal.getTexture();
 
@@ -88,27 +84,17 @@ class Composite extends h3d.scene.Renderer {
 		setTarget(colorTex);
 		clear(0, 1);
 
-		var envColor = allocTarget("envColor", envColorScale, false);
+		var envColor = myAllocTarget("envColor", envColorScale, false);
 		h3d.pass.Copy.run(colorTex, envColor);
-		envColorBlur.apply(envColor, allocTarget("envColorBlur", envColorScale, false));
+		envColorBlur.apply(envColor, myAllocTarget("envColorBlur", envColorScale, false));
 		setTarget(colorTex);
 
 		draw("default");
-/*
-	//ssao
-		if( enableAmbientOcclusion ) {
-			var saoTarget = allocTarget("sao", sao.scale, false);
-			setTarget(saoTarget);
-			sao.pass.apply(depthTex, normalTex, ctx.camera);
-			sao.blur.apply(saoTarget, allocTarget("saoBlurTmp", sao.scale, false));
-			h3d.pass.Copy.run(saoTarget, colorTex, Multiply);
-		}
-*/
 		setTarget(colorTex);
 		draw("alpha");
 
 		// additive in separate buffer so it doesn't get affected by shadows
-		var addTex = allocTarget("addColor"); // can't subscale because of Z buffer
+		var addTex = myAllocTarget("addColor"); // can't subscale because of Z buffer
 		setTarget(addTex);
 		clear(0);
 		draw("additive");
@@ -118,10 +104,10 @@ class Composite extends h3d.scene.Renderer {
 		setTarget(colorTex);
 		draw("env");
 
-		var colorBlurTex = allocTarget("colorBlur", colorBlurScale, false);
+		var colorBlurTex = myAllocTarget("colorBlur", colorBlurScale, false);
 		h3d.pass.Copy.run(colorTex, colorBlurTex);
 		h3d.pass.Copy.run(addTex, colorBlurTex, Add);
-		colorBlur.apply(colorBlurTex, allocTarget("colorBlurTmp", colorBlurScale, false));
+		colorBlur.apply(colorBlurTex, myAllocTarget("colorBlurTmp", colorBlurScale, false));
 
 
 	// ambient
@@ -136,7 +122,7 @@ class Composite extends h3d.scene.Renderer {
 		ambient.shader.camera = ctx.camera;
 		ambient.shader.time += ctx.elapsedTime;
 
-		final = allocTarget("final", 0, true);
+		final = myAllocTarget("final", 0, true);
 		setTarget(final);
 		ambient.setGlobals(ctx);
 		ambient.render();

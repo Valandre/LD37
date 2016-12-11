@@ -25,6 +25,8 @@ class Player extends Entity
 	override function hitTest() {
 		var b = super.hitTest();
 		canMove = !b;
+
+		//if(this == game.players[0]) trace(game.world.isCollide(this));
 		return b;
 	}
 

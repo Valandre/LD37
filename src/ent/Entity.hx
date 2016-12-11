@@ -20,7 +20,6 @@ enum AnimationCommand {
 
 class Entity
 {
-	var COLORS = [0xFFFFFF, 0xFF511C, 0x02DAD8, 0xA1F522, 0xF5227A];
 	var game : Game;
 	public var kind : EntityKind;
 	public var x(default, set) : Float;
@@ -61,7 +60,7 @@ class Entity
 
 		this.id = game.players.length + 1;
 		//if(kind == IA) this.id = 0;
-		color = COLORS[id];
+		color = game.COLORS[id];
 
 		init();
 		this.kind = kind;

@@ -77,13 +77,14 @@ class Composite extends h3d.shader.ScreenShader {
 			var fog = (fogAmount * fog.pow(fogPower)).saturate();
 
 			// shadows
+			/*
 			var shadowPos = pos * shadow.proj * vec3(0.5, -0.5, 1) + vec3(0.5, 0.5, 0);
 			var shadowDepth = unpack(shadow.map.get(shadowPos.xy));
 			var zMax = shadowPos.z.saturate();
 			var delta = (shadowDepth + shadow.bias).min(zMax) - zMax;
 			var shade = (exp( shadow.power * delta  )).saturate();
 			pColor.rgb = mix(pColor.rgb * shadow.color.rgb, pColor.rgb, shade);
-
+*/
 			// dof
 			if(hasDOF) {
 				var k = ((d - dofStart).max(0.).pow(dofPower) * dofAmount).min(1.);

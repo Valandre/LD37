@@ -3,6 +3,8 @@ import hxd.Res;
 import map.World;
 class Game extends hxd.App {
 
+	public var COLORS = [0xFFFFFF, 0xFF511C, 0x02DAD8, 0xA1F522, 0xF5227A];
+
 	public var modelCache : h3d.prim.ModelCache;
 	public var event : hxd.WaitEvent;
 	public var sfx : Sfx;
@@ -20,9 +22,10 @@ class Game extends hxd.App {
 	var camTargetOffset : h3d.col.Point;
 
 	var pause = false;
-	var gameOver = false;
+	var gameOver = true;
 	var IAOnly = false;
 
+	var menu : Menu;
 	var blackScreen : h2d.Bitmap;
 
 	override function init() {
@@ -44,12 +47,13 @@ class Game extends hxd.App {
 		world = new map.World(size);
 		entities = [];
 		players = [];
-		restart();
 
-		//hxd.Pad.wait(function(p) trace(p));
+		//menu = new Menu(s2d);
+
+		restart();
 	}
 
-	public function restart() {
+	public function transition(?onReady : Void -> Void, ?onDone : Void -> Void) {
 		blackScreen = new h2d.Bitmap(h2d.Tile.fromColor(0), s2d);
 		blackScreen.scaleX = s2d.width;
 		blackScreen.scaleY = s2d.height;
@@ -57,8 +61,7 @@ class Game extends hxd.App {
 		event.waitUntil(function(dt) {
 			blackScreen.alpha = Math.min(1, blackScreen.alpha + 0.1 * dt);
 			if(blackScreen.alpha == 1) {
-				reset();
-				start();
+				if(onReady != null) onReady();
 				event.wait(0.2, function() {
 					event.waitUntil(function(dt) {
 						if(blackScreen == null) return true;
@@ -66,6 +69,7 @@ class Game extends hxd.App {
 						if(blackScreen.alpha == 0) {
 							blackScreen.remove();
 							blackScreen = null;
+							if(onDone != null) onDone();
 							return true;
 						}
 						return false;
@@ -77,6 +81,13 @@ class Game extends hxd.App {
 		});
 	}
 
+	public function restart() {
+		transition(function() {
+			reset();
+			start();
+		});
+	}
+
 	function reset() {
 		while(entities.length > 0)
 			entities[0].remove();
@@ -84,6 +95,7 @@ class Game extends hxd.App {
 		while(players.length > 0)
 			players.pop().remove();
 		gameOver = false;
+		if(menu != null) menu.remove();
 	}
 
 	function start(){
@@ -161,8 +173,9 @@ class Game extends hxd.App {
 	}
 
 	function updateKeys(dt : Float) {
-		if(K.isDown(K.CTRL) && K.isPressed("F".code))
+		if(K.isDown(K.CTRL) && K.isPressed("F".code)) {
 			engine.fullScreen = !engine.fullScreen;
+		}
 
 		if( K.isDown(K.CTRL) && K.isPressed("I".code) ) {
 			if( inspector != null ) {
@@ -184,6 +197,9 @@ class Game extends hxd.App {
 	}
 
 	override function update(dt:Float) {
+
+		if(menu != null)
+			menu.update(dt);
 
 		if( K.isDown(K.SHIFT)) {
 			var speed = K.isDown(K.CTRL) ? 0.1 : 5;
@@ -231,6 +247,8 @@ class Game extends hxd.App {
 			blackScreen.scaleX = s2d.width;
 			blackScreen.scaleY = s2d.height;
 		}
+		if(menu != null)
+			menu.onResize();
 	}
 
 	public static var inst : Game;
