@@ -72,7 +72,10 @@ class IA extends Entity
 			//if(this == game.players[0])	trace(lcol, rcol, worldNormal, dir, !lcol ? setDir(dir, -1) : null, !rcol ? setDir(dir, 1) : null);
 
 			if(lcol && rcol) return false;
-			if(!lcol && !rcol) changeDir(Math.random() < 0.5 ? -1 : 1);
+			if(!lcol && !rcol) {
+				var v = Math.random() < 0.5 ? -1 : 1;
+				changeDir(v);
+			}
 			else if(lcol) changeDir(1);
 			else if(rcol) changeDir( -1);
 			return true;
