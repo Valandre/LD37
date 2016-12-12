@@ -202,9 +202,9 @@ class ChoosePlayers extends h2d.Sprite
 		back.interactive.onClick = function(e) {
 			slideOut(function() {
 				game.setAmbient(0);
-				onRemove(false);
 				while(game.players.length > 0)
 					game.players.pop().remove();
+				onRemove(false);
 				remove();
 			});
 		}

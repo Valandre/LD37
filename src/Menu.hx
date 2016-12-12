@@ -62,6 +62,7 @@ private class Button extends h2d.Flow {
 class Menu extends h2d.Sprite
 {
 	var bg : h2d.Bitmap;
+	var bmpSlide : h2d.Bitmap;
 	var game : Game;
 	var root : h2d.Flow;
 	var selectId = 0;
@@ -71,6 +72,8 @@ class Menu extends h2d.Sprite
 	var title : h2d.Bitmap;
 	var cont : h2d.Flow;
 	var lock = false;
+
+	var creditsBmp : h2d.Bitmap;
 
 	public function new(?parent) {
 		super(parent);
@@ -115,6 +118,7 @@ class Menu extends h2d.Sprite
 
 		var start = new Button("START", cont);
 		start.interactive.onClick = function(e) {
+			if(creditsBmp != null) toggleCredits();
 			slideOut(function() {
 				while(game.players.length > 0)
 					game.players.pop().remove();
@@ -122,7 +126,9 @@ class Menu extends h2d.Sprite
 					lock = start;
 					choose = null;
 					slideIn();
-					if(!lock)createFairies();
+					while(game.players.length > 0)
+						game.players.pop().remove();
+					if(!lock) createFairies();
 				});
 			});
 		}
@@ -137,11 +143,12 @@ class Menu extends h2d.Sprite
 			game.mute = !game.mute;
 			if(game.mute) Sounds.stop("Loop");
 			else Sounds.play("Loop");
+			if(creditsBmp != null) toggleCredits();
 		};
 		buttons.push(sound);
 
 		var credits = new Button("CREDITS", cont);
-		credits.interactive.onClick = function(e){};
+		credits.interactive.onClick = function(e){ toggleCredits(); };
 		buttons.push(credits);
 
 		var exit = new Button("EXIT", cont);
@@ -190,14 +197,75 @@ class Menu extends h2d.Sprite
 		new h3d.col.Point(0, -1, 0)
 		];
 
-		for( i in 0...8) {
+		game.players = [];
+		for( i in 0...12) {
 			var e = new ent.IA(dirs[Std.random(dirs.length)], 1, 1 + Std.random(4));
 			e.x = hxd.Math.srand(game.size * 0.4);
 			e.y = hxd.Math.srand(game.size * 0.4);
 			e.enableCollides = false;
 			e.enableWalls = false;
 			e.canMove = true;
+			@:privateAccess e.speed *= 5;
 			game.players.push(e);
+			for(j in 0...100)
+				e.update(1);
+		}
+	}
+
+	function toggleCredits() {
+		if(creditsBmp == null) {
+			creditsBmp = new h2d.Bitmap(hxd.Res.UI.Credits.toTile());
+			creditsBmp.blendMode = Alpha;
+			creditsBmp.filter = true;
+			creditsBmp.alpha = 0;
+			creditsBmp.x = game.s2d.width * 0.4;
+			creditsBmp.y = (game.s2d.height - creditsBmp.tile.height) * 0.5;
+			addChildAt(creditsBmp, 0);
+
+			bmpSlide = new h2d.Bitmap(h2d.Tile.fromColor(0xFFFFFF));
+			bmpSlide.scaleY = game.s2d.height;
+			addChildAt(bmpSlide, 0);
+
+			var a = 0.;
+			var sp = 10.;
+			game.event.waitUntil(function(dt){
+				bg.x += sp;
+				sp += 15;
+				bmpSlide.scaleX = bg.x;
+				if(bmpSlide.scaleX > game.s2d.width) {
+					game.event.waitUntil(function(dt){
+						a = Math.min(1, a + 0.1 * dt);
+						creditsBmp.alpha = a;
+						if(a == 1) {
+							return true;
+						}
+						return false;
+					});
+
+					return true;
+				}
+				return false;
+			});
+		}
+		else {
+			var a = 1.;
+			var sp = 10.;
+			game.event.waitUntil(function(dt){
+				a = Math.max(0, a - 0.1 * dt);
+				creditsBmp.alpha = a;
+				bg.x -= sp;
+				sp += 15;
+				bmpSlide.scaleX = bg.x;
+				if(bmpSlide.scaleX <= 0) {
+					bg.x = 0;
+					bmpSlide.remove();
+					bmpSlide = null;
+					creditsBmp.remove();
+					creditsBmp = null;
+					return true;
+				}
+				return false;
+			});
 		}
 	}
 
@@ -287,6 +355,14 @@ class Menu extends h2d.Sprite
 
 		if(choose != null)
 			choose.onResize();
+
+		if(creditsBmp != null) {
+			creditsBmp.x = game.s2d.width * 0.4;
+			creditsBmp.y = (game.s2d.height - creditsBmp.tile.height) * 0.5;
+		}
+		if(bmpSlide != null) {
+			bmpSlide.scaleY = game.s2d.height;
+		}
 	}
 
 	public function update(dt : Float) {
