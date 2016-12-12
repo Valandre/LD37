@@ -151,7 +151,6 @@ class Game extends hxd.App {
 	function start(){
 		entities = [];
 
-		nbPlayers = 4;
 		switch(nbPlayers) {
 			case 1 : renderer.width = 0; renderer.height = 0;
 			case 2 : renderer.width = 1; renderer.height = 0;
@@ -160,17 +159,17 @@ class Game extends hxd.App {
 		}
 
 		function addPlayer(k : ent.Entity.EntityKind, dir : h3d.col.Point) {
-			var pl = k == Player ? new ent.IA(dir) : new ent.IA(dir);
+			var pl = k == Player ? new ent.Player(dir) : new ent.IA(dir);
 			players.push(pl);
 			var cam = initCamera(pl);
 
-			//if(k == Player) {
+			if(k == Player) {
 				var tex = new h3d.mat.Texture(s2d.width >> renderer.width, s2d.height >> renderer.height, [Target]);
 				customScene.addView(pl.id, cam, tex);
 				var b = new h2d.Bitmap(h2d.Tile.fromTexture(tex), s2d);
 				b.blendMode = None;
 				bmpViews.push(b);
-			//}
+			}
 			return pl;
 		}
 
