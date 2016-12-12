@@ -16,21 +16,21 @@
 			"Shaders": {
 				"ambient": {
 					"shader shaders Composite": {
-						"bloomPower": 5,
-						"global_saturation": 1.1,
-						"fogColor": "#221938",
-						"global_contrast": 1.1,
-						"dofPower": 0.5,
-						"fogStart": 0.1,
-						"hasFOG": true,
 						"global_brightness": 0.02,
-						"bloomAmount": 1,
-						"dofStart": 0.001,
-						"hasBLOOM": true,
-						"fogAmount": 0.95,
 						"dofAmount": 4,
+						"bloomAmount": 1,
+						"bloomPower": 5,
+						"hasFOG": true,
+						"global_contrast": 1.1,
+						"fogAmount": 1,
+						"hasBLOOM": true,
 						"hasDOF": true,
-						"fogPower": 3
+						"fogColor": "#221938",
+						"dofPower": 0.5,
+						"fogStart": 10,
+						"global_saturation": 1.1,
+						"fogPower": 1,
+						"fogDensity": 0.04
 					}
 				}
 			}
