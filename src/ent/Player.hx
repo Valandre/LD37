@@ -14,8 +14,8 @@ class Player extends Entity
 
 	function updateKeys() {
 		var v = 0;
-		if(game.keys.pressed.xAxis < 0) v = -1;
-		if(game.keys.pressed.xAxis > 0) v = 1;
+		if((game.nbPlayers == 1 && K.isPressed(K.LEFT)) || (controller != null && controller.pressed.xAxis < 0)) v = -1;
+		if((game.nbPlayers == 1 && K.isPressed(K.RIGHT)) || (controller != null && controller.pressed.xAxis > 0)) v = 1;
 		if(v == 0) return;
 		changeDir(v);
 	}
@@ -40,11 +40,11 @@ class Player extends Entity
 					game.s3d.camera = v.camera;
 				}
 
-				if(game.keys.pressed.xAxis < 0) {
+				if((game.nbPlayers == 1 && K.isPressed(K.LEFT)) || (controller != null && controller.pressed.xAxis < 0)) {
 					game.players.unshift(game.players.pop());
 					setCam();
 				}
-				if(game.keys.pressed.xAxis > 0) {
+				if((game.nbPlayers == 1 && K.isPressed(K.RIGHT)) || (controller != null && controller.pressed.xAxis > 0)) {
 					game.players.push(game.players.shift());
 					setCam();
 				}

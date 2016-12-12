@@ -51,22 +51,6 @@ private class Button extends h2d.Flow {
 	}
 }
 
-private class Player extends h2d.Flow {
-	var game : Game;
-	var tf : h2d.Text;
-
-	var enable = false;
-	var bg : h2d.Bitmap;
-	var id : Int;
-
-	public function new (id : Int, ?parent : h2d.Flow) {
-		super(parent);
-		game = Game.inst;
-		this.id = id;
-		enableInteractive = true;
-	}
-}
-
 class ChoosePlayers extends h2d.Sprite
 {
 	var bg : h2d.Bitmap;
@@ -81,6 +65,10 @@ class ChoosePlayers extends h2d.Sprite
 
 	var buttons : Array<Button> = [];
 	var onRemove : Bool -> Void;
+
+	var fairies = [];
+	var sticks : Array<h2d.Bitmap> = [];
+	var ptiles = [];
 
 	public function new(?parent, onRemove : Bool -> Void) {
 		super(parent);
@@ -120,6 +108,8 @@ class ChoosePlayers extends h2d.Sprite
 			title.alpha = a;
 			for(b in buttons)
 				b.setAlpha(a);
+			for(b in sticks)
+				b.alpha = a;
 			bg.x += sp;
 			sp += 15;
 			bmp.scaleX = bg.x;
@@ -144,6 +134,8 @@ class ChoosePlayers extends h2d.Sprite
 		title.alpha = 0;
 		for( b in buttons)
 			b.setAlpha(0);
+		for(b in sticks)
+			b.alpha = 0;
 
 		var bmp = new h2d.Bitmap(h2d.Tile.fromColor(0xFFFFFF));
 		bmp.scaleX = bg.x;
@@ -164,6 +156,8 @@ class ChoosePlayers extends h2d.Sprite
 					title.alpha = a;
 					for(b in buttons)
 						b.setAlpha(a);
+					for(b in sticks)
+						b.alpha = a;
 					if(a == 1) {
 						if(onEnd != null) onEnd();
 						return true;
@@ -189,8 +183,15 @@ class ChoosePlayers extends h2d.Sprite
 		var ready = new Button("READY", contLeft);
 		ready.interactive.onClick = function(e) {
 			slideOut(function() {
-				onRemove(true);
 				remove();
+				while(game.players.length > 0)
+					game.players.pop().remove();
+				game.nbPlayers = 0;
+				for( c in game.controllers)
+					if(c.active) game.nbPlayers++;
+				if(game.nbPlayers == 0)
+					game.nbPlayers = 1;
+				onRemove(true);
 				game.restart();
 			});
 		}
@@ -200,6 +201,8 @@ class ChoosePlayers extends h2d.Sprite
 		back.interactive.onClick = function(e) {
 			slideOut(function() {
 				onRemove(false);
+				while(game.players.length > 0)
+					game.players.pop().remove();
 				remove();
 			});
 		}
@@ -213,11 +216,51 @@ class ChoosePlayers extends h2d.Sprite
 		contRight.verticalSpacing = 1;
 		contRight.isVertical = true;
 		contRight.debug = true;
-/*
+
+//
+
+
+		game.players = [];
 		for(i in 0...4) {
-			var pl = new Player(i, contRight);
-			players.push(pl);
-		}*/
+			var e = new ent.Player(new h3d.col.Point(0, 0, 1));
+			e.x = 4;
+			e.y = -1 - 2 * (i % 2);
+			e.z += 2 * (i < 2 ? 1 : 0);
+			e.play("stand");
+			var p = game.s3d.camera.pos;
+			@:privateAccess e.fxParts.get("ElfHead").z += 1;
+			@:privateAccess e.fxParts.get("ElfHead").x -= 0.5;
+			//@:privateAccess e.obj.setRotate(0, 0, hxd.Math.atan2(p.y - 6 - e.y, p.x - 5 - e.x));
+			@:privateAccess e.obj.currentAnimation.setFrame(Math.random() * (e.obj.currentAnimation.frameCount - 1));
+			@:privateAccess e.light.params = new h3d.Vector(0.8, 0.5, 0.1);
+
+			fairies.push(e);
+			game.players.push(e);
+		}
+
+		ptiles = [];
+		ptiles.push(hxd.Res.UI.Player1.toTile());
+		ptiles.push(hxd.Res.UI.Player2.toTile());
+		ptiles.push(hxd.Res.UI.Player3.toTile());
+		ptiles.push(hxd.Res.UI.Player4.toTile());
+		ptiles.push(hxd.Res.UI.PressStart.toTile());
+
+		for(t in ptiles) {
+			t.dx -= t.width >> 1;
+			t.dy -= t.height >> 1;
+		}
+
+		sticks = [];
+		var b = new h2d.Bitmap(ptiles[0], this);
+		b.filter = true;
+		sticks.push(b);
+		for(i in 0...3) {
+			var b = new h2d.Bitmap(ptiles[4], this);
+			b.blendMode = Alpha;
+			b.filter = true;
+			sticks.push(b);
+		}
+
 
 		onResize();
 	}
@@ -246,25 +289,56 @@ class ChoosePlayers extends h2d.Sprite
 		contRight.needReflow = true;
 
 		root.needReflow = true;
+
+		sticks[0].setScale(0.85 * sc);
+		sticks[0].x = game.s2d.width * 0.53;
+		sticks[0].y = game.s2d.height * 0.45;
+
+		sticks[1].setScale(0.85 * sc);
+		sticks[1].x = game.s2d.width * 0.80;
+		sticks[1].y = game.s2d.height * 0.45;
+
+		sticks[2].setScale(0.85 * sc);
+		sticks[2].x = game.s2d.width * 0.53;
+		sticks[2].y = game.s2d.height * 0.84;
+
+		sticks[3].setScale(0.85 * sc);
+		sticks[3].x = game.s2d.width * 0.78;
+		sticks[3].y = game.s2d.height * 0.88;
 	}
 
 	public function update(dt : Float) {
-		if(game.keys.pressed.yAxis < 0) {
+		if(K.isPressed(K.UP) || (game.keys != null && game.keys.pressed.yAxis < 0)) {
 			Sounds.play("Over");
 			selectId--;
 			if(selectId < 0) selectId = buttons.length - 1;
 			select(selectId);
 		}
-		if(game.keys.pressed.yAxis > 0) {
+		if(K.isPressed(K.DOWN) || (game.keys != null && game.keys.pressed.yAxis > 0)) {
 			Sounds.play("Over");
 			selectId = (selectId + 1) % buttons.length;
 			select(selectId);
 		}
 
-		if(K.isPressed(K.ENTER) || K.isPressed(K.SPACE) || game.keys.pressed.A) {
+		if(K.isPressed(K.ENTER) || K.isPressed(K.SPACE) || (game.keys != null && game.keys.pressed.A)) {
 			Sounds.play("Select");
 			buttons[selectId].onclick();
 		}
 
+		for(i in 0...game.controllers.length) {
+			if(i == 0) {
+				game.controllers[0].active = true;
+				continue;
+			}
+			var c = game.controllers[i];
+			if(c.pressed.start) {
+				c.active = !c.active;
+				sticks[i].tile = c.active ? ptiles[i] : ptiles[4];
+			}
+			if(c.pressed.B) {
+				c.active = false;
+				sticks[i].tile = ptiles[4];
+			}
+		}
 	}
 }

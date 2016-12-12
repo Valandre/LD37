@@ -53,6 +53,8 @@ class Entity
 
 	public var id = 0;
 
+	public var controller : Controller;
+
 	public function new(kind, x = 0., y = 0., z = 0., scale = 1.) {
 		game = Game.inst;
 		game.entities.push(this);
@@ -111,10 +113,11 @@ class Entity
 
 		meshRotate(obj);
 		play("fly");
+		obj.currentAnimation.setFrame(Math.random() * (obj.currentAnimation.frameCount - 1));
 
 		light = new h3d.scene.PointLight();
 		light.color.setColor(color);
-		light.params = new h3d.Vector(0.5, 0.05, 0.01);
+		light.params = new h3d.Vector(0.5, 0.1, 0.02);
 		//light.params = new h3d.Vector(0.8, 0.5, 0.1);
 		light.y += 1;
 		obj.addChild(light);
@@ -570,7 +573,7 @@ class Entity
 			if(parts.count == 0) {
 				//remove();
 				game.players.remove(this);
-				if(game.customScene.views.length == 1 && game.players.length > 0) {
+				if(kind != IA && game.customScene.views.length == 1 && game.players.length > 0) {
 					var pl = game.players[0];
 					var v = game.customScene.views[0];
 					v.id = pl.id;

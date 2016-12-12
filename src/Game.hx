@@ -7,7 +7,6 @@ class Game extends hxd.App {
 
 	public var modelCache : h3d.prim.ModelCache;
 	public var event : hxd.WaitEvent;
-	public var keys : Keys;
 	public var entities : Array<ent.Entity>;
 	public var world : map.World;
 	public var players : Array<ent.Entity>;
@@ -36,6 +35,9 @@ class Game extends hxd.App {
 	public var nbPlayers = 1;
 	public var stars : Array<Int>;
 
+	public var controllers : Array<Controller> = [];
+	public var keys : Controller;
+
 	override function init() {
 
 		customScene = new CustomScene();
@@ -50,7 +52,6 @@ class Game extends hxd.App {
 		catch(e : hxd.res.NotFound) {};
 
 		modelCache = new h3d.prim.ModelCache();
-		keys = new Keys();
 		event = new hxd.WaitEvent();
 
 		world = new map.World(size);
@@ -61,6 +62,12 @@ class Game extends hxd.App {
 
 		menu = new Menu(s2d);
 		//restart();
+
+		hxd.Pad.wait(function(p) {
+			controllers.push(new Controller(controllers.length, p));
+			if(controllers.length == 1)
+				keys = controllers[0];
+		});
 	}
 
 	public function transition(?onReady : Void -> Void, ?onDone : Void -> Void, fadeIn = true ) {
@@ -93,6 +100,9 @@ class Game extends hxd.App {
 
 	public function endGame() {
 		transition(function() {
+			for( c in controllers)
+				c.active = false;
+
 			reset();
 			stars = [0, 0, 0, 0];
 			gameOver = true;
@@ -120,6 +130,9 @@ class Game extends hxd.App {
 		menu = null;
 		ui = null;
 		customScene.clearViews();
+
+		if(controllers.length > 0)
+			controllers[0].active = true;
 	}
 
 	function start(){
@@ -144,6 +157,7 @@ class Game extends hxd.App {
 				b.blendMode = None;
 				bmpViews.push(b);
 			}
+			return pl;
 		}
 
 		var dirs = [
@@ -153,9 +167,18 @@ class Game extends hxd.App {
 			new h3d.col.Point(0, -1, 0)
 			];
 
-		for(i in 0...nbPlayers)
+
+		if(controllers.length == 0)
 			addPlayer(Player, dirs.shift());
-		for(i in 0...4 - nbPlayers)
+		for(c in controllers) {
+			if(c.active) {
+				var pl = addPlayer(Player, dirs.shift());
+				pl.controller = c;
+			}
+			else addPlayer(IA, dirs.shift());
+		}
+
+		for(i in 0...4 - players.length)
 			addPlayer(IA, dirs.shift());
 
 		if(ui != null) ui.remove();
@@ -259,7 +282,7 @@ class Game extends hxd.App {
 		var cam = s3d.camera;
 		cam.pos.x = 25 * Math.cos(camRot);
 		cam.pos.y = 25 * Math.sin(camRot);
-		cam.pos.z = 25 - size >> 1;
+		cam.pos.z = 12.5 - (size >> 1);
 		cam.target.x = 0;
 		cam.target.y = 0;
 		cam.target.z = -size >> 1;
@@ -268,6 +291,20 @@ class Game extends hxd.App {
 		cam.up.z = 1;
 		cam.fovY = 90;
 		camRot += 0.0025 * dt;
+	}
+
+	function updateChooseCamera(dt : Float) {
+		var cam = s3d.camera;
+		cam.pos.x = 8;
+		cam.pos.y = -1.5;
+		cam.pos.z = 2.75 - (size >> 1);
+		cam.target.x = 0;
+		cam.target.y = 0;
+		cam.target.z = 1.75 - (size >> 1);
+		cam.up.x = 0;
+		cam.up.y = 0;
+		cam.up.z = 1;
+		cam.fovY = 60;
 	}
 
 	function updateKeys(dt : Float) {
@@ -295,6 +332,9 @@ class Game extends hxd.App {
 	}
 
 	override function update(dt:Float) {
+		for(c in controllers)
+			c.update(dt);
+
 		if(menu != null) menu.update(dt);
 		if(ui != null) ui.update(dt);
 
@@ -311,11 +351,13 @@ class Game extends hxd.App {
 		if(blackScreen != null)
 			return;
 
-		if(menu != null)
-			updateDefaultCamera(dt);
+		if(menu != null) {
+			if(menu.choose == null)
+				updateDefaultCamera(dt);
+			else updateChooseCamera(dt);
+		}
 
 		updateKeys(dt);
-		keys.update(dt);
 
 		if(pause) return;
 

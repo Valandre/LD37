@@ -67,11 +67,10 @@ class Menu extends h2d.Sprite
 	var selectId = 0;
 
 	var buttons : Array<Button> = [];
-	var choose : ChoosePlayers;
+	public var choose : ChoosePlayers;
 	var title : h2d.Bitmap;
 	var cont : h2d.Flow;
 	var lock = false;
-
 
 	public function new(?parent) {
 		super(parent);
@@ -94,8 +93,6 @@ class Menu extends h2d.Sprite
 		root.isVertical = true;
 
 		init();
-
-		//hxd.Pad.wait(function(p) trace(p));
 	}
 
 	function init() {
@@ -262,19 +259,19 @@ class Menu extends h2d.Sprite
 		if(choose != null)
 			choose.update(dt);
 		else {
-			if(game.keys.pressed.yAxis < 0) {
+			if(K.isPressed(K.UP) || (game.keys != null && game.keys.pressed.yAxis < 0)) {
 				Sounds.play("Over");
 				selectId--;
 				if(selectId < 0) selectId = buttons.length - 1;
 				select(selectId);
 			}
-			if(game.keys.pressed.yAxis > 0) {
+			if(K.isPressed(K.DOWN) || (game.keys != null && game.keys.pressed.yAxis > 0)) {
 				Sounds.play("Over");
 				selectId = (selectId + 1) % buttons.length;
 				select(selectId);
 			}
 
-			if(K.isPressed(K.ENTER) || K.isPressed(K.SPACE) || game.keys.pressed.A) {
+			if(K.isPressed(K.ENTER) || K.isPressed(K.SPACE) || (game.keys != null && game.keys.pressed.A)) {
 				Sounds.play("Select");
 				buttons[selectId].onclick();
 			}
