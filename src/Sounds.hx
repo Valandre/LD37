@@ -5,10 +5,10 @@ typedef S = flash.media.Sound;
 typedef C = flash.media.SoundChannel;
 typedef T = flash.media.SoundTransform;
 
-/*
-@:keep @:sound("res/sfx/ValMak.mp3")
+
+@:keep @:sound("res/sfx/bensound-happyrock.mp3")
 class Loop extends S {
-}*/
+}
 
 
 @:keep @:sound("res/sfx/321.mp3")
@@ -26,7 +26,11 @@ class Select extends S {
 @:keep @:sound("res/sfx/winner.mp3")
 class Winner extends S {
 }
+/*
 @:keep @:sound("res/sfx/crash.mp3")
+class Crash extends S {
+}*/
+@:keep @:sound("res/sfx/xplode.wav")
 class Crash extends S {
 }
 
@@ -47,13 +51,12 @@ class Sounds {
 		if(Game.inst.mute) return;
 
 		switch(name) {
-			/*
 			case "Loop":
 				if(!Game.inst.mute) {
 					var t = new T();
 					t.volume = 0.5;
 					musicChannel = s.play(0, 99999, t);
-				}*/
+				}
 
 			case "Count":
 				s.play(0, 0);
@@ -66,7 +69,9 @@ class Sounds {
 			case "Winner":
 				s.play(0, 0);
 			case "Crash":
-				s.play(0, 0);
+				var t = new T();
+				t.volume = 0.8;
+				s.play(0, 0, t);
 
 				/*
 				var t = new T();

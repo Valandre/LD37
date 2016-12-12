@@ -234,7 +234,7 @@ class ChoosePlayers extends h2d.Sprite
 			@:privateAccess e.fxParts.get("ElfHead").x -= 0.5;
 			//@:privateAccess e.obj.setRotate(0, 0, hxd.Math.atan2(p.y - 6 - e.y, p.x - 5 - e.x));
 			@:privateAccess e.obj.currentAnimation.setFrame(Math.random() * (e.obj.currentAnimation.frameCount - 1));
-			@:privateAccess e.light.params = new h3d.Vector(0.8, 0.5, 0.1);
+			//@:privateAccess e.light.params = new h3d.Vector(0.8, 0.5, 0.1);
 
 			fairies.push(e);
 			game.players.push(e);

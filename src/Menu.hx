@@ -132,6 +132,8 @@ class Menu extends h2d.Sprite
 			sound.tiles.push(sound.tiles.shift());
 			sound.bt.tile = sound.tiles[1];
 			game.mute = !game.mute;
+			if(game.mute) Sounds.stop("Loop");
+			else Sounds.play("Loop");
 		};
 		buttons.push(sound);
 

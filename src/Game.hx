@@ -74,6 +74,7 @@ class Game extends hxd.App {
 			if(controllers.length == 1)
 				keys = controllers[0];
 		});
+		Sounds.play("Loop");
 	}
 
 	public function transition(?onReady : Void -> Void, ?onDone : Void -> Void, fadeIn = true ) {

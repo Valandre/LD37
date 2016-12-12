@@ -63,7 +63,7 @@ class Entity
 			this.id = game.players.length + 1;
 		else this.id = id;
 		//if(kind == IA) this.id = 0;
-		color = game.COLORS[id];
+		color = game.COLORS[this.id];
 
 		init();
 		this.kind = kind;
