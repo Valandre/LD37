@@ -70,7 +70,7 @@ class ChoosePlayers extends h2d.Sprite
 	var sticks : Array<h2d.Bitmap> = [];
 	var ptiles = [];
 
-	public function new(?parent, onRemove : Bool -> Void) {
+	public function new(?parent, onRemove : Bool -> Void ) {
 		super(parent);
 		game = Game.inst;
 
@@ -92,6 +92,7 @@ class ChoosePlayers extends h2d.Sprite
 		root.horizontalSpacing = 0;
 		root.verticalSpacing = 0;
 
+		game.setAmbient(1);
 		init();
 		slideIn();
 	}
@@ -200,6 +201,7 @@ class ChoosePlayers extends h2d.Sprite
 		var back = new Button("BACK", contLeft);
 		back.interactive.onClick = function(e) {
 			slideOut(function() {
+				game.setAmbient(0);
 				onRemove(false);
 				while(game.players.length > 0)
 					game.players.pop().remove();
@@ -260,7 +262,6 @@ class ChoosePlayers extends h2d.Sprite
 			b.filter = true;
 			sticks.push(b);
 		}
-
 
 		onResize();
 	}

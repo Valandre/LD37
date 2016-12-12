@@ -15,20 +15,9 @@ private class Button extends h2d.Flow {
 		str = name;
 
 		switch(name) {
-			case "START":
-				tiles.push(hxd.Res.UI.Bt_Start0.toTile());
-				tiles.push(hxd.Res.UI.Bt_Start1.toTile());
-			case "SOUND":
-				tiles.push(hxd.Res.UI.Bt_SoundOn0.toTile());
-				tiles.push(hxd.Res.UI.Bt_SoundOn1.toTile());
-				tiles.push(hxd.Res.UI.Bt_SoundOff0.toTile());
-				tiles.push(hxd.Res.UI.Bt_SoundOff1.toTile());
-			case "CREDITS":
-				tiles.push(hxd.Res.UI.Bt_Credits0.toTile());
-				tiles.push(hxd.Res.UI.Bt_Credits1.toTile());
-			case "EXIT":
-				tiles.push(hxd.Res.UI.Bt_Exit0.toTile());
-				tiles.push(hxd.Res.UI.Bt_Exit1.toTile());
+			case "BACK":
+				tiles.push(hxd.Res.UI.Bt_Back0.toTile());
+				tiles.push(hxd.Res.UI.Bt_Back1.toTile());
 		}
 
 		bt = new h2d.Bitmap(tiles[0], this);
@@ -59,9 +48,10 @@ private class Button extends h2d.Flow {
 	}
 }
 
-class Menu extends h2d.Sprite
+class Win extends h2d.Sprite
 {
 	var bg : h2d.Bitmap;
+	var bmpwin : h2d.Bitmap;
 	var game : Game;
 	var root : h2d.Flow;
 	var selectId = 0;
@@ -92,19 +82,12 @@ class Menu extends h2d.Sprite
 		root.verticalSpacing = 5;
 		root.isVertical = true;
 
-		game.setAmbient(0);
+		game.setAmbient(1);
 		init();
 	}
 
-	public function openChoose() {
-		choose = new ChoosePlayers(game.s2d, function(start : Bool) {
-			lock = start;
-			choose = null;
-			slideIn();
-		});
-	}
-
 	function init() {
+
 		cont = new h2d.Flow(root);
 		cont.horizontalAlign = Middle;
 		cont.verticalAlign = Middle;
@@ -113,66 +96,69 @@ class Menu extends h2d.Sprite
 		cont.paddingLeft = 170;
 		cont.paddingTop = 300;
 
-		var start = new Button("START", cont);
-		start.interactive.onClick = function(e) {
+		var back = new Button("BACK", cont);
+		back.interactive.onClick = function(e) {
 			slideOut(function() {
-				choose = new ChoosePlayers(game.s2d, function(start : Bool) {
-					lock = start;
-					choose = null;
-					slideIn();
-				});
+				game.choose();
+				remove();
 			});
 		}
-		buttons.push(start);
-
-
-		var sound = new Button("SOUND", cont);
-		sound.interactive.onClick = function(e) {
-			sound.tiles.push(sound.tiles.shift());
-			sound.tiles.push(sound.tiles.shift());
-			sound.bt.tile = sound.tiles[1];
-			game.mute = !game.mute;
-		};
-		buttons.push(sound);
-
-		var credits = new Button("CREDITS", cont);
-		credits.interactive.onClick = function(e){};
-		buttons.push(credits);
-
-		var exit = new Button("EXIT", cont);
-		exit.interactive.onClick = function(e) hxd.System.exit();
-		buttons.push(exit);
+		buttons.push(back);
 
 		select(selectId);
 		onResize();
 		slideIn();
 
-		/*
-		var t = hxd.Res.UI.smoke.toTile();
-		t.dx -= t.width >> 1;
-		t.dy -= t.height >> 1;
+		var id = 0;
+		var n = 0;
+		for(i in 0...game.stars.length)
+			if(game.stars[i] > n){
+				id = i + 1;
+				n = game.stars[i];
+			}
+
+		var e = new ent.Player(new h3d.col.Point(0, 0, 1), 1, id);
+		e.x = 3;
+		e.y = -2;
+		e.play("stand");
+		var p = game.s3d.camera.pos;
+		@:privateAccess e.fxParts.get("ElfHead").z += 1;
+		@:privateAccess e.fxParts.get("ElfHead").x -= 0.5;
+		@:privateAccess e.obj.currentAnimation.setFrame(Math.random() * (e.obj.currentAnimation.frameCount - 1));
+		@:privateAccess e.light.params = new h3d.Vector(0.8, 0.5, 0.1);
+		@:privateAccess e.obj.setScale(1.5);
+		game.players.push(e);
 
 
-		var batch = new h2d.SpriteBatch(t);
-		batch.blendMode = Add;
-		addChildAt(batch, 0);
-		var parts : Array<h2d.SpriteBatch.BatchElement> = [];
-		inline function addPart() {
-			var e = batch.alloc(t);
-			e.x = game.s2d.width * 0.3;
-			e.y = Math.random() * game.s2d.height;
-			e.scale = 0.01;
-			e.rotation = hxd.Math.srand(Math.PI);
-			parts.push(e);
-		}
-		for(i in 0...10)
-			addPart();
+		var t = hxd.Res.UI.Winner.toTile();
+		bmpwin = new h2d.Bitmap(t);
+		bmpwin.filter = true;
+		bmpwin.x = -t.width;
+		bmpwin.y = 50;
+		bmpwin.blendMode = Alpha;
+		addChildAt(bmpwin, 0);
+		var to = game.s2d.width * 0.5;
 
-		game.event.waitUntil(function(dt) {
-			for(p in parts)
-				p.x += 0.5 * dt;
-			return false;
-		});*/
+		game.event.wait(1, function() {
+			game.event.waitUntil(function(dt) {
+				bmpwin.x += (to - bmpwin.x) * 0.25 * dt;
+				if(Math.abs(to - bmpwin.x) < 1) {
+					var c = 1.;
+					bmpwin.colorAdd = new h3d.Vector(c, c, c);
+					game.event.waitUntil(function(dt) {
+						c -= 0.05 * dt;
+						bmpwin.colorAdd.x = bmpwin.colorAdd.y = bmpwin.colorAdd.y = c;
+						if(c <= 0) {
+							bmpwin.colorAdd = null;
+							return true;
+						}
+						return false;
+					});
+					return true;
+				}
+				return false;
+			});
+		});
 	}
 
 	function slideOut(?onEnd : Void -> Void) {
@@ -187,6 +173,7 @@ class Menu extends h2d.Sprite
 			title.alpha = a;
 			for(b in buttons)
 				b.setAlpha(a);
+			bmpwin.alpha = a;
 			bg.x += sp;
 			sp += 15;
 			bmp.scaleX = bg.x;
@@ -264,26 +251,9 @@ class Menu extends h2d.Sprite
 	}
 
 	public function update(dt : Float) {
-		if(lock) return;
-		if(choose != null)
-			choose.update(dt);
-		else {
-			if(K.isPressed(K.UP) || (game.keys != null && game.keys.pressed.yAxis < 0)) {
-				Sounds.play("Over");
-				selectId--;
-				if(selectId < 0) selectId = buttons.length - 1;
-				select(selectId);
-			}
-			if(K.isPressed(K.DOWN) || (game.keys != null && game.keys.pressed.yAxis > 0)) {
-				Sounds.play("Over");
-				selectId = (selectId + 1) % buttons.length;
-				select(selectId);
-			}
-
-			if(K.isPressed(K.ENTER) || K.isPressed(K.SPACE) || (game.keys != null && game.keys.pressed.A)) {
-				Sounds.play("Select");
-				buttons[selectId].onclick();
-			}
+		if(K.isPressed(K.ENTER) || K.isPressed(K.SPACE) || (game.keys != null && game.keys.pressed.A)) {
+			Sounds.play("Select");
+			buttons[selectId].onclick();
 		}
 	}
 }

@@ -18,6 +18,7 @@ class UI extends h2d.Sprite
 		game = Game.inst;
 		this.onReady = onReady;
 
+		game.setAmbient(1);
 		init();
 	}
 

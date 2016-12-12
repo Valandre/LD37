@@ -4,11 +4,11 @@ import hxd.Key in K;
 
 class Player extends Entity
 {
-	public function new(dir, scale = 1.)	{
+	public function new(dir, scale = 1., ?id)	{
 		game = Game.inst;
 		this.dir = dir;
 		var size = game.size >> 1;
-		super(Player, -size * 0.65 * dir.x, -size * 0.65 * dir.y, -size, scale);
+		super(Player, -size * 0.65 * dir.x, -size * 0.65 * dir.y, -size, scale, id);
 		this.z += w * 0.5;
 	}
 

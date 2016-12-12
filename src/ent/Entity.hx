@@ -55,11 +55,13 @@ class Entity
 
 	public var controller : Controller;
 
-	public function new(kind, x = 0., y = 0., z = 0., scale = 1.) {
+	public function new(kind, x = 0., y = 0., z = 0., scale = 1., ?id) {
 		game = Game.inst;
 		game.entities.push(this);
 
-		this.id = game.players.length + 1;
+		if(id == null)
+			this.id = game.players.length + 1;
+		else this.id = id;
 		//if(kind == IA) this.id = 0;
 		color = game.COLORS[id];
 
@@ -70,7 +72,7 @@ class Entity
 		this.z = z;
 		this.scale = scale;
 
-		wallTex = hxd.Res.load("wall0" + id + ".png").toTexture();
+		wallTex = hxd.Res.load("wall0" + this.id + ".png").toTexture();
 		speed = speedRef;
 	}
 
