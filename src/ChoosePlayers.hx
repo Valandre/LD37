@@ -186,16 +186,6 @@ class ChoosePlayers extends h2d.Sprite
 		contLeft.paddingLeft = 170;
 		contLeft.paddingTop = 300;
 
-
-		var back = new Button("BACK", contLeft);
-		back.interactive.onClick = function(e) {
-			slideOut(function() {
-				onRemove(false);
-				remove();
-			});
-		}
-		buttons.push(back);
-
 		var ready = new Button("READY", contLeft);
 		ready.interactive.onClick = function(e) {
 			slideOut(function() {
@@ -205,6 +195,15 @@ class ChoosePlayers extends h2d.Sprite
 			});
 		}
 		buttons.push(ready);
+
+		var back = new Button("BACK", contLeft);
+		back.interactive.onClick = function(e) {
+			slideOut(function() {
+				onRemove(false);
+				remove();
+			});
+		}
+		buttons.push(back);
 
 		select(selectId);
 
@@ -250,17 +249,20 @@ class ChoosePlayers extends h2d.Sprite
 	}
 
 	public function update(dt : Float) {
-		if(K.isPressed(K.UP)) {
+		if(game.keys.pressed.yAxis < 0) {
+			Sounds.play("Over");
 			selectId--;
 			if(selectId < 0) selectId = buttons.length - 1;
 			select(selectId);
 		}
-		if(K.isPressed(K.DOWN)) {
+		if(game.keys.pressed.yAxis > 0) {
+			Sounds.play("Over");
 			selectId = (selectId + 1) % buttons.length;
 			select(selectId);
 		}
 
-		if(K.isPressed(K.ENTER) || K.isPressed(K.SPACE)) {
+		if(K.isPressed(K.ENTER) || K.isPressed(K.SPACE) || game.keys.pressed.A) {
+			Sounds.play("Select");
 			buttons[selectId].onclick();
 		}
 

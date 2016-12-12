@@ -64,7 +64,7 @@ class UI extends h2d.Sprite
 			scores.push(s);
 		}
 
-		game.event.wait(2, function() start(0));
+		game.event.wait(1, function() start(0));
 		onResize();
 	}
 
@@ -78,10 +78,11 @@ class UI extends h2d.Sprite
 		var sc = 5.;
 		bmp.setScale(sc);
 		game.event.waitUntil(function(dt) {
-			sc -= 0.25 * dt;
+			sc -= 0.4 * dt;
 			bmp.setScale(sc);
 			if(sc <= 1){
 				game.shake(0.025);
+				Sounds.play(id < 3 ? "Count" : "Go");
 				bmp2.alpha = 1;
 				game.event.waitUntil(function(dt) {
 					sc += 0.05 * dt;
@@ -148,6 +149,8 @@ class UI extends h2d.Sprite
 					bmp.colorAdd.x = bmp.colorAdd.y = bmp.colorAdd.y = c;
 					if(c <= 0) {
 						bmp.colorAdd = null;
+
+						Sounds.play("Winner");
 
 						var t = stars[pl.id].clone();
 						t.dx -= t.width >> 1;

@@ -7,7 +7,6 @@ class Game extends hxd.App {
 
 	public var modelCache : h3d.prim.ModelCache;
 	public var event : hxd.WaitEvent;
-	public var sfx : Sfx;
 	public var keys : Keys;
 	public var entities : Array<ent.Entity>;
 	public var world : map.World;
@@ -32,6 +31,8 @@ class Game extends hxd.App {
 	var ui : UI;
 	var blackScreen : h2d.Bitmap;
 
+	public var mute = false;
+
 	public var nbPlayers = 1;
 	public var stars : Array<Int>;
 
@@ -49,7 +50,6 @@ class Game extends hxd.App {
 		catch(e : hxd.res.NotFound) {};
 
 		modelCache = new h3d.prim.ModelCache();
-		sfx = new Sfx();
 		keys = new Keys();
 		event = new hxd.WaitEvent();
 
@@ -61,10 +61,6 @@ class Game extends hxd.App {
 
 		menu = new Menu(s2d);
 		//restart();
-	}
-
-	public static function getSfxLevel() {
-		return 1;
 	}
 
 	public function transition(?onReady : Void -> Void, ?onDone : Void -> Void, fadeIn = true ) {

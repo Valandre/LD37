@@ -125,6 +125,7 @@ class Menu extends h2d.Sprite
 			sound.tiles.push(sound.tiles.shift());
 			sound.tiles.push(sound.tiles.shift());
 			sound.bt.tile = sound.tiles[1];
+			game.mute = !game.mute;
 		};
 		buttons.push(sound);
 
@@ -139,6 +140,33 @@ class Menu extends h2d.Sprite
 		select(selectId);
 		onResize();
 		slideIn();
+
+		/*
+		var t = hxd.Res.UI.smoke.toTile();
+		t.dx -= t.width >> 1;
+		t.dy -= t.height >> 1;
+
+
+		var batch = new h2d.SpriteBatch(t);
+		batch.blendMode = Add;
+		addChildAt(batch, 0);
+		var parts : Array<h2d.SpriteBatch.BatchElement> = [];
+		inline function addPart() {
+			var e = batch.alloc(t);
+			e.x = game.s2d.width * 0.3;
+			e.y = Math.random() * game.s2d.height;
+			e.scale = 0.01;
+			e.rotation = hxd.Math.srand(Math.PI);
+			parts.push(e);
+		}
+		for(i in 0...10)
+			addPart();
+
+		game.event.waitUntil(function(dt) {
+			for(p in parts)
+				p.x += 0.5 * dt;
+			return false;
+		});*/
 	}
 
 	function slideOut(?onEnd : Void -> Void) {
@@ -234,17 +262,20 @@ class Menu extends h2d.Sprite
 		if(choose != null)
 			choose.update(dt);
 		else {
-			if(K.isPressed(K.UP)) {
+			if(game.keys.pressed.yAxis < 0) {
+				Sounds.play("Over");
 				selectId--;
 				if(selectId < 0) selectId = buttons.length - 1;
 				select(selectId);
 			}
-			if(K.isPressed(K.DOWN)) {
+			if(game.keys.pressed.yAxis > 0) {
+				Sounds.play("Over");
 				selectId = (selectId + 1) % buttons.length;
 				select(selectId);
 			}
 
-			if(K.isPressed(K.ENTER) || K.isPressed(K.SPACE)) {
+			if(K.isPressed(K.ENTER) || K.isPressed(K.SPACE) || game.keys.pressed.A) {
+				Sounds.play("Select");
 				buttons[selectId].onclick();
 			}
 		}

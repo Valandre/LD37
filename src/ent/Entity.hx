@@ -38,7 +38,6 @@ class Entity
 	var currentAnim(default,set) : { opts : PlayOptions, name : String };
 	var currentAnimEnd : h3d.anim.Animation;
 	var cachedAnims = new Map<String,AnimationCommand>();
-	var sfxCache : Sfx.SfxContext;
 	var currFx : h3d.scene.Object;
 	var fxParts : Map<String,h3d.parts.GpuParticles>;
 	var fxs = [];
@@ -424,10 +423,8 @@ class Entity
 		var prev = obj.currentAnimation;
 		switch( a ) {
 		case ASingle(a):
-			sfx(currentAnim.name);
 			playAnimation(a,opts.loop);
 			obj.currentAnimation.onAnimEnd = function() {
-				if( opts.loop ) sfx(currentAnim.name);
 				if( onEnd != null ) onEnd();
 			};
 
@@ -443,29 +440,22 @@ class Entity
 
 		case AComplex(start, loop, end):
 			if( start == null ) {
-				sfx(currentAnim.name);
 				playAnimation(loop, opts.loop);
 				obj.currentAnimation.onAnimEnd = function() {
-					if( opts.loop ) sfx(currentAnim.name);
 					if( onEnd != null ) onEnd();
 				};
 			} else {
-				sfx(currentAnim.name+"_start");
 				playAnimation(start, false);
 				obj.currentAnimation.onAnimEnd = function() {
-					sfx(currentAnim.name);
 					playAnimation(loop, opts.loop);
-					obj.currentAnimation.onEvent = onAnimEvent;
 					obj.currentAnimation.speed = opts.speed;
 					obj.currentAnimation.onAnimEnd = function() {
-						if( opts.loop ) sfx(currentAnim.name);
 						if( onEnd != null ) onEnd();
 					};
 				}
 			}
 			currentAnimEnd = end;
 		}
-		obj.currentAnimation.onEvent = onAnimEvent;
 		obj.currentAnimation.speed = opts.speed;
 
 		if( prev != null && opts.smooth != 0 ) {
@@ -490,17 +480,6 @@ class Entity
 		obj.switchToAnimation(new h3d.anim.SmoothTarget(obj.currentAnimation, 0.5));
 		currentAnimEnd = null;
 	}
-
-
-	function sfx( name : String ) {
-		game.sfx.play(name, this);
-	}
-
-	function onAnimEvent( e : String ) {
-		if( e == "sfx" )
-			sfx(currentAnim.name+"_event");
-	}
-
 
 	function getModel() : hxd.res.Model {
 		return null;
@@ -537,7 +516,10 @@ class Entity
 
 		obj.visible = false;
 		fadeTrailFx();
+
 		//
+		Sounds.play("Crash");
+
 		var parts = new h3d.parts.Particles();
 		parts.x = x;
 		parts.y = y;
