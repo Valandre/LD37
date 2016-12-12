@@ -151,6 +151,7 @@ class Game extends hxd.App {
 	function start(){
 		entities = [];
 
+		nbPlayers = 4;
 		switch(nbPlayers) {
 			case 1 : renderer.width = 0; renderer.height = 0;
 			case 2 : renderer.width = 1; renderer.height = 0;
@@ -159,17 +160,17 @@ class Game extends hxd.App {
 		}
 
 		function addPlayer(k : ent.Entity.EntityKind, dir : h3d.col.Point) {
-			var pl = k == Player ? new ent.Player(dir) : new ent.IA(dir);
+			var pl = k == Player ? new ent.IA(dir) : new ent.IA(dir);
 			players.push(pl);
 			var cam = initCamera(pl);
 
-			if(k == Player) {
+			//if(k == Player) {
 				var tex = new h3d.mat.Texture(s2d.width >> renderer.width, s2d.height >> renderer.height, [Target]);
 				customScene.addView(pl.id, cam, tex);
 				var b = new h2d.Bitmap(h2d.Tile.fromTexture(tex), s2d);
 				b.blendMode = None;
 				bmpViews.push(b);
-			}
+			//}
 			return pl;
 		}
 
@@ -351,6 +352,7 @@ class Game extends hxd.App {
 
 		if(menu != null) menu.update(dt);
 		if(ui != null) ui.update(dt);
+		if(win != null) win.update(dt);
 
 		if( K.isDown(K.SHIFT)) {
 			var speed = K.isDown(K.CTRL) ? 0.1 : 5;
@@ -444,9 +446,14 @@ class Game extends hxd.App {
 		}
 	}
 
+
+	override function loadAssets(done) {
+		new hxd.fmt.pak.Loader(s2d, done);
+	}
+
 	public static var inst : Game;
 	static function main() {
 		inst = new Game();
-		hxd.Res.initLocal();
+		//hxd.Res.initLocal();
 	}
 }
