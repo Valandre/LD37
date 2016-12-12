@@ -65,6 +65,17 @@ class Composite extends h3d.scene.Renderer {
 		game.s3d.lightSystem.ambientLight.setColor(0xB1BECE);
 		game.s3d.lightSystem.perPixelLighting = true;
 		game.s3d.lightSystem.shadowLight = light;
+
+		var shadow = Std.instance(getPass("shadow"), h3d.pass.ShadowMap);
+		shadow.size = 1024;
+		shadow.power = 30;
+		shadow.blur.passes = 2;
+		shadow.bias = 0;
+		shadow.color.setColor(0x556596);
+		shadow.calcShadowBounds = function(cam) {
+			cam.orthoBounds = h3d.col.Bounds.fromValues(-100, -100, -100,  200, 200, 200);
+		}
+
 	}
 
 	function myAllocTarget( name : String, ?size = 0, depth = true ) {
@@ -72,6 +83,8 @@ class Composite extends h3d.scene.Renderer {
 	}
 
 	override function render() {
+		shadow.draw(get("shadow"));
+
 
 		var colorTex, depthTex, normalTex;
 		depth.draw(get("depth"));

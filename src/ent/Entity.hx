@@ -612,6 +612,11 @@ class Entity
 				return true;
 			}
 		}
+
+		if(game.world.isCollide(this)) {
+			destroy();
+			return true;
+		}
 		return false;
 	}
 

@@ -10,7 +10,7 @@ class World {
 	public var bounds : h3d.col.Bounds;
 	public var walls : Array<{w : h3d.scene.Mesh, n : h3d.col.Point}>;
 	public var lights : Array<h3d.scene.PointLight>;
-	public var collides : Array<h3d.col.Collider>;
+	public var collides : Array<{m : h3d.Matrix, c : h3d.col.Collider}>;
 
 	public function new(size : Int) {
 		game = Game.inst;
@@ -28,6 +28,7 @@ class World {
 		if( res == null ) return;
 		room = game.modelCache.loadModel(res);
 		room.inheritCulled = true;
+		room.setScale(size / 100);
 		game.s3d.addChild(room);
 
 		for(m in room.getMeshes()) {
@@ -43,16 +44,16 @@ class World {
 		bounds.addPoint(new h3d.col.Point( w * 0.5, w * 0.5, w * 0.5));
 
 		//
-	return;
 		var res = hxd.Res.load("Room/Window01.FBX").toModel();
 		if( res == null ) return;
 		obj = game.modelCache.loadModel(res);
 		obj.inheritCulled = true;
+		obj.setScale(size / 100);
 		game.s3d.addChild(obj);
 
 		for(m in obj.getMeshes()) {
 			if(m.name.substr(0, 7) == "Collide") {
-				collides.push(m.primitive.getCollider());
+				collides.push({m : m.getInvPos(), c : m.primitive.getCollider()});
 				m.remove();
 				continue;
 			}
@@ -73,17 +74,15 @@ class World {
 
 	var pt = new h3d.col.Point();
 	public function isCollide(e : ent.Entity) {
-
-		var r = h3d.col.Ray.fromValues(e.x, e.y, e.z, e.dir.x, e.dir.y, e.dir.z);
-		r.transform(obj.getInvPos());
-		r.normalize();
-
-		var p = new h3d.col.Point(e.x, e.y, e.z);
-		p.transform(obj.getInvPos());
-
 		for(c in collides) {
-			if(c.contains(p)) return true;
-			if(c.rayIntersection(r, pt) != null) return true;
+			var r = h3d.col.Ray.fromValues(e.x, e.y, e.z, e.dir.x, e.dir.y, e.dir.z);
+			r.transform(c.m);
+			r.normalize();
+			if(c.c.rayIntersection(r, pt) != null){
+				var n = new h3d.col.Point(pt.x - r.px, pt.y - r.py, pt.z - r.pz);
+				if(hxd.Math.distanceSq(n.x, n.y, n.z) > 2) continue;
+				return true;
+			}
 		}
 
 		return false;

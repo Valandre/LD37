@@ -15,7 +15,7 @@ class Game extends hxd.App {
 	public var renderer : Composite;
 	public var inspector : hxd.inspect.Inspector;
 
-	public var size = 100;
+	public var size = 60;
 	var camPos : h3d.col.Point;
 	var camTarget : h3d.col.Point;
 	var camPosOffset : h3d.col.Point;
