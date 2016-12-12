@@ -115,8 +115,8 @@ class Entity
 
 		light = new h3d.scene.PointLight();
 		light.color.setColor(color);
-		//light.params = new h3d.Vector(0.5, 0.05, 0.01);
-		light.params = new h3d.Vector(0.8, 0.5, 0.1);
+		light.params = new h3d.Vector(0.5, 0.05, 0.01);
+		//light.params = new h3d.Vector(0.8, 0.5, 0.1);
 		light.y += 1;
 		obj.addChild(light);
 

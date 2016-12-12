@@ -140,7 +140,8 @@ class Composite extends h3d.scene.Renderer {
 		ambient.render();
 
 	//fxaa
-		setTarget(null);
+		resetTarget();
+		//setTarget(null);
 		antiAliasing.apply(final);
 	}
 }

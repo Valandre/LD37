@@ -13,6 +13,7 @@ class Game extends hxd.App {
 	public var world : map.World;
 	public var players : Array<ent.Entity>;
 	public var renderer : Composite;
+	public var customScene : CustomScene;
 	public var inspector : hxd.inspect.Inspector;
 
 	public var size = 60;
@@ -20,6 +21,8 @@ class Game extends hxd.App {
 	var camTarget : h3d.col.Point;
 	var camPosOffset : h3d.col.Point;
 	var camTargetOffset : h3d.col.Point;
+
+	var bmpViews : Array<h2d.Bitmap>;
 
 	var pause = false;
 	var gameOver = true;
@@ -32,12 +35,15 @@ class Game extends hxd.App {
 	public var stars : Array<Int>;
 
 	override function init() {
+
+		customScene = new CustomScene();
+		setScene3D(customScene);
 		renderer = new Composite();
 		s3d.renderer = renderer;
 
 		try {
 			var t = haxe.Json.parse(hxd.Res.load("ambient.js").entry.getText());
-			new hxd.inspect.SceneProps(s3d).applyProps(t.s3d, function(msg) trace(msg));
+			new hxd.inspect.SceneProps(customScene).applyProps(t.s3d, function(msg) trace(msg));
 		}
 		catch(e : hxd.res.NotFound) {};
 
@@ -50,11 +56,15 @@ class Game extends hxd.App {
 		world = new map.World(size);
 		entities = [];
 		players = [];
+		bmpViews = [];
 		stars = [0, 0, 0, 0];
 
 		menu = new Menu(s2d);
-
 		//restart();
+	}
+
+	public static function getSfxLevel() {
+		return 1;
 	}
 
 	public function transition(?onReady : Void -> Void, ?onDone : Void -> Void, fadeIn = true ) {
@@ -107,21 +117,44 @@ class Game extends hxd.App {
 		world.reset();
 		while(players.length > 0)
 			players.pop().remove();
+		while(bmpViews.length > 0)
+			bmpViews.pop().remove();
 		if(menu != null) menu.remove();
 		if(ui != null) ui.remove();
+		customScene.clearViews();
 	}
 
 	function start(){
 		entities = [];
 
-		players.push(new ent.Player(new h3d.col.Point(1, 0, 0))); IAOnly = false;
-		//players.push(new ent.IA(new h3d.col.Point(1, 0, 0))); IAOnly = true;
-		players.push(new ent.IA(new h3d.col.Point(-1, 0, 0)));
-		players.push(new ent.IA(new h3d.col.Point(0, 1, 0)));
-		players.push(new ent.IA(new h3d.col.Point(0, -1, 0)));
+		function addPlayer(k : ent.Entity.EntityKind, dir : h3d.col.Point) {
+			var pl = k == Player ? new ent.Player(dir) : new ent.IA(dir);
+			players.push(pl);
+			var cam = initCamera(pl);
+			if(k == Player) {
+				var tex = new h3d.mat.Texture(s2d.width >> renderer.width, s2d.height >> renderer.height);
+				tex.clear(0xFF0000, 1);
+				customScene.addView(cam, tex);
+				//bmpViews.push(new h2d.Bitmap(h2d.Tile.fromTexture(tex), s2d));
+			}
+		}
 
-		updateCamera(1);
+		addPlayer(Player, new h3d.col.Point(1, 0, 0)); IAOnly = false;
+		//addPlayer(IA, new h3d.col.Point(1, 0, 0)); IAOnly = true;
+		addPlayer(IA, new h3d.col.Point(-1, 0, 0));
+		addPlayer(IA, new h3d.col.Point(0, 1, 0));
+		addPlayer(IA, new h3d.col.Point(0, -1, 0));
 
+		if(ui != null) ui.remove();
+		ui = new UI(s2d, function() {
+			gameOver = false;
+			for(p in players)
+				p.canMove = true;
+		});
+	}
+
+	function initCamera(pl : ent.Entity) {
+		setCameraValues(pl);
 		var cam = s3d.camera;
 		cam.pos.x = camPos.x;
 		cam.pos.y = camPos.y;
@@ -130,43 +163,97 @@ class Game extends hxd.App {
 		cam.target.y = camTarget.y;
 		cam.target.z = camTarget.z;
 		cam.fovY = 90;
-		cam.up.x = 0;
-		cam.up.y = 0;
-		cam.up.z = 1;
-
-		if(ui != null) ui.remove();
-		ui = new UI(s2d, function() {
-			for(p in players)
-				p.canMove = true;
-			gameOver = false;
-		});
-	}
-
-	public static function getSfxLevel() {
-		return 1;
-	}
-
-	function updateCamera(dt : Float) {
-		if(/*IAOnly &&*/ players.length == 0) return;
-		/*else if (!IAOnly && players.length < 4) {
-			var hasPlayer = false;
-			for(p in players) if(p.kind == Player) hasPlayer = true;
-			if(!hasPlayer) return;
-		}*/
-
-		var pl = players[0];
 		var pn = pl.worldNormal;
+		cam.up.x = pn.x;
+		cam.up.y = pn.y;
+		cam.up.z = pn.z;
+		return cam;
+	}
 
+	function setCamera(pl : ent.Entity) {
+		if(pl == null) return;
+		setCameraValues(pl);
+		var cam = s3d.camera;
+		cam.pos.x = camPos.x;
+		cam.pos.y = camPos.y;
+		cam.pos.z = camPos.z;
+		cam.target.x = camTarget.x;
+		cam.target.y = camTarget.y;
+		cam.target.z = camTarget.z;
+
+		var pn = pl.worldNormal;
+		cam.up.x = pn.x;
+		cam.up.y = pn.y;
+		cam.up.z = pn.z;
+	}
+
+	function setCameraValues(pl : ent.Entity) {
+		var pn = pl.worldNormal;
 		var dist = 2;
 		var dz = 4;
 		var dir = pl.dir;
-		camPosOffset = new h3d.col.Point( -dist * dir.x + dz * pn.x, -dist * dir.y + dz * pn.y, -dist * dir.z + dz * pn.z);
-
 		var decal = dz * 0.75;
-		camTargetOffset = new h3d.col.Point(decal * pn.x, decal * pn.y, decal * pn.z);
 
+		camPosOffset = new h3d.col.Point( -dist * dir.x + dz * pn.x, -dist * dir.y + dz * pn.y, -dist * dir.z + dz * pn.z);
+		camTargetOffset = new h3d.col.Point(decal * pn.x, decal * pn.y, decal * pn.z);
 		camPos = new h3d.col.Point(pl.x + camPosOffset.x, pl.y + camPosOffset.y, pl.z  + camPosOffset.z);
 		camTarget = new h3d.col.Point(pl.x + camTargetOffset.x, pl.y + camTargetOffset.y, pl.z  + camTargetOffset.z);
+	}
+
+	function updatePlayerCamera(pl : ent.Entity, dt : Float) {
+		setCameraValues(pl);
+
+		var pn = pl.worldNormal;
+		var dist = 2;
+		var dz = 4;
+		var dir = pl.dir;
+		var decal = dz * 0.75;
+
+		var sp = 0.1 * dt;
+		var cam = customScene.views[pl.id - 1].camera;
+
+		cam.pos.x += (camPos.x - cam.pos.x) * sp;
+		cam.pos.y += (camPos.y - cam.pos.y) * sp;
+		cam.pos.z += (camPos.z - cam.pos.z) * sp;
+		cam.target.x += (camTarget.x - cam.target.x) * sp;
+		cam.target.y += (camTarget.y - cam.target.y) * sp;
+		cam.target.z += (camTarget.z - cam.target.z) * sp;
+
+		var n = new h3d.Vector(cam.pos.x - cam.target.x, cam.pos.y - cam.target.y, cam.pos.z - cam.target.z);
+		var d = dist + decal;
+		if(n.x * n.x + n.y * n.y + n.z * n.z < d * d) {
+			n.normalize();
+			cam.pos.x = cam.target.x + n.x * d;
+			cam.pos.y = cam.target.y + n.y * d;
+			cam.pos.z = cam.target.z + n.z * d;
+		}
+
+		s3d.camera.up.x += (pn.x - s3d.camera.up.x) * sp;
+		s3d.camera.up.y += (pn.y - s3d.camera.up.y) * sp;
+		s3d.camera.up.z += (pn.z - s3d.camera.up.z) * sp;
+
+
+		cam.target.x += pshake.x;
+		cam.pos.x += pshake.y;
+		cam.target.y += pshake.y;
+		cam.pos.y += pshake.x;
+		cam.target.z += pshake.y;
+		cam.pos.z += pshake.y;
+
+		return cam;
+	}
+
+	function updateDefaultCamera(dt : Float) {
+		if( players.length == 0) return;
+
+		var pl = players[0];
+		setCameraValues(pl);
+
+		var pn = pl.worldNormal;
+		var dist = 2;
+		var dz = 4;
+		var dir = pl.dir;
+		var decal = dz * 0.75;
 
 		var sp = 0.1 * dt;
 		var cam = s3d.camera;
@@ -239,7 +326,7 @@ class Game extends hxd.App {
 		event.update(dt);
 
 		if(blackScreen != null) {
-			updateCamera(dt);
+			updateDefaultCamera(dt);
 			return;
 		}
 
@@ -248,7 +335,11 @@ class Game extends hxd.App {
 
 		if(pause) return;
 
-		updateCamera(dt);
+		for( pl in players)
+			if(pl.kind == Player)
+				updatePlayerCamera(pl, dt);
+
+
 		for(e in entities)
 			e.update(dt);
 
@@ -257,19 +348,6 @@ class Game extends hxd.App {
 				gameOver = true;
 				ui.nextRound(players[0]);
 			}
-			/*
-			if(IAOnly && players.length == 0) {
-				gameOver = true;
-				event.wait(0.5,  restart);
-			}
-			else if (!IAOnly && players.length < 4) {
-				var hasPlayer = false;
-				for(p in players) if(p.kind == Player) hasPlayer = true;
-				if(!hasPlayer) {
-					gameOver = true;
-					event.wait(0.5,  restart);
-				}
-			}*/
 		}
 	}
 
