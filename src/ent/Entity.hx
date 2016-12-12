@@ -54,6 +54,8 @@ class Entity
 	public var id = 0;
 
 	public var controller : Controller;
+	public var enableWalls = true;
+	public var enableCollides = true;
 
 	public function new(kind, x = 0., y = 0., z = 0., scale = 1., ?id) {
 		game = Game.inst;
@@ -202,6 +204,10 @@ class Entity
 	}
 
 	public function createWall() {
+		if(!enableWalls) {
+			addTrailFx();
+			return;
+		}
 		if(wall != null) lastwall = wall;
 
 		var n = worldNormal;
@@ -593,6 +599,7 @@ class Entity
 	}
 
 	function hitTest() {
+		if(!enableCollides) return false;
 		var n = worldNormal;
 		var colBounds = obj.getBounds();
 		colBounds.scaleCenter(0.2);
@@ -619,7 +626,7 @@ class Entity
 			wall.scaleX = hxd.Math.distance(x - wall.x, y - wall.y, z - wall.z);
 		hitTest();
 
-		if(canMove && wall == null) {
+		if(canMove && wall == null && enableWalls) {
 			createWall();
 			if(fxParts != null) {
 				var fx = fxParts.get("TrailStart");

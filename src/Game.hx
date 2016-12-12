@@ -340,15 +340,9 @@ class Game extends hxd.App {
 				inspector = new hxd.inspect.Inspector(s3d);
 			}
 		}
-
-		if(K.isPressed(K.BACKSPACE))
-			restart();
-
-		if(IAOnly && K.isPressed(K.TAB))
-			players.push(players.shift());
-
+/*
 		if(K.isPressed("P".code))
-			pause = !pause;
+			pause = !pause;*/
 	}
 
 	override function update(dt:Float) {

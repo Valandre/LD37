@@ -8,11 +8,11 @@ class IA extends Entity
 	var pt = new h3d.col.Point();
 	var time = 0.;
 
-	public function new(dir, scale = 1.)	{
+	public function new(dir, scale = 1., ?id)	{
 		game = Game.inst;
 		this.dir = dir;
 		var size = game.size >> 1;
-		super(IA, -size * 0.65 * dir.x, -size * 0.65 * dir.y, -size, scale);
+		super(IA, -size * 0.65 * dir.x, -size * 0.65 * dir.y, -size, scale, id);
 		this.z += w * 0.5;
 
 		sensor = h3d.col.Ray.fromValues(x, y, z, 0, 0, 0);

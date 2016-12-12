@@ -116,10 +116,13 @@ class Menu extends h2d.Sprite
 		var start = new Button("START", cont);
 		start.interactive.onClick = function(e) {
 			slideOut(function() {
+				while(game.players.length > 0)
+					game.players.pop().remove();
 				choose = new ChoosePlayers(game.s2d, function(start : Bool) {
 					lock = start;
 					choose = null;
 					slideIn();
+					if(!lock)createFairies();
 				});
 			});
 		}
@@ -175,6 +178,27 @@ class Menu extends h2d.Sprite
 				p.x += 0.5 * dt;
 			return false;
 		});*/
+
+		createFairies();
+	}
+
+	function createFairies() {
+		var dirs = [
+		new h3d.col.Point(1, 0, 0),
+		new h3d.col.Point( -1, 0, 0),
+		new h3d.col.Point(0, 1, 0),
+		new h3d.col.Point(0, -1, 0)
+		];
+
+		for( i in 0...8) {
+			var e = new ent.IA(dirs[Std.random(dirs.length)], 1, 1 + Std.random(4));
+			e.x = hxd.Math.srand(game.size * 0.4);
+			e.y = hxd.Math.srand(game.size * 0.4);
+			e.enableCollides = false;
+			e.enableWalls = false;
+			e.canMove = true;
+			game.players.push(e);
+		}
 	}
 
 	function slideOut(?onEnd : Void -> Void) {
