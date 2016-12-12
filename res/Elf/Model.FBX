@@ -10,11 +10,11 @@ FBXHeaderExtension:  {
 		Version: 1000
 		Year: 2016
 		Month: 12
-		Day: 10
-		Hour: 18
-		Minute: 48
-		Second: 9
-		Millisecond: 46
+		Day: 12
+		Hour: 11
+		Minute: 46
+		Second: 40
+		Millisecond: 203
 	}
 	Creator: "FBX SDK/FBX Plugins version 2013.1"
 	SceneInfo: "SceneInfo::GlobalInfo", "UserData" {
@@ -36,13 +36,13 @@ FBXHeaderExtension:  {
 			P: "Original|ApplicationVendor", "KString", "", "", "Autodesk"
 			P: "Original|ApplicationName", "KString", "", "", "3ds Max"
 			P: "Original|ApplicationVersion", "KString", "", "", "2013"
-			P: "Original|DateTime_GMT", "DateTime", "", "", "10/12/2016 17:48:09.045"
+			P: "Original|DateTime_GMT", "DateTime", "", "", "12/12/2016 10:46:40.202"
 			P: "Original|FileName", "KString", "", "", "C:\Projects\LD37\trunk\res\Elf\Model.FBX"
 			P: "LastSaved", "Compound", "", ""
 			P: "LastSaved|ApplicationVendor", "KString", "", "", "Autodesk"
 			P: "LastSaved|ApplicationName", "KString", "", "", "3ds Max"
 			P: "LastSaved|ApplicationVersion", "KString", "", "", "2013"
-			P: "LastSaved|DateTime_GMT", "DateTime", "", "", "10/12/2016 17:48:09.045"
+			P: "LastSaved|DateTime_GMT", "DateTime", "", "", "12/12/2016 10:46:40.202"
 		}
 	}
 }
@@ -60,7 +60,7 @@ GlobalSettings:  {
 		P: "UnitScaleFactor", "double", "Number", "",100
 		P: "OriginalUnitScaleFactor", "double", "Number", "",100.00000066
 		P: "AmbientColor", "ColorRGB", "Color", "",0.733333349227905,0.635294139385223,0.509803950786591
-		P: "DefaultCamera", "KString", "", "", "Producer Perspective"
+		P: "DefaultCamera", "KString", "", "", "Producer Front"
 		P: "TimeMode", "enum", "", "",6
 		P: "TimeSpanStart", "KTime", "Time", "",0
 		P: "TimeSpanStop", "KTime", "Time", "",153953860000
@@ -73,7 +73,7 @@ GlobalSettings:  {
 
 Documents:  {
 	Count: 1
-	Document: 561146872, "", "Scene" {
+	Document: 526010832, "", "Scene" {
 		Properties70:  {
 			P: "SourceObject", "object", "", ""
 			P: "ActiveAnimStackName", "KString", "", "", ""
@@ -312,10 +312,10 @@ Definitions:  {
 ;------------------------------------------------------------------
 
 Objects:  {
-	NodeAttribute: 2592484504, "NodeAttribute::", "Null" {
+	NodeAttribute: 523892016, "NodeAttribute::", "Null" {
 		TypeFlags: "Null"
 	}
-	Geometry: 570753648, "Geometry::", "Mesh" {
+	Geometry: 528338576, "Geometry::", "Mesh" {
 		Properties70:  {
 			P: "Color", "ColorRGB", "Color", "",0,0,0
 		}
@@ -642,244 +642,244 @@ Objects:  {
 			}
 		}
 	}
-	NodeAttribute: 495857336, "NodeAttribute::", "Root" {
+	NodeAttribute: 526663288, "NodeAttribute::", "Root" {
 		TypeFlags: "Null", "Skeleton", "Root"
 	}
-	NodeAttribute: 495857208, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526663608, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.750587522983551
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495857656, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526662136, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.994692951440811
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495856184, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526662200, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.454853899776936
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495857912, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526662776, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.454853795468807
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495857016, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526662392, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.170504061505199
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495856952, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526530296, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.0136456154286861
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495856888, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526531192, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.0136456154286861
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495856504, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526532600, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.454853743314743
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495859640, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526531000, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.454853847622871
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495858488, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526533624, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.170504048466682
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495859448, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526533560, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.0136456154286861
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495858232, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526534008, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.0136456154286861
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495858808, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526533304, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
-			P: "Size", "double", "Number", "",0.452702648937702
+			P: "Size", "double", "Number", "",0.452702596783638
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495859832, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526533688, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.146623458713293
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495859576, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526534328, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.71871367096901
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495859896, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526534584, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.609136417508125
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495858680, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526534072, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.770510010421276
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495859000, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526533240, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.770510010421276
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495859192, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526533432, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.71871367096901
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495863864, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526533880, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.609136573970318
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495863544, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526535416, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.770509749650955
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495862072, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526535992, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.770509749650955
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495864120, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526535672, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",2.78737729787827
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495865784, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526536184, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",2.78737729787827
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495865848, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526536312, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",1.9290129840374
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495865272, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526536504, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",1.46230211853981
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495866104, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526536376, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",1.46230211853981
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495865208, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526535096, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.653009042143822
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495864504, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526536952, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.653009042143822
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495865976, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526535608, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.70772585272789
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495865528, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526537848, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.70772585272789
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495864632, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526538040, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.685839086771011
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495864888, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526538616, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.685839086771011
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495866168, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526538808, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.683650232851505
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495866936, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526538296, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.683650232851505
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495866488, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526538744, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
-			P: "Size", "double", "Number", "",0.693662822246552
+			P: "Size", "double", "Number", "",0.693662874400616
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495867256, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526537592, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
-			P: "Size", "double", "Number", "",0.693662822246552
+			P: "Size", "double", "Number", "",0.693662874400616
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 495867064, "NodeAttribute::", "LimbNode" {
-		Properties70:  {
-			P: "Size", "double", "Number", "",0.847964271903038
-		}
-		TypeFlags: "Skeleton"
-	}
-	NodeAttribute: 495866808, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 526537400, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",0.847964271903038
 		}
 		TypeFlags: "Skeleton"
 	}
-	Model: 3171075288, "Model::Root", "Null" {
+	NodeAttribute: 526537912, "NodeAttribute::", "LimbNode" {
+		Properties70:  {
+			P: "Size", "double", "Number", "",0.847964271903038
+		}
+		TypeFlags: "Skeleton"
+	}
+	Model: 1261586320, "Model::Root", "Null" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -892,7 +892,7 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3171082048, "Model::body", "Mesh" {
+	Model: 1261597136, "Model::body", "Mesh" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -907,7 +907,7 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3171067176, "Model::Bip001", "Root" {
+	Model: 1261610656, "Model::Bip001", "Root" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -922,7 +922,7 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3171076640, "Model::Bip001 Pelvis", "LimbNode" {
+	Model: 1261601192, "Model::Bip001 Pelvis", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -935,35 +935,35 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3171056360, "Model::Bip001 Spine", "LimbNode" {
+	Model: 1261595784, "Model::Bip001 Spine", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
 			P: "Lcl Translation", "Lcl Translation", "", "A",0.107226774096489,-5.12727128807455e-005,1.59829525614441e-007
-			P: "Lcl Rotation", "Lcl Rotation", "", "A",-0.000231752849410057,-8.1234347377222e-005,-4.95437732427282
-			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000002071247,1.00000002071964,1.00000000000919
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",-0.000231752849559178,-8.12343474294923e-005,-4.95437689898095
+			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000002006902,1.00000002007619,1.00000000000919
 			P: "MaxHandle", "int", "Integer", "UH",4019
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3171068528, "Model::Bip001 L Thigh", "LimbNode" {
+	Model: 1261579560, "Model::Bip001 L Thigh", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",-0.106830596923828,-0.00920954998582602,0.0932445004582405
-			P: "Lcl Rotation", "Lcl Rotation", "", "A",179.999839745604,1.01068951979447e-005,179.22479733524
-			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000009335717,0.999999974162691,1.00000000000393
+			P: "Lcl Translation", "Lcl Translation", "", "A",-0.106830596923828,-0.00920954905450344,0.0932445004582405
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",179.999839745604,1.0106893568482e-005,179.224796908392
+			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000009345798,0.999999974263494,1.00000000000393
 			P: "MaxHandle", "int", "Integer", "UH",4023
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3171053656, "Model::Bip001 L Calf", "LimbNode" {
+	Model: 1261602544, "Model::Bip001 L Calf", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "RotationActive", "bool", "", "",1
@@ -982,7 +982,7 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3171079344, "Model::Bip001 L Foot", "LimbNode" {
+	Model: 1261603896, "Model::Bip001 L Foot", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -996,7 +996,7 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3171061768, "Model::Bip001 L Toe0", "LimbNode" {
+	Model: 1261594432, "Model::Bip001 L Toe0", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -1010,7 +1010,7 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3171080696, "Model::Bip001 L Toe0Nub", "LimbNode" {
+	Model: 1261582264, "Model::Bip001 L Toe0Nub", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -1024,21 +1024,21 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3171083400, "Model::Bip001 R Thigh", "LimbNode" {
+	Model: 1261591728, "Model::Bip001 R Thigh", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",-0.106830596923828,-0.00920903217047453,-0.0932445898652077
-			P: "Lcl Rotation", "Lcl Rotation", "", "A",179.999839745604,1.01068951979447e-005,179.22479733524
-			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000009335717,0.999999974162691,1.00000000000393
+			P: "Lcl Translation", "Lcl Translation", "", "A",-0.106830596923828,-0.00920903123915195,-0.0932445898652077
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",179.999839745604,1.0106893568482e-005,179.224796908392
+			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000009345798,0.999999974263494,1.00000000000393
 			P: "MaxHandle", "int", "Integer", "UH",4026
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3171084752, "Model::Bip001 R Calf", "LimbNode" {
+	Model: 1261598488, "Model::Bip001 R Calf", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "RotationActive", "bool", "", "",1
@@ -1057,7 +1057,7 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3171059064, "Model::Bip001 R Foot", "LimbNode" {
+	Model: 1261587672, "Model::Bip001 R Foot", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -1071,7 +1071,7 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3171057712, "Model::Bip001 R Toe0", "LimbNode" {
+	Model: 1261593080, "Model::Bip001 R Toe0", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -1085,7 +1085,7 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3171060416, "Model::Bip001 R Toe0Nub", "LimbNode" {
+	Model: 1261605248, "Model::Bip001 R Toe0Nub", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -1099,63 +1099,63 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3171064472, "Model::Bip001 Spine1", "LimbNode" {
+	Model: 1261606600, "Model::Bip001 Spine1", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",0.0646206140518188,-4.97084110975266e-005,-1.3734080539507e-010
-			P: "Lcl Rotation", "Lcl Rotation", "", "A",-5.99968653818435e-006,6.32709088887593e-005,-14.9999992361644
-			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000004408929,1.00000004408869,1.00000000000062
+			P: "Lcl Translation", "Lcl Translation", "", "A",0.0646206140518188,-4.97084110975266e-005,-1.37347910822427e-010
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",-5.99968815121936e-006,6.32709130195319e-005,-14.9999984706918
+			P: "Lcl Scaling", "Lcl Scaling", "", "A",0.999999978802218,0.999999978801613,1.00000000000062
 			P: "MaxHandle", "int", "Integer", "UH",4053
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3138893024, "Model::Bip001 Neck", "LimbNode" {
+	Model: 1261580912, "Model::Bip001 Neck", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",0.0646717548370361,-6.5535306930542e-005,-1.81785253516864e-010
-			P: "Lcl Rotation", "Lcl Rotation", "", "A",-2.12906542667054e-005,-7.94578000397355e-005,30.0000034028507
-			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000001634211,1.00000001634122,1.00000000000103
+			P: "Lcl Translation", "Lcl Translation", "", "A",0.0646717846393585,-6.5535306930542e-005,-1.81785253516864e-010
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",-2.12906400350783e-005,-7.94577959823991e-005,30.0000029453143
+			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000014938271,1.00000014938181,1.00000000000103
 			P: "MaxHandle", "int", "Integer", "UH",4038
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3138882208, "Model::Bip001 L Clavicle", "LimbNode" {
+	Model: 1261607952, "Model::Bip001 L Clavicle", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",2.98023223876953e-008,7.56010413169861e-005,0.0209460742771626
-			P: "Lcl Rotation", "Lcl Rotation", "", "A",-90.0004465050388,-79.9998617319226,-120.045186300169
-			P: "Lcl Scaling", "Lcl Scaling", "", "A",0.999999978201587,1.00000005884385,1.00000008616783
+			P: "Lcl Translation", "Lcl Translation", "", "A",2.98023223876953e-008,7.55935907363892e-005,0.0209460742771626
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",-90.0004465050388,-79.9998615214349,-120.045188428158
+			P: "Lcl Scaling", "Lcl Scaling", "", "A",0.999999978849369,1.00000005884385,1.00000008616783
 			P: "MaxHandle", "int", "Integer", "UH",4029
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3138901136, "Model::Bip001 L UpperArm", "LimbNode" {
+	Model: 1261609304, "Model::Bip001 L UpperArm", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",0.102673389017582,0,0
-			P: "Lcl Rotation", "Lcl Rotation", "", "A",36.3453126174025,45.0401399393815,26.1454549722287
-			P: "Lcl Scaling", "Lcl Scaling", "", "A",0.999999882065058,1.00000008573805,0.999999935344109
+			P: "Lcl Translation", "Lcl Translation", "", "A",0.102673403918743,0,-2.98023223876953e-008
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",36.3453105858538,45.040139650838,26.1454550118002
+			P: "Lcl Scaling", "Lcl Scaling", "", "A",0.999999971328746,1.00000020644091,1.00000001532916
 			P: "MaxHandle", "int", "Integer", "UH",4030
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3138876800, "Model::Bip001 L Forearm", "LimbNode" {
+	Model: 542896840, "Model::Bip001 L Forearm", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "RotationActive", "bool", "", "",1
@@ -1166,7 +1166,7 @@ Objects:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",0.0870194882154465,-3.72529029846191e-009,0
+			P: "Lcl Translation", "Lcl Translation", "", "A",0.0870194882154465,0,0
 			P: "Lcl Rotation", "Lcl Rotation", "", "A",0,1.70754714526616e-006,-11.4591574263082
 			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000008622721,0.999999919858864,1
 			P: "MaxHandle", "int", "Integer", "UH",4031
@@ -1174,13 +1174,13 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3138883560, "Model::Bip001 L Hand", "LimbNode" {
+	Model: 542881968, "Model::Bip001 L Hand", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",0.110072866082191,5.58793544769287e-009,-2.98023223876953e-008
+			P: "Lcl Translation", "Lcl Translation", "", "A",0.110072866082191,-1.86264514923096e-009,-2.98023223876953e-008
 			P: "Lcl Rotation", "Lcl Rotation", "", "A",-89.9543771044346,3.41509458500637e-006,4.26886823125797e-007
 			P: "Lcl Scaling", "Lcl Scaling", "", "A",1,0.999999959403754,0.999999959394853
 			P: "MaxHandle", "int", "Integer", "UH",4032
@@ -1188,13 +1188,13 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3138906544, "Model::Bip001 R Clavicle", "LimbNode" {
+	Model: 542872504, "Model::Bip001 R Clavicle", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",2.98023223876953e-008,7.57128000259399e-005,-0.0209460742771626
+			P: "Lcl Translation", "Lcl Translation", "", "A",2.98023223876953e-008,7.5705349445343e-005,-0.0209460742771626
 			P: "Lcl Rotation", "Lcl Rotation", "", "A",89.9995300842505,80.0001371447983,-120.046089756545
 			P: "Lcl Scaling", "Lcl Scaling", "", "A",0.999999977960181,1.0000000195946,1.00000008616793
 			P: "MaxHandle", "int", "Integer", "UH",4033
@@ -1202,21 +1202,21 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3138880856, "Model::Bip001 R UpperArm", "LimbNode" {
+	Model: 542883320, "Model::Bip001 R UpperArm", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",0.102673411369324,0,0
-			P: "Lcl Rotation", "Lcl Rotation", "", "A",-36.3452654586293,-45.040088831993,26.1454079211302
-			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000018316595,1.00000020401544,1.00000021849866
+			P: "Lcl Translation", "Lcl Translation", "", "A",0.102673418819904,-7.45058059692383e-009,2.98023223876953e-008
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",-36.3452620096837,-45.0400915336779,26.1454078815543
+			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000013607858,1.00000017941543,1.00000021012832
 			P: "MaxHandle", "int", "Integer", "UH",4034
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3138878152, "Model::Bip001 R Forearm", "LimbNode" {
+	Model: 542900896, "Model::Bip001 R Forearm", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "RotationActive", "bool", "", "",1
@@ -1227,7 +1227,7 @@ Objects:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",0.0870195329189301,3.72529029846191e-009,2.98023223876953e-008
+			P: "Lcl Translation", "Lcl Translation", "", "A",0.0870195329189301,-3.72529029846191e-009,2.98023223876953e-008
 			P: "Lcl Rotation", "Lcl Rotation", "", "A",4.26886836191024e-007,1.7075471351561e-006,-11.4591590998181
 			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000009214802,0.999999969394169,1
 			P: "MaxHandle", "int", "Integer", "UH",4035
@@ -1235,13 +1235,13 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3138902488, "Model::Bip001 R Hand", "LimbNode" {
+	Model: 542877912, "Model::Bip001 R Hand", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",0.110072806477547,-7.45058059692383e-009,0
+			P: "Lcl Translation", "Lcl Translation", "", "A",0.110072806477547,-3.72529029846191e-009,0
 			P: "Lcl Rotation", "Lcl Rotation", "", "A",89.9543766829871,-0,0
 			P: "Lcl Scaling", "Lcl Scaling", "", "A",1,0.999999959397819,1.00000007861004
 			P: "MaxHandle", "int", "Integer", "UH",4036
@@ -1249,40 +1249,40 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3138884912, "Model::Bip001 Head", "LimbNode" {
+	Model: 542875208, "Model::Bip001 Head", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",0.0950087904930115,0,7.105427357601e-015
-			P: "Lcl Rotation", "Lcl Rotation", "", "A",-1.16987186395225e-005,-2.65804850443515e-005,-0.0457067760781478
-			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000002016643,1.00000002017823,1.00000000000013
+			P: "Lcl Translation", "Lcl Translation", "", "A",0.0950087904930115,-7.45058059692383e-009,1.4210854715202e-014
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",-1.16987113112466e-005,-2.65804817874636e-005,-0.0457067760781478
+			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000002016643,1.000000020202,1.00000000000013
 			P: "MaxHandle", "int", "Integer", "UH",4037
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3138886264, "Model::Bip001 HeadNub", "LimbNode" {
+	Model: 542890080, "Model::Bip001 HeadNub", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",0.398196756839752,0,-5.6843418860808e-014
+			P: "Lcl Translation", "Lcl Translation", "", "A",0.398196756839752,7.45058059692383e-009,-5.6843418860808e-014
 			P: "Lcl Rotation", "Lcl Rotation", "", "A",3.25688799381864e-012,6.51377598763728e-012,-8.53773646251594e-007
 			P: "MaxHandle", "int", "Integer", "UH",4052
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3138879504, "Model::Bip001 Ponytail1", "LimbNode" {
+	Model: 542873856, "Model::Bip001 Ponytail1", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",0.342264473438263,-0.149784937500954,-4.34423725437227e-007
+			P: "Lcl Translation", "Lcl Translation", "", "A",0.342264473438263,-0.149784952402115,-4.34423725437227e-007
 			P: "Lcl Rotation", "Lcl Rotation", "", "A",-1.79804968254809e-005,7.34265903672497e-005,-27.5192430721723
 			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000002129501,1.00000000752418,1.00000000000087
 			P: "MaxHandle", "int", "Integer", "UH",4110
@@ -1290,13 +1290,13 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3138888968, "Model::Bip001 Ponytail11", "LimbNode" {
+	Model: 542884672, "Model::Bip001 Ponytail11", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",0.275573313236237,-0.000166237354278564,-4.61113813798875e-010
+			P: "Lcl Translation", "Lcl Translation", "", "A",0.275573194026947,-0.000166222453117371,-4.61113813798875e-010
 			P: "Lcl Rotation", "Lcl Rotation", "", "A",-1.43503356046486e-007,-6.75187703205853e-006,2.4350720812223
 			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000003941761,1.00000009960154,1.00000000000001
 			P: "MaxHandle", "int", "Integer", "UH",4111
@@ -1304,7 +1304,7 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3138898432, "Model::Bip001 Ponytail1Nub", "LimbNode" {
+	Model: 542886024, "Model::Bip001 Ponytail1Nub", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -1318,7 +1318,7 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3138887616, "Model::Bip001 Xtra01", "LimbNode" {
+	Model: 542891432, "Model::Bip001 Xtra01", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -1332,7 +1332,7 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3138891672, "Model::Bip001 Xtra01Nub", "LimbNode" {
+	Model: 542887376, "Model::Bip001 Xtra01Nub", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -1346,147 +1346,147 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3138905192, "Model::Bip001 Xtra02", "LimbNode" {
+	Model: 542888728, "Model::Bip001 Xtra02", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",0.0932799577713013,-8.02278518676758e-005,-2.22485141421203e-010
-			P: "Lcl Rotation", "Lcl Rotation", "", "A",-6.04725919335652e-007,1.38503994795976e-005,-5.00000253705096
-			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000002613523,1.0000000261352,1.00000000000003
+			P: "Lcl Translation", "Lcl Translation", "", "A",0.0932799577713013,-8.02129507064819e-005,-2.22485141421203e-010
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",-6.04725913052679e-007,1.38504237623539e-005,-5.00000934124893
+			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000003652502,1.00000003652499,1.00000000000003
 			P: "MaxHandle", "int", "Integer", "UH",4126
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3138894376, "Model::Bip001 Xtra02Nub", "LimbNode" {
+	Model: 542871152, "Model::Bip001 Xtra02Nub", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",0.101103723049164,1.49011611938477e-008,5.6843418860808e-014
-			P: "Lcl Rotation", "Lcl Rotation", "", "A",-179.999999873463,-0.000158915551103373,89.9543777502036
-			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000007859905,1.00000007859521,1.00000000000385
+			P: "Lcl Translation", "Lcl Translation", "", "A",0.101103723049164,0,5.6843418860808e-014
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",-179.999999873465,-0.00015891555465788,89.9543773260363
+			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000013820961,1.00000013819983,1.00000000000385
 			P: "MaxHandle", "int", "Integer", "UH",4125
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3138895728, "Model::Bip001 Xtra03", "LimbNode" {
+	Model: 542876560, "Model::Bip001 Xtra03", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",0.101103663444519,-7.80075788497925e-005,-2.16402895603096e-010
-			P: "Lcl Rotation", "Lcl Rotation", "", "A",1.30275519752744e-011,-3.82684339273685e-011,9.81839693189323e-006
+			P: "Lcl Translation", "Lcl Translation", "", "A",0.101103663444519,-7.79926776885986e-005,-2.16346052184235e-010
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",1.30275519752744e-011,-3.90826559258231e-011,9.81839693189323e-006
 			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000000000001,1.00000000000001,1
 			P: "MaxHandle", "int", "Integer", "UH",4130
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3138897080, "Model::Bip001 Xtra03Nub", "LimbNode" {
+	Model: 542892784, "Model::Bip001 Xtra03Nub", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",0.0979770421981812,0,0
-			P: "Lcl Rotation", "Lcl Rotation", "", "A",-179.999999873476,-0.000158915538074879,89.954377323317
-			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000007860498,1.00000007859521,1.00000000000385
+			P: "Lcl Translation", "Lcl Translation", "", "A",0.0979770421981812,1.49011611938477e-008,5.6843418860808e-014
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",-179.999999873478,-0.000158915538074879,89.954377323317
+			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000007860498,1.00000007860114,1.00000000000385
 			P: "MaxHandle", "int", "Integer", "UH",4129
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3138890320, "Model::Bip001 Xtra04", "LimbNode" {
+	Model: 542899544, "Model::Bip001 Xtra04", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",0.0979770123958588,-7.77691602706909e-005,-2.15663931157906e-010
-			P: "Lcl Rotation", "Lcl Rotation", "", "A",0,-3.8268436208345e-011,9.81839751711533e-006
-			P: "Lcl Scaling", "Lcl Scaling", "", "A",0.99999994039537,0.999999940395369,1
+			P: "Lcl Translation", "Lcl Translation", "", "A",0.0979770421981812,-7.77691602706909e-005,-2.15663931157906e-010
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",0,-3.98968803023171e-011,9.81839751711533e-006
+			P: "Lcl Scaling", "Lcl Scaling", "", "A",0.99999994039537,0.99999994039537,1
 			P: "MaxHandle", "int", "Integer", "UH",4132
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3138875448, "Model::Bip001 Xtra04Nub", "LimbNode" {
+	Model: 542879264, "Model::Bip001 Xtra04Nub", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",0.0976643562316895,0,-1.13686837721616e-013
-			P: "Lcl Rotation", "Lcl Rotation", "", "A",-179.999999873468,-0.000158915573603026,89.9543777474843
-			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000001899443,1.00000001899058,1.00000000000385
+			P: "Lcl Translation", "Lcl Translation", "", "A",0.0976643264293671,1.49011611938477e-008,0
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",-179.999999873469,-0.000158915564130924,89.9543777502036
+			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000007859905,1.00000007859521,1.00000000000385
 			P: "MaxHandle", "int", "Integer", "UH",4131
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3138903840, "Model::Bip001 Xtra05", "LimbNode" {
+	Model: 542880616, "Model::Bip001 Xtra05", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",0.0976643264293671,-7.89165496826172e-005,-2.18960849451832e-010
-			P: "Lcl Rotation", "Lcl Rotation", "", "A",1.3027552751777e-011,-3.01262157384844e-011,9.81839751711533e-006
+			P: "Lcl Translation", "Lcl Translation", "", "A",0.0976642966270447,-7.88867473602295e-005,-2.18847162614111e-010
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",1.3027552751777e-011,-3.09404377854704e-011,9.81839751711533e-006
 			P: "Lcl Scaling", "Lcl Scaling", "", "A",0.99999994039537,0.99999994039537,1
 			P: "MaxHandle", "int", "Integer", "UH",4138
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3138899784, "Model::Bip001 Xtra05Nub", "LimbNode" {
+	Model: 542894136, "Model::Bip001 Xtra05Nub", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",0.0990946888923645,1.49011611938477e-008,1.13686837721616e-013
-			P: "Lcl Rotation", "Lcl Rotation", "", "A",-179.999999873474,-0.000158915541630329,89.9543773260363
-			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000013820961,1.00000013820576,1.00000000000385
+			P: "Lcl Translation", "Lcl Translation", "", "A",0.0990947186946869,0,5.6843418860808e-014
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",-179.999999873463,-0.000158915547547923,89.9543777474843
+			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000001899443,1.00000001899651,1.00000000000385
 			P: "MaxHandle", "int", "Integer", "UH",4137
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3143600600, "Model::Bip001 Xtra06", "LimbNode" {
+	Model: 542895488, "Model::Bip001 Xtra06", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",0.0990946888923645,-9.6440315246582e-005,-2.67391442321241e-010
-			P: "Lcl Rotation", "Lcl Rotation", "", "A",0,-4.23395439196418e-011,9.39151010876745e-006
-			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000000000001,1.00000000000001,1
+			P: "Lcl Translation", "Lcl Translation", "", "A",0.0990947186946869,-9.64552164077759e-005,-2.67448285740102e-010
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",-1.3027552751777e-011,-3.09404377854705e-011,9.39151066854511e-006
+			P: "Lcl Scaling", "Lcl Scaling", "", "A",0.999999940395369,0.99999994039537,1
 			P: "MaxHandle", "int", "Integer", "UH",4140
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 3143601952, "Model::Bip001 Xtra06Nub", "LimbNode" {
+	Model: 542898192, "Model::Bip001 Xtra06Nub", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",0.121137857437134,1.49011611938477e-008,0
-			P: "Lcl Rotation", "Lcl Rotation", "", "A",-179.999999873467,-0.000158915551103373,89.9543777502036
-			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000007859905,1.00000007859521,1.00000000000385
+			P: "Lcl Translation", "Lcl Translation", "", "A",0.121137857437134,1.49011611938477e-008,-1.13686837721616e-013
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",-179.999999873474,-0.000158915541631272,89.9543777529229
+			P: "Lcl Scaling", "Lcl Scaling", "", "A",1.00000013820368,1.00000013819983,1.00000000000385
 			P: "MaxHandle", "int", "Integer", "UH",4139
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Material: 2594596816, "Material::02 - Default", "" {
+	Material: 2060758064, "Material::02 - Default", "" {
 		Version: 102
 		ShadingModel: "phong"
 		MultiLayer: 0
@@ -1508,11 +1508,11 @@ Objects:  {
 			P: "Reflectivity", "double", "Number", "",0
 		}
 	}
-	Deformer: 3167210672, "Deformer::", "Skin" {
+	Deformer: 531469088, "Deformer::", "Skin" {
 		Version: 101
 		Link_DeformAcuracy: 50
 	}
-	Deformer: 3135594224, "SubDeformer::", "Cluster" {
+	Deformer: 1260333144, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *1024 {
@@ -1532,7 +1532,7 @@ Objects:  {
 			a: -0.999999761581421,-1.31130195780811e-006,4.37112639417592e-008,0,4.37113264713912e-008,-4.37113877688801e-008,0.99999988079071,0,-1.31130211221684e-006,0.99999988079071,4.37114450876417e-008,0,-0.0192337036132813,-0.0932445451617241,0.00144273845944554,1
 		} 
 	}
-	Deformer: 3135600432, "SubDeformer::", "Cluster" {
+	Deformer: 1260340904, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *1024 {
@@ -1552,7 +1552,7 @@ Objects:  {
 			a: -0.999999761581421,-1.31130195768492e-006,4.37112639417592e-008,0,4.37113264713911e-008,-4.37113877688801e-008,0.99999988079071,0,1.31130211209365e-006,-0.99999988079071,-4.37114450876417e-008,0,-0.0211830772459507,-0.0932445451617241,0.00144273857586086,1
 		} 
 	}
-	Deformer: 3135596552, "SubDeformer::", "Cluster" {
+	Deformer: 1260323056, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *1024 {
@@ -1572,7 +1572,7 @@ Objects:  {
 			a: -0.999999821186066,-1.31130207105086e-006,1.03315912269863e-007,0,1.03316096542513e-007,-1.31134086907829e-007,0.999999940395355,0,-1.31130213566232e-006,0.999999880790711,1.31134214570254e-007,0,-0.0192339476197958,0.0932445302605629,0.00144274660851806,1
 		} 
 	}
-	Deformer: 3135599656, "SubDeformer::", "Cluster" {
+	Deformer: 1260335472, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *1024 {
@@ -1592,7 +1592,7 @@ Objects:  {
 			a: -0.999999821186066,-1.31130207105086e-006,1.03315912269863e-007,0,1.03316096542513e-007,-1.31134086907829e-007,0.999999940395355,0,-1.31130213566232e-006,0.999999880790711,1.31134214570254e-007,0,-0.0211833212524652,0.0932445302605629,0.00144274684134871,1
 		} 
 	}
-	Deformer: 3135579480, "SubDeformer::", "Cluster" {
+	Deformer: 1260330816, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *63 {
@@ -1608,7 +1608,7 @@ Objects:  {
 			a: 6.12323399574229e-017,0,1.0000000000009,0,-0.999999880790711,-2.69810220748145e-006,6.1232332657904e-017,0,2.69810220748388e-006,-0.999999880791612,-1.65211111608377e-022,0,-1.7017007247766e-010,0,0.145696923136711,1
 		} 
 	}
-	Deformer: 3135581032, "SubDeformer::", "Cluster" {
+	Deformer: 1260331592, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *17 {
@@ -1624,7 +1624,7 @@ Objects:  {
 			a: -0.174432247877121,1.51146622294725e-007,0.984669148921967,0,-0.984669038458568,1.29309853446993e-006,-0.174432228308941,0,-1.29963914186507e-006,-0.999999880790711,-7.67286887689015e-008,0,0.0278138499706984,5.07107067448942e-008,0.378065407276154,1
 		} 
 	}
-	Deformer: 3135615952, "SubDeformer::", "Cluster" {
+	Deformer: 1260330040, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *32 {
@@ -1640,7 +1640,7 @@ Objects:  {
 			a: 0.149635419249535,0.570604860782623,-0.807477116584778,0,0.986867368502819,-0.136445960665278,0.0864589009470863,0,-0.0608431242894973,-0.809810164870764,-0.583528490306729,0,0.0444929972290993,0.122059687972069,0.371954292058945,1
 		} 
 	}
-	Deformer: 3135622160, "SubDeformer::", "Cluster" {
+	Deformer: 1260319952, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *19 {
@@ -1656,7 +1656,7 @@ Objects:  {
 			a: 0.163174450397491,0.984807789325714,-0.0593916177749634,0,0.925416650515806,-0.173646959887229,-0.336824051987715,0,-0.342020241279584,-9.12426583275909e-007,-0.939692595542442,0,0.0277393199503422,0.0209461227059364,0.378052234649658,1
 		} 
 	}
-	Deformer: 3135609744, "SubDeformer::", "Cluster" {
+	Deformer: 1260323832, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *24 {
@@ -1672,7 +1672,7 @@ Objects:  {
 			a: 0.086362525820732,1.53278833181503e-007,0.996263802051544,0,-0.996263684372442,1.47282052461842e-006,0.0863625156193273,0,-1.45408015692807e-006,-0.99999988079071,2.79902621607976e-007,0,5.12772239744663e-005,-1.56761217340318e-008,0.2529236972332,1
 		} 
 	}
-	Deformer: 3135624488, "SubDeformer::", "Cluster" {
+	Deformer: 1260324608, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *19 {
@@ -1688,7 +1688,7 @@ Objects:  {
 			a: 0.999999582767486,1.3112322676534e-006,0.00079618685413152,0,-0.000796186952565128,2.68513369413254e-006,0.999999701976605,0,1.30909395915506e-006,-0.99999988079071,2.68617645811305e-006,0,0.107960447669029,-8.46220427064281e-009,0.169644996523857,1
 		} 
 	}
-	Deformer: 3135607416, "SubDeformer::", "Cluster" {
+	Deformer: 1260318400, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *16 {
@@ -1704,7 +1704,7 @@ Objects:  {
 			a: 0.341271817684174,8.71147562975239e-007,0.939964652061462,0,-0.939964556296616,1.56702156799195e-006,0.341271782913496,0,-1.17564677977381e-006,-0.99999988079071,1.35362810699728e-006,0,0.00568159855902195,-5.7070241865631e-009,0.317298591136932,1
 		} 
 	}
-	Deformer: 3135608968, "SubDeformer::", "Cluster" {
+	Deformer: 1260320728, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *29 {
@@ -1720,7 +1720,7 @@ Objects:  {
 			a: -0.0494076572358608,0.586338460445404,-0.808558106422424,0,0.996923566021446,-0.0203644315708761,-0.0756854786432399,0,-0.0608431384695991,-0.809810142381113,-0.583528520038928,0,0.0575141981244087,0.171713426709175,0.301688015460968,1
 		} 
 	}
-	Deformer: 3135615176, "SubDeformer::", "Cluster" {
+	Deformer: 1260366512, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *26 {
@@ -1736,7 +1736,7 @@ Objects:  {
 			a: -0.0998334959149354,4.30602113729773e-008,-0.995004236698151,0,-0.99500400065583,-1.32220631433219e-006,0.0998334722316322,0,-1.31130198176547e-006,0.99999988079071,1.74845554283209e-007,0,-1.22441946359686e-007,0.0932445302605629,0.145696923136711,1
 		} 
 	}
-	Deformer: 3135610520, "SubDeformer::", "Cluster" {
+	Deformer: 1260354872, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *33 {
@@ -1752,7 +1752,7 @@ Objects:  {
 			a: 0.0998333469033235,3.04883826629519e-007,-0.995004236698151,0,-0.995004000655778,-1.28729603026782e-006,-0.0998333232205021,0,-1.31130255625683e-006,0.99999988079071,1.74845554294166e-007,0,-0.00648721447214484,0.0932445377111435,0.0810424387454987,1
 		} 
 	}
-	Deformer: 3135606640, "SubDeformer::", "Cluster" {
+	Deformer: 1260351768, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *262 {
@@ -1768,14 +1768,14 @@ Objects:  {
 			a: -0.173646718263626,-3.13801905333757e-007,0.984807968139648,0,-0.984807855073209,1.49739962036324e-006,-0.173646698326657,0,-1.42016052463726e-006,-0.999999880790711,-5.69053156114389e-007,0,0.0112412516027689,6.50709637284308e-008,0.471617639064789,1
 		} 
 	}
-	Deformer: 3135622936, "SubDeformer::", "Cluster" {
+	Deformer: 1260361856, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *80 {
 			a: 324,325,327,328,330,331,332,334,335,337,338,340,341,343,344,346,348,349,350,351,352,353,354,355,356,357,358,359,360,361,362,363,364,393,394,395,396,465,516,538,1217,1218,1220,1221,1223,1224,1225,1227,1228,1230,1231,1232,1234,1235,1237,1238,1240,1242,1243,1244,1245,1246,1247,1248,1249,1250,1251,1252,1253,1254,1255,1256,1257,1286,1287,1288,1289,1406,1429,1430
 		} 
 		Weights: *80 {
-			a: 1,0.5,1,0.5,0.5,1,0.5,1,0.5,1,0.5,1,0.5,1,0.5,1,1,0.5,1,0.5,1,0.5,1,0.5,1,0.5,1,0.5,1,0.5,1,1,0.5,0.5,1,0.5,1,0.5,0.5,1,1,0.5,1,0.5,0.5,1,0.5,1,0.5,1,1,0.5,1,0.5,1,0.5,1,0.5,1,0.5,1,0.5,1,0.5,1,0.5,1,0.5,1,0.5,1,1,0.5,0.5,1,0.5,1,0.5,1,0.5
+			a: 0.75,0.5,0.75,0.5,0.5,0.75,0.5,0.75,0.5,0.75,0.5,0.75,0.5,0.75,0.5,0.75,0.75,0.5,1,0.5,1,0.5,1,0.5,1,0.5,1,0.5,1,0.5,1,1,0.5,0.5,0.75,0.5,1,0.5,0.5,1,0.75,0.5,0.75,0.5,0.5,0.75,0.5,0.75,0.5,0.75,0.75,0.5,0.75,0.5,0.75,0.5,0.75,0.5,1,0.5,1,0.5,1,0.5,1,0.5,1,0.5,1,0.5,1,1,0.5,0.5,0.75,0.5,1,0.5,1,0.5
 		} 
 		Transform: *16 {
 			a: 0.301027353130687,-0.953615693042203,-1.33364588644345e-006,0,3.11370087255909e-007,1.49680544138683e-006,-1.00000011920697,0,0.953615601747605,0.301027381949118,7.47506662303707e-007,0,-0.825872725965807,-0.156554415985419,-3.63886958235454e-007,1
@@ -1784,14 +1784,14 @@ Objects:  {
 			a: 0.301027297973633,3.11370030203762e-007,0.953615427017212,0,-0.953615335720876,1.49680488053143e-006,0.301027269153676,0,-1.33364556848063e-006,-0.999999880790711,7.47506484085989e-007,0,0.0993175432085991,1.67803364092833e-007,0.834692120552063,1
 		} 
 	}
-	Deformer: 3135604312, "SubDeformer::", "Cluster" {
+	Deformer: 1260347112, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
-		Indexes: *75 {
-			a: 325,326,328,329,330,332,333,335,336,338,339,341,342,344,345,347,392,393,398,399,400,401,402,403,404,405,406,407,408,409,410,411,412,413,414,516,517,588,1216,1218,1219,1221,1222,1223,1225,1226,1228,1229,1232,1233,1235,1236,1238,1239,1241,1285,1286,1291,1292,1293,1294,1295,1296,1297,1298,1299,1300,1301,1302,1303,1304,1305,1306,1307,1406
+		Indexes: *95 {
+			a: 324,325,326,327,328,329,330,331,332,333,334,335,336,337,338,339,340,341,342,343,344,345,346,347,348,392,393,394,398,399,400,401,402,403,404,405,406,407,408,409,410,411,412,413,414,516,517,588,1216,1217,1218,1219,1220,1221,1222,1223,1224,1225,1226,1227,1228,1229,1230,1231,1232,1233,1234,1235,1236,1237,1238,1239,1240,1241,1285,1286,1287,1291,1292,1293,1294,1295,1296,1297,1298,1299,1300,1301,1302,1303,1304,1305,1306,1307,1406
 		} 
-		Weights: *75 {
-			a: 0.5,1,0.5,1,0.5,0.5,1,0.5,1,0.5,1,0.5,1,0.5,1,1,1,0.5,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.5,1,1,1,0.5,1,0.5,1,0.5,0.5,1,0.5,1,0.5,1,0.5,1,0.5,1,1,1,0.5,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.5
+		Weights: *95 {
+			a: 0.25,0.5,1,0.25,0.5,1,0.5,0.25,0.5,1,0.25,0.5,1,0.25,0.5,1,0.25,0.5,1,0.25,0.5,1,0.25,1,0.25,1,0.5,0.25,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.5,1,1,1,0.25,0.5,1,0.25,0.5,1,0.5,0.25,0.5,1,0.25,0.5,1,0.25,0.25,0.5,1,0.25,0.5,1,0.25,0.5,1,0.25,1,1,0.5,0.25,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.5
 		} 
 		Transform: *16 {
 			a: 0.260239093923032,-0.96554436418647,-1.36673140157385e-006,0,2.56841504150426e-007,1.48472915662683e-006,-1.00000011920703,0,0.965544323597467,0.26023910486242,6.343763423178e-007,0,-1.10709589194761,-0.109449608662478,-2.33237089597323e-007,1
@@ -1800,7 +1800,7 @@ Objects:  {
 			a: 0.260239034891129,2.56841445889222e-007,0.965544104576111,0,-0.965544063985253,1.48472869500382e-006,0.260239023950451,0,-1.36673107572282e-006,-0.99999988079071,6.34376191072143e-007,0,0.182431146502495,2.53820871876087e-007,1.09743297100067,1
 		} 
 	}
-	Deformer: 3135605864, "SubDeformer::", "Cluster" {
+	Deformer: 1260358752, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *32 {
@@ -1816,7 +1816,7 @@ Objects:  {
 			a: 0.996263444423676,1.31395245261956e-006,-0.0863620340824127,0,0.0863620442798743,2.79974979920945e-006,0.996263562103128,0,1.55083583100871e-006,-0.99999988079071,2.67581412605043e-006,0,0.595572471618652,6.33962429219537e-007,0.135123521089554,1
 		} 
 	}
-	Deformer: 3135619832, "SubDeformer::", "Cluster" {
+	Deformer: 1260343232, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *20 {
@@ -1832,7 +1832,7 @@ Objects:  {
 			a: 0.996263682842255,1.31395290736691e-006,-0.0863624811172485,0,0.0863624913147594,2.79975192643106e-006,0.996263800521695,0,1.55083717614621e-006,-0.99999988079071,2.67581480841031e-006,0,0.201240420341492,1.13856550854052e-007,0.169639050960541,1
 		} 
 	}
-	Deformer: 3135626816, "SubDeformer::", "Cluster" {
+	Deformer: 1260348664, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *20 {
@@ -1848,7 +1848,7 @@ Objects:  {
 			a: 0.99626362323761,1.31395279368007e-006,-0.0863623693585396,0,0.0863623795560381,2.79975133744907e-006,0.996263740917054,0,1.55083683492395e-006,-0.99999988079071,2.67581458085753e-006,0,0.301959574222565,2.46699954686846e-007,0.160829767584801,1
 		} 
 	}
-	Deformer: 3135617504, "SubDeformer::", "Cluster" {
+	Deformer: 1260352544, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *20 {
@@ -1864,7 +1864,7 @@ Objects:  {
 			a: 0.996263563632965,1.31395267999324e-006,-0.0863622575998306,0,0.0863622677973168,2.79975074868921e-006,0.996263681312412,0,1.55083649372086e-006,-0.99999988079071,2.67581435352593e-006,0,0.399563789367676,3.75435064370322e-007,0.152290776371956,1
 		} 
 	}
-	Deformer: 3135618280, "SubDeformer::", "Cluster" {
+	Deformer: 1260360304, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *20 {
@@ -1880,7 +1880,7 @@ Objects:  {
 			a: 0.99626350402832,1.3139525663064e-006,-0.0863621458411217,0,0.0863621560385955,2.79975015992942e-006,0.99626362170777,0,1.55083615251779e-006,-0.99999988079071,2.67581412619431e-006,0,0.496856361627579,5.03759281400562e-007,0.143777653574944,1
 		} 
 	}
-	Deformer: 3135647768, "SubDeformer::", "Cluster" {
+	Deformer: 1260354096, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *32 {
@@ -1896,7 +1896,7 @@ Objects:  {
 			a: 0.149636909365654,-0.570604264736175,-0.807477116584778,0,0.98686701270381,0.136448536469509,0.0864589366998764,0,0.060845235766023,-0.809810017619537,0.583528292049087,0,0.0444933474063873,-0.122059538960457,0.371954381465912,1
 		} 
 	}
-	Deformer: 3135645440, "SubDeformer::", "Cluster" {
+	Deformer: 1260344008, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *20 {
@@ -1912,7 +1912,7 @@ Objects:  {
 			a: 0.163177281618118,-0.984807431697845,-0.0593908205628395,0,0.925416175055897,0.173649342582528,-0.336824227786097,0,0.342020264394002,8.35874770283699e-007,0.939692587129484,0,0.027739379554987,-0.0209460221230984,0.378052234649658,1
 		} 
 	}
-	Deformer: 3135640008, "SubDeformer::", "Cluster" {
+	Deformer: 1260346336, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *29 {
@@ -1928,7 +1928,7 @@ Objects:  {
 			a: -0.049406122416258,-0.586338341236115,-0.808558106422424,0,0.996923566175405,0.0203670476636803,-0.0756854803718242,0,0.0608452448539325,-0.80981001484812,0.583528294947602,0,0.0575146749615669,-0.171713247895241,0.301688134670258,1
 		} 
 	}
-	Deformer: 3135649320, "SubDeformer::", "Cluster" {
+	Deformer: 1260347888, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *25 {
@@ -1944,7 +1944,7 @@ Objects:  {
 			a: -0.0998334959149354,4.30602113729773e-008,-0.995004236698151,0,-0.99500400065583,-1.32220631433219e-006,0.0998334722316322,0,-1.31130198176547e-006,0.99999988079071,1.74845554283209e-007,0,1.22101596389257e-007,-0.0932445451617241,0.145696923136711,1
 		} 
 	}
-	Deformer: 3135643888, "SubDeformer::", "Cluster" {
+	Deformer: 1260359528, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *33 {
@@ -1960,7 +1960,7 @@ Objects:  {
 			a: 0.0998333469033235,3.04883826629519e-007,-0.995004236698151,0,-0.995004000655778,-1.28729603026782e-006,-0.0998333232205021,0,-1.31130255625683e-006,0.99999988079071,1.74845554294166e-007,0,-0.00648696999996901,-0.0932445377111435,0.0810424238443375,1
 		} 
 	}
-	Video: 1643617728, "Video::Map #43", "Clip" {
+	Video: 543160952, "Video::Map #43", "Clip" {
 		Type: "Clip"
 		Properties70:  {
 			P: "Path", "KString", "XRefUrl", "", "C:\Projects\LD37\trunk\res\Elf\01.jpg"
@@ -1969,7 +1969,7 @@ Objects:  {
 		Filename: "C:\Projects\LD37\trunk\res\Elf\01.jpg"
 		RelativeFilename: "01.jpg"
 	}
-	Texture: 585074600, "Texture::Map #43", "" {
+	Texture: 522654536, "Texture::Map #43", "" {
 		Type: "TextureVideoClip"
 		Version: 202
 		TextureName: "Texture::Map #43"
@@ -1985,7 +1985,7 @@ Objects:  {
 		Texture_Alpha_Source: "None"
 		Cropping: 0,0,0,0
 	}
-	CollectionExclusive: 495867512, "DisplayLayer::characters", "DisplayLayer" {
+	CollectionExclusive: 526538488, "DisplayLayer::characters", "DisplayLayer" {
 		Properties70:  {
 			P: "Color", "ColorRGB", "Color", "",0.603921568627451,0.843137254901961,0.898039215686275
 			P: "Show", "bool", "", "",1
@@ -2001,557 +2001,557 @@ Objects:  {
 Connections:  {
 	
 	;Model::Root, Model::RootNode
-	C: "OO",3171075288,0
+	C: "OO",1261586320,0
 	
 	;AnimLayer::BaseLayer, AnimStack::Take 001
-	C: "OO",2589434504,565678664
+	C: "OO",528781352,530848032
 	
 	;Model::body, Model::Root
-	C: "OO",3171082048,3171075288
+	C: "OO",1261597136,1261586320
 	
 	;Model::Bip001, Model::Root
-	C: "OO",3171067176,3171075288
+	C: "OO",1261610656,1261586320
 	
 	;NodeAttribute::, Model::Root
-	C: "OO",2592484504,3171075288
+	C: "OO",523892016,1261586320
 	
 	;Geometry::, Model::body
-	C: "OO",570753648,3171082048
+	C: "OO",528338576,1261597136
 	
 	;Material::02 - Default, Model::body
-	C: "OO",2594596816,3171082048
+	C: "OO",2060758064,1261597136
 	
 	;Model::Bip001 Pelvis, Model::Bip001
-	C: "OO",3171076640,3171067176
+	C: "OO",1261601192,1261610656
 	
 	;NodeAttribute::, Model::Bip001
-	C: "OO",495857336,3171067176
+	C: "OO",526663288,1261610656
 	
 	;Model::Bip001 Spine, Model::Bip001 Pelvis
-	C: "OO",3171056360,3171076640
+	C: "OO",1261595784,1261601192
 	
 	;Model::Bip001 Xtra01, Model::Bip001 Pelvis
-	C: "OO",3138887616,3171076640
+	C: "OO",542891432,1261601192
 	
 	;NodeAttribute::, Model::Bip001 Pelvis
-	C: "OO",495857208,3171076640
+	C: "OO",526663608,1261601192
 	
 	;Model::Bip001 L Thigh, Model::Bip001 Spine
-	C: "OO",3171068528,3171056360
+	C: "OO",1261579560,1261595784
 	
 	;Model::Bip001 R Thigh, Model::Bip001 Spine
-	C: "OO",3171083400,3171056360
+	C: "OO",1261591728,1261595784
 	
 	;Model::Bip001 Spine1, Model::Bip001 Spine
-	C: "OO",3171064472,3171056360
+	C: "OO",1261606600,1261595784
 	
 	;NodeAttribute::, Model::Bip001 Spine
-	C: "OO",495857656,3171056360
+	C: "OO",526662136,1261595784
 	
 	;Model::Bip001 L Calf, Model::Bip001 L Thigh
-	C: "OO",3171053656,3171068528
+	C: "OO",1261602544,1261579560
 	
 	;NodeAttribute::, Model::Bip001 L Thigh
-	C: "OO",495856184,3171068528
+	C: "OO",526662200,1261579560
 	
 	;Model::Bip001 L Foot, Model::Bip001 L Calf
-	C: "OO",3171079344,3171053656
+	C: "OO",1261603896,1261602544
 	
 	;NodeAttribute::, Model::Bip001 L Calf
-	C: "OO",495857912,3171053656
+	C: "OO",526662776,1261602544
 	
 	;Model::Bip001 L Toe0, Model::Bip001 L Foot
-	C: "OO",3171061768,3171079344
+	C: "OO",1261594432,1261603896
 	
 	;NodeAttribute::, Model::Bip001 L Foot
-	C: "OO",495857016,3171079344
+	C: "OO",526662392,1261603896
 	
 	;Model::Bip001 L Toe0Nub, Model::Bip001 L Toe0
-	C: "OO",3171080696,3171061768
+	C: "OO",1261582264,1261594432
 	
 	;NodeAttribute::, Model::Bip001 L Toe0
-	C: "OO",495856952,3171061768
+	C: "OO",526530296,1261594432
 	
 	;NodeAttribute::, Model::Bip001 L Toe0Nub
-	C: "OO",495856888,3171080696
+	C: "OO",526531192,1261582264
 	
 	;Model::Bip001 R Calf, Model::Bip001 R Thigh
-	C: "OO",3171084752,3171083400
+	C: "OO",1261598488,1261591728
 	
 	;NodeAttribute::, Model::Bip001 R Thigh
-	C: "OO",495856504,3171083400
+	C: "OO",526532600,1261591728
 	
 	;Model::Bip001 R Foot, Model::Bip001 R Calf
-	C: "OO",3171059064,3171084752
+	C: "OO",1261587672,1261598488
 	
 	;NodeAttribute::, Model::Bip001 R Calf
-	C: "OO",495859640,3171084752
+	C: "OO",526531000,1261598488
 	
 	;Model::Bip001 R Toe0, Model::Bip001 R Foot
-	C: "OO",3171057712,3171059064
+	C: "OO",1261593080,1261587672
 	
 	;NodeAttribute::, Model::Bip001 R Foot
-	C: "OO",495858488,3171059064
+	C: "OO",526533624,1261587672
 	
 	;Model::Bip001 R Toe0Nub, Model::Bip001 R Toe0
-	C: "OO",3171060416,3171057712
+	C: "OO",1261605248,1261593080
 	
 	;NodeAttribute::, Model::Bip001 R Toe0
-	C: "OO",495859448,3171057712
+	C: "OO",526533560,1261593080
 	
 	;NodeAttribute::, Model::Bip001 R Toe0Nub
-	C: "OO",495858232,3171060416
+	C: "OO",526534008,1261605248
 	
 	;Model::Bip001 Neck, Model::Bip001 Spine1
-	C: "OO",3138893024,3171064472
+	C: "OO",1261580912,1261606600
 	
 	;NodeAttribute::, Model::Bip001 Spine1
-	C: "OO",495858808,3171064472
+	C: "OO",526533304,1261606600
 	
 	;Model::Bip001 L Clavicle, Model::Bip001 Neck
-	C: "OO",3138882208,3138893024
+	C: "OO",1261607952,1261580912
 	
 	;Model::Bip001 R Clavicle, Model::Bip001 Neck
-	C: "OO",3138906544,3138893024
+	C: "OO",542872504,1261580912
 	
 	;Model::Bip001 Head, Model::Bip001 Neck
-	C: "OO",3138884912,3138893024
+	C: "OO",542875208,1261580912
 	
 	;NodeAttribute::, Model::Bip001 Neck
-	C: "OO",495859832,3138893024
+	C: "OO",526533688,1261580912
 	
 	;Model::Bip001 L UpperArm, Model::Bip001 L Clavicle
-	C: "OO",3138901136,3138882208
+	C: "OO",1261609304,1261607952
 	
 	;NodeAttribute::, Model::Bip001 L Clavicle
-	C: "OO",495859576,3138882208
+	C: "OO",526534328,1261607952
 	
 	;Model::Bip001 L Forearm, Model::Bip001 L UpperArm
-	C: "OO",3138876800,3138901136
+	C: "OO",542896840,1261609304
 	
 	;NodeAttribute::, Model::Bip001 L UpperArm
-	C: "OO",495859896,3138901136
+	C: "OO",526534584,1261609304
 	
 	;Model::Bip001 L Hand, Model::Bip001 L Forearm
-	C: "OO",3138883560,3138876800
+	C: "OO",542881968,542896840
 	
 	;NodeAttribute::, Model::Bip001 L Forearm
-	C: "OO",495858680,3138876800
+	C: "OO",526534072,542896840
 	
 	;NodeAttribute::, Model::Bip001 L Hand
-	C: "OO",495859000,3138883560
+	C: "OO",526533240,542881968
 	
 	;Model::Bip001 R UpperArm, Model::Bip001 R Clavicle
-	C: "OO",3138880856,3138906544
+	C: "OO",542883320,542872504
 	
 	;NodeAttribute::, Model::Bip001 R Clavicle
-	C: "OO",495859192,3138906544
+	C: "OO",526533432,542872504
 	
 	;Model::Bip001 R Forearm, Model::Bip001 R UpperArm
-	C: "OO",3138878152,3138880856
+	C: "OO",542900896,542883320
 	
 	;NodeAttribute::, Model::Bip001 R UpperArm
-	C: "OO",495863864,3138880856
+	C: "OO",526533880,542883320
 	
 	;Model::Bip001 R Hand, Model::Bip001 R Forearm
-	C: "OO",3138902488,3138878152
+	C: "OO",542877912,542900896
 	
 	;NodeAttribute::, Model::Bip001 R Forearm
-	C: "OO",495863544,3138878152
+	C: "OO",526535416,542900896
 	
 	;NodeAttribute::, Model::Bip001 R Hand
-	C: "OO",495862072,3138902488
+	C: "OO",526535992,542877912
 	
 	;Model::Bip001 HeadNub, Model::Bip001 Head
-	C: "OO",3138886264,3138884912
+	C: "OO",542890080,542875208
 	
 	;Model::Bip001 Ponytail1, Model::Bip001 Head
-	C: "OO",3138879504,3138884912
+	C: "OO",542873856,542875208
 	
 	;NodeAttribute::, Model::Bip001 Head
-	C: "OO",495864120,3138884912
+	C: "OO",526535672,542875208
 	
 	;NodeAttribute::, Model::Bip001 HeadNub
-	C: "OO",495865784,3138886264
+	C: "OO",526536184,542890080
 	
 	;Model::Bip001 Ponytail11, Model::Bip001 Ponytail1
-	C: "OO",3138888968,3138879504
+	C: "OO",542884672,542873856
 	
 	;NodeAttribute::, Model::Bip001 Ponytail1
-	C: "OO",495865848,3138879504
+	C: "OO",526536312,542873856
 	
 	;Model::Bip001 Ponytail1Nub, Model::Bip001 Ponytail11
-	C: "OO",3138898432,3138888968
+	C: "OO",542886024,542884672
 	
 	;NodeAttribute::, Model::Bip001 Ponytail11
-	C: "OO",495865272,3138888968
+	C: "OO",526536504,542884672
 	
 	;NodeAttribute::, Model::Bip001 Ponytail1Nub
-	C: "OO",495866104,3138898432
+	C: "OO",526536376,542886024
 	
 	;Model::Bip001 Xtra01Nub, Model::Bip001 Xtra01
-	C: "OO",3138891672,3138887616
+	C: "OO",542887376,542891432
 	
 	;Model::Bip001 Xtra02, Model::Bip001 Xtra01
-	C: "OO",3138905192,3138887616
+	C: "OO",542888728,542891432
 	
 	;NodeAttribute::, Model::Bip001 Xtra01
-	C: "OO",495865208,3138887616
+	C: "OO",526535096,542891432
 	
 	;NodeAttribute::, Model::Bip001 Xtra01Nub
-	C: "OO",495864504,3138891672
+	C: "OO",526536952,542887376
 	
 	;Model::Bip001 Xtra02Nub, Model::Bip001 Xtra02
-	C: "OO",3138894376,3138905192
+	C: "OO",542871152,542888728
 	
 	;Model::Bip001 Xtra03, Model::Bip001 Xtra02
-	C: "OO",3138895728,3138905192
+	C: "OO",542876560,542888728
 	
 	;NodeAttribute::, Model::Bip001 Xtra02
-	C: "OO",495865976,3138905192
+	C: "OO",526535608,542888728
 	
 	;NodeAttribute::, Model::Bip001 Xtra02Nub
-	C: "OO",495865528,3138894376
+	C: "OO",526537848,542871152
 	
 	;Model::Bip001 Xtra03Nub, Model::Bip001 Xtra03
-	C: "OO",3138897080,3138895728
+	C: "OO",542892784,542876560
 	
 	;Model::Bip001 Xtra04, Model::Bip001 Xtra03
-	C: "OO",3138890320,3138895728
+	C: "OO",542899544,542876560
 	
 	;NodeAttribute::, Model::Bip001 Xtra03
-	C: "OO",495864632,3138895728
+	C: "OO",526538040,542876560
 	
 	;NodeAttribute::, Model::Bip001 Xtra03Nub
-	C: "OO",495864888,3138897080
+	C: "OO",526538616,542892784
 	
 	;Model::Bip001 Xtra04Nub, Model::Bip001 Xtra04
-	C: "OO",3138875448,3138890320
+	C: "OO",542879264,542899544
 	
 	;Model::Bip001 Xtra05, Model::Bip001 Xtra04
-	C: "OO",3138903840,3138890320
+	C: "OO",542880616,542899544
 	
 	;NodeAttribute::, Model::Bip001 Xtra04
-	C: "OO",495866168,3138890320
+	C: "OO",526538808,542899544
 	
 	;NodeAttribute::, Model::Bip001 Xtra04Nub
-	C: "OO",495866936,3138875448
+	C: "OO",526538296,542879264
 	
 	;Model::Bip001 Xtra05Nub, Model::Bip001 Xtra05
-	C: "OO",3138899784,3138903840
+	C: "OO",542894136,542880616
 	
 	;Model::Bip001 Xtra06, Model::Bip001 Xtra05
-	C: "OO",3143600600,3138903840
+	C: "OO",542895488,542880616
 	
 	;NodeAttribute::, Model::Bip001 Xtra05
-	C: "OO",495866488,3138903840
+	C: "OO",526538744,542880616
 	
 	;NodeAttribute::, Model::Bip001 Xtra05Nub
-	C: "OO",495867256,3138899784
+	C: "OO",526537592,542894136
 	
 	;Model::Bip001 Xtra06Nub, Model::Bip001 Xtra06
-	C: "OO",3143601952,3143600600
+	C: "OO",542898192,542895488
 	
 	;NodeAttribute::, Model::Bip001 Xtra06
-	C: "OO",495867064,3143600600
+	C: "OO",526537400,542895488
 	
 	;NodeAttribute::, Model::Bip001 Xtra06Nub
-	C: "OO",495866808,3143601952
+	C: "OO",526537912,542898192
 	
 	;Deformer::, Geometry::
-	C: "OO",3167210672,570753648
+	C: "OO",531469088,528338576
 	
 	;Texture::Map #43, Material::02 - Default
-	C: "OP",585074600,2594596816, "DiffuseColor"
+	C: "OP",522654536,2060758064, "DiffuseColor"
 	
 	;Video::Map #43, Texture::Map #43
-	C: "OO",1643617728,585074600
+	C: "OO",543160952,522654536
 	
 	;Model::Bip001 Xtra06Nub, DisplayLayer::characters
-	C: "OO",3143601952,495867512
+	C: "OO",542898192,526538488
 	
 	;Model::Bip001 Xtra06, DisplayLayer::characters
-	C: "OO",3143600600,495867512
+	C: "OO",542895488,526538488
 	
 	;Model::Bip001 Xtra05Nub, DisplayLayer::characters
-	C: "OO",3138899784,495867512
+	C: "OO",542894136,526538488
 	
 	;Model::Bip001 Xtra05, DisplayLayer::characters
-	C: "OO",3138903840,495867512
+	C: "OO",542880616,526538488
 	
 	;Model::Bip001 Xtra04Nub, DisplayLayer::characters
-	C: "OO",3138875448,495867512
+	C: "OO",542879264,526538488
 	
 	;Model::Bip001 Xtra04, DisplayLayer::characters
-	C: "OO",3138890320,495867512
+	C: "OO",542899544,526538488
 	
 	;Model::Bip001 Xtra03Nub, DisplayLayer::characters
-	C: "OO",3138897080,495867512
+	C: "OO",542892784,526538488
 	
 	;Model::Bip001 Xtra03, DisplayLayer::characters
-	C: "OO",3138895728,495867512
+	C: "OO",542876560,526538488
 	
 	;Model::Bip001 Xtra02Nub, DisplayLayer::characters
-	C: "OO",3138894376,495867512
+	C: "OO",542871152,526538488
 	
 	;Model::Bip001 Xtra02, DisplayLayer::characters
-	C: "OO",3138905192,495867512
+	C: "OO",542888728,526538488
 	
 	;Model::Bip001 Xtra01Nub, DisplayLayer::characters
-	C: "OO",3138891672,495867512
+	C: "OO",542887376,526538488
 	
 	;Model::Bip001 Xtra01, DisplayLayer::characters
-	C: "OO",3138887616,495867512
+	C: "OO",542891432,526538488
 	
 	;Model::Bip001 Ponytail1Nub, DisplayLayer::characters
-	C: "OO",3138898432,495867512
+	C: "OO",542886024,526538488
 	
 	;Model::Bip001 Ponytail11, DisplayLayer::characters
-	C: "OO",3138888968,495867512
+	C: "OO",542884672,526538488
 	
 	;Model::Bip001 Ponytail1, DisplayLayer::characters
-	C: "OO",3138879504,495867512
+	C: "OO",542873856,526538488
 	
 	;Model::Bip001 HeadNub, DisplayLayer::characters
-	C: "OO",3138886264,495867512
+	C: "OO",542890080,526538488
 	
 	;Model::Bip001 Head, DisplayLayer::characters
-	C: "OO",3138884912,495867512
+	C: "OO",542875208,526538488
 	
 	;Model::Bip001 R Hand, DisplayLayer::characters
-	C: "OO",3138902488,495867512
+	C: "OO",542877912,526538488
 	
 	;Model::Bip001 R Forearm, DisplayLayer::characters
-	C: "OO",3138878152,495867512
+	C: "OO",542900896,526538488
 	
 	;Model::Bip001 R UpperArm, DisplayLayer::characters
-	C: "OO",3138880856,495867512
+	C: "OO",542883320,526538488
 	
 	;Model::Bip001 R Clavicle, DisplayLayer::characters
-	C: "OO",3138906544,495867512
+	C: "OO",542872504,526538488
 	
 	;Model::Bip001 L Hand, DisplayLayer::characters
-	C: "OO",3138883560,495867512
+	C: "OO",542881968,526538488
 	
 	;Model::Bip001 L Forearm, DisplayLayer::characters
-	C: "OO",3138876800,495867512
+	C: "OO",542896840,526538488
 	
 	;Model::Bip001 L UpperArm, DisplayLayer::characters
-	C: "OO",3138901136,495867512
+	C: "OO",1261609304,526538488
 	
 	;Model::Bip001 L Clavicle, DisplayLayer::characters
-	C: "OO",3138882208,495867512
+	C: "OO",1261607952,526538488
 	
 	;Model::Bip001 Neck, DisplayLayer::characters
-	C: "OO",3138893024,495867512
+	C: "OO",1261580912,526538488
 	
 	;Model::Bip001 Spine1, DisplayLayer::characters
-	C: "OO",3171064472,495867512
+	C: "OO",1261606600,526538488
 	
 	;Model::Bip001 R Toe0Nub, DisplayLayer::characters
-	C: "OO",3171060416,495867512
+	C: "OO",1261605248,526538488
 	
 	;Model::Bip001 R Toe0, DisplayLayer::characters
-	C: "OO",3171057712,495867512
+	C: "OO",1261593080,526538488
 	
 	;Model::Bip001 R Foot, DisplayLayer::characters
-	C: "OO",3171059064,495867512
+	C: "OO",1261587672,526538488
 	
 	;Model::Bip001 R Calf, DisplayLayer::characters
-	C: "OO",3171084752,495867512
+	C: "OO",1261598488,526538488
 	
 	;Model::Bip001 R Thigh, DisplayLayer::characters
-	C: "OO",3171083400,495867512
+	C: "OO",1261591728,526538488
 	
 	;Model::Bip001 L Toe0Nub, DisplayLayer::characters
-	C: "OO",3171080696,495867512
+	C: "OO",1261582264,526538488
 	
 	;Model::Bip001 L Toe0, DisplayLayer::characters
-	C: "OO",3171061768,495867512
+	C: "OO",1261594432,526538488
 	
 	;Model::Bip001 L Foot, DisplayLayer::characters
-	C: "OO",3171079344,495867512
+	C: "OO",1261603896,526538488
 	
 	;Model::Bip001 L Calf, DisplayLayer::characters
-	C: "OO",3171053656,495867512
+	C: "OO",1261602544,526538488
 	
 	;Model::Bip001 L Thigh, DisplayLayer::characters
-	C: "OO",3171068528,495867512
+	C: "OO",1261579560,526538488
 	
 	;Model::Bip001 Spine, DisplayLayer::characters
-	C: "OO",3171056360,495867512
+	C: "OO",1261595784,526538488
 	
 	;Model::Bip001 Pelvis, DisplayLayer::characters
-	C: "OO",3171076640,495867512
+	C: "OO",1261601192,526538488
 	
 	;Model::Bip001, DisplayLayer::characters
-	C: "OO",3171067176,495867512
+	C: "OO",1261610656,526538488
 	
 	;Model::body, DisplayLayer::characters
-	C: "OO",3171082048,495867512
+	C: "OO",1261597136,526538488
 	
 	;Model::Root, DisplayLayer::characters
-	C: "OO",3171075288,495867512
+	C: "OO",1261586320,526538488
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135594224,3167210672
+	C: "OO",1260333144,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135600432,3167210672
+	C: "OO",1260340904,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135596552,3167210672
+	C: "OO",1260323056,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135599656,3167210672
+	C: "OO",1260335472,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135579480,3167210672
+	C: "OO",1260330816,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135581032,3167210672
+	C: "OO",1260331592,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135615952,3167210672
+	C: "OO",1260330040,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135622160,3167210672
+	C: "OO",1260319952,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135609744,3167210672
+	C: "OO",1260323832,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135624488,3167210672
+	C: "OO",1260324608,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135607416,3167210672
+	C: "OO",1260318400,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135608968,3167210672
+	C: "OO",1260320728,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135615176,3167210672
+	C: "OO",1260366512,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135610520,3167210672
+	C: "OO",1260354872,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135606640,3167210672
+	C: "OO",1260351768,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135622936,3167210672
+	C: "OO",1260361856,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135604312,3167210672
+	C: "OO",1260347112,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135605864,3167210672
+	C: "OO",1260358752,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135619832,3167210672
+	C: "OO",1260343232,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135626816,3167210672
+	C: "OO",1260348664,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135617504,3167210672
+	C: "OO",1260352544,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135618280,3167210672
+	C: "OO",1260360304,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135647768,3167210672
+	C: "OO",1260354096,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135645440,3167210672
+	C: "OO",1260344008,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135640008,3167210672
+	C: "OO",1260346336,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135649320,3167210672
+	C: "OO",1260347888,531469088
 	
 	;SubDeformer::, Deformer::
-	C: "OO",3135643888,3167210672
+	C: "OO",1260359528,531469088
 	
 	;Model::Bip001 L Toe0, SubDeformer::
-	C: "OO",3171061768,3135594224
+	C: "OO",1261594432,1260333144
 	
 	;Model::Bip001 L Toe0Nub, SubDeformer::
-	C: "OO",3171080696,3135600432
+	C: "OO",1261582264,1260340904
 	
 	;Model::Bip001 R Toe0, SubDeformer::
-	C: "OO",3171057712,3135596552
+	C: "OO",1261593080,1260323056
 	
 	;Model::Bip001 R Toe0Nub, SubDeformer::
-	C: "OO",3171060416,3135599656
+	C: "OO",1261605248,1260335472
 	
 	;Model::Bip001 Pelvis, SubDeformer::
-	C: "OO",3171076640,3135579480
+	C: "OO",1261601192,1260330816
 	
 	;Model::Bip001 Neck, SubDeformer::
-	C: "OO",3138893024,3135581032
+	C: "OO",1261580912,1260331592
 	
 	;Model::Bip001 R UpperArm, SubDeformer::
-	C: "OO",3138880856,3135615952
+	C: "OO",542883320,1260330040
 	
 	;Model::Bip001 R Clavicle, SubDeformer::
-	C: "OO",3138906544,3135622160
+	C: "OO",542872504,1260319952
 	
 	;Model::Bip001 Spine, SubDeformer::
-	C: "OO",3171056360,3135609744
+	C: "OO",1261595784,1260323832
 	
 	;Model::Bip001 Xtra01, SubDeformer::
-	C: "OO",3138887616,3135624488
+	C: "OO",542891432,1260324608
 	
 	;Model::Bip001 Spine1, SubDeformer::
-	C: "OO",3171064472,3135607416
+	C: "OO",1261606600,1260318400
 	
 	;Model::Bip001 R Forearm, SubDeformer::
-	C: "OO",3138878152,3135608968
+	C: "OO",542900896,1260320728
 	
 	;Model::Bip001 R Thigh, SubDeformer::
-	C: "OO",3171083400,3135615176
+	C: "OO",1261591728,1260366512
 	
 	;Model::Bip001 R Calf, SubDeformer::
-	C: "OO",3171084752,3135610520
+	C: "OO",1261598488,1260354872
 	
 	;Model::Bip001 Head, SubDeformer::
-	C: "OO",3138884912,3135606640
+	C: "OO",542875208,1260351768
 	
 	;Model::Bip001 Ponytail1, SubDeformer::
-	C: "OO",3138879504,3135622936
+	C: "OO",542873856,1260361856
 	
 	;Model::Bip001 Ponytail11, SubDeformer::
-	C: "OO",3138888968,3135604312
+	C: "OO",542884672,1260347112
 	
 	;Model::Bip001 Xtra06, SubDeformer::
-	C: "OO",3143600600,3135605864
+	C: "OO",542895488,1260358752
 	
 	;Model::Bip001 Xtra02, SubDeformer::
-	C: "OO",3138905192,3135619832
+	C: "OO",542888728,1260343232
 	
 	;Model::Bip001 Xtra03, SubDeformer::
-	C: "OO",3138895728,3135626816
+	C: "OO",542876560,1260348664
 	
 	;Model::Bip001 Xtra04, SubDeformer::
-	C: "OO",3138890320,3135617504
+	C: "OO",542899544,1260352544
 	
 	;Model::Bip001 Xtra05, SubDeformer::
-	C: "OO",3138903840,3135618280
+	C: "OO",542880616,1260360304
 	
 	;Model::Bip001 L UpperArm, SubDeformer::
-	C: "OO",3138901136,3135647768
+	C: "OO",1261609304,1260354096
 	
 	;Model::Bip001 L Clavicle, SubDeformer::
-	C: "OO",3138882208,3135645440
+	C: "OO",1261607952,1260344008
 	
 	;Model::Bip001 L Forearm, SubDeformer::
-	C: "OO",3138876800,3135640008
+	C: "OO",542896840,1260346336
 	
 	;Model::Bip001 L Thigh, SubDeformer::
-	C: "OO",3171068528,3135649320
+	C: "OO",1261579560,1260347888
 	
 	;Model::Bip001 L Calf, SubDeformer::
-	C: "OO",3171053656,3135643888
+	C: "OO",1261602544,1260359528
 }
