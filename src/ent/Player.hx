@@ -14,8 +14,8 @@ class Player extends Entity
 
 	function updateKeys() {
 		var v = 0;
-		if(K.isPressed(K.LEFT) || game.keys.pressed.xAxis < 0) v = -1;
-		if(K.isPressed(K.RIGHT) || game.keys.pressed.xAxis > 0) v = 1;
+		if(game.keys.pressed.xAxis < 0) v = -1;
+		if(game.keys.pressed.xAxis > 0) v = 1;
 		if(v == 0) return;
 		changeDir(v);
 	}
@@ -30,11 +30,24 @@ class Player extends Entity
 
 	override public function update(dt:Float) {
 		if(dead) {
-			var hasPlayer = false;
-			for(p in game.players) if(p.kind == Player) hasPlayer = true;
-			if(!hasPlayer) {
-				if(K.isPressed(K.LEFT) || game.keys.pressed.xAxis < 0) game.players.unshift(game.players.pop());
-				if(K.isPressed(K.RIGHT) || game.keys.pressed.xAxis > 0) game.players.push(game.players.shift());
+			if(game.nbPlayers == 1 && game.players.length > 0 && game.players.indexOf(this) == -1) {
+
+				inline function setCam() {
+					var pl = game.players[0];
+					var v = game.customScene.views[0];
+					v.id = pl.id;
+					v.camera = game.initCamera(pl);
+					game.s3d.camera = v.camera;
+				}
+
+				if(game.keys.pressed.xAxis < 0) {
+					game.players.unshift(game.players.pop());
+					setCam();
+				}
+				if(game.keys.pressed.xAxis > 0) {
+					game.players.push(game.players.shift());
+					setCam();
+				}
 			}
 			return;
 		}

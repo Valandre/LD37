@@ -112,7 +112,7 @@ class UI extends h2d.Sprite
 		var t = hxd.Res.UI.Winner.toTile();
 		var bmp = new h2d.Bitmap(t, this);
 		bmp.filter = true;
-		var sc = 0.7;
+		var sc = 1;
 		bmp.setScale(sc);
 
 		var d = 25;

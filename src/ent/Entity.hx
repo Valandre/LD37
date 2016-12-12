@@ -50,7 +50,7 @@ class Entity
 	var w = 1;
 	var wallSize = 0.4;
 	var wallTex : h3d.mat.Texture;
-	var dead = false;
+	public var dead = false;
 
 	public var id = 0;
 
@@ -588,6 +588,13 @@ class Entity
 			if(parts.count == 0) {
 				//remove();
 				game.players.remove(this);
+				if(game.customScene.views.length == 1 && game.players.length > 0) {
+					var pl = game.players[0];
+					var v = game.customScene.views[0];
+					v.id = pl.id;
+					v.camera = game.initCamera(pl);
+					game.s3d.camera = v.camera;
+				}
 				parts.remove();
 				parts.dispose();
 				return true;
