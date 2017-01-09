@@ -1,4 +1,6 @@
 package ent;
+import lib.Controller;
+import Sounds;
 
 enum EntityKind {
 	Player;
@@ -30,8 +32,9 @@ class Entity
 	var model : hxd.res.Model;
 	var obj : h3d.scene.Object;
 	var color : Int = 0xFFFFFF;
-	var speedRef = 0.4;
+	var speedRef = 0.35;
 	var speed = 0.;
+	var speedAspi = 0.;
 	public var dir : h3d.col.Point;
 	public var worldNormal = new h3d.col.Point(0, 0, 1);
 
@@ -47,15 +50,19 @@ class Entity
 	var light : h3d.scene.PointLight;
 	public var canMove = false;
 	var w = 1;
-	var wallSize = 0.4;
+	var wallSize = 0.3;
 	var wallTex : h3d.mat.Texture;
 	public var dead = false;
 
 	public var id = 0;
 
-	public var controller : Controller;
+	public var controller : lib.Controller;
 	public var enableWalls = true;
 	public var enableCollides = true;
+
+	var sensor : h3d.col.Ray;
+	var pt = new h3d.col.Point();
+	var dray = 5;
 
 	public function new(kind, x = 0., y = 0., z = 0., scale = 1., ?id) {
 		game = Game.inst;
@@ -76,6 +83,8 @@ class Entity
 
 		wallTex = hxd.Res.load("wall0" + this.id + ".png").toTexture();
 		speed = speedRef;
+
+		sensor = h3d.col.Ray.fromValues(x, y, z, 0, 0, 0);
 	}
 
 	public function remove() {
@@ -122,7 +131,6 @@ class Entity
 		light = new h3d.scene.PointLight();
 		light.color.setColor(color);
 		light.params = new h3d.Vector(0.5, 0.1, 0.02);
-		//light.params = new h3d.Vector(0.8, 0.5, 0.1);
 		light.y += 1;
 		obj.addChild(light);
 
@@ -145,12 +153,10 @@ class Entity
 					o.addChild(fx);
 
 					var g = fx.getGroup(name);
-					//g.displayedParts = 0;
 					var sc = 0.;
 					fx.setScale(0);
 					game.event.waitUntil(function(dt) {
 						if(fx == null) return true;
-						//g.displayedParts = hxd.Math.imin(g.nparts, g.displayedParts + 10);
 						sc = Math.min(1, sc + 0.01 * dt);
 						fx.setScale(sc);
 						return sc == 1;
@@ -235,6 +241,8 @@ class Entity
 
 	function move(dt : Float) {
 		speed = Math.min(speedRef, speed + 0.01 * dt);
+		speedAspi += (calcAspiration() - speedAspi) * 0.05 * dt;
+		speed += speedAspi;
 		x += dir.x * speed * dt;
 		y += dir.y * speed * dt;
 		z += dir.z * speed * dt;
@@ -321,6 +329,56 @@ class Entity
 			d.x = -tmp * v * -n.y;
 		}
 		return d;
+	}
+
+	function calcAspiration() {
+		//return 0.;
+
+		var v = 0.;
+		var r = 1.5;
+
+		sensor.px = x + dir.x; sensor.py = y + dir.y; sensor.pz = z + dir.z;
+
+		var d = setDir(dir, -1);
+		sensor.lx = r * d.x; sensor.ly = r * d.y; sensor.lz = r * d.z;
+		if(sensorCollide(r))
+			v += r - Math.min(r, hxd.Math.distance(pt.x - x, pt.y - y));
+
+		var d = setDir(dir, 1);
+		sensor.lx = r * d.x; sensor.ly = r * d.y; sensor.lz = r * d.z;
+		if(sensorCollide(r))
+			v += r - Math.min(r, hxd.Math.distance(pt.x - x, pt.y - y));
+		return v * 0.15;
+	}
+
+	function sensorCollide(ray : Float) {
+		for(w in game.world.walls) {
+			if(w.w == wall) continue;
+			if(w.w == lastwall) continue;
+			if(w.n.x != worldNormal.x || w.n.y != worldNormal.y || w.n.z != worldNormal.z) continue;
+			if(w.w.getBounds().rayIntersection(sensor, pt) != null) {
+				var n = new h3d.col.Point(pt.x - sensor.px, pt.y - sensor.py, pt.z - sensor.pz);
+				if(hxd.Math.distanceSq(n.x, n.y, n.z) > ray * ray) continue;
+				n.normalize();
+				var v = sensor.getDir();
+				v.normalize();
+				if(v.dot(n) > 0)
+					return true;
+			}
+		}
+
+		for(c in game.world.collides) {
+			var r = sensor.clone();
+			r.transform(c.m);
+			r.normalize();
+			if(c.c.rayIntersection(r, pt) != null){
+				var n = new h3d.col.Point(pt.x - r.px, pt.y - r.py, pt.z - r.pz);
+				if(hxd.Math.distanceSq(n.x, n.y, n.z) > ray * ray) continue;
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	function fadeTrailFx() {
@@ -523,13 +581,15 @@ class Entity
 	function destroy() {
 		dead = true;
 		if(wall != null)
-			wall.scaleX = hxd.Math.distance(x + dir.x * 0.5 - wall.x, y + dir.y * 0.5 - wall.y, z + dir.z * 0.5 - wall.z);
+			wall.scaleX = hxd.Math.distance(x - wall.x, y - wall.y, z - wall.z);
 
 		obj.visible = false;
 		fadeTrailFx();
 
 		//
 		Sounds.play("Crash");
+		if(game.players[0] == this)
+			game.shake(0.1, 0.9);
 
 		var parts = new h3d.parts.Particles();
 		parts.x = x;
@@ -579,7 +639,6 @@ class Entity
 			}
 
 			if(parts.count == 0) {
-				//remove();
 				game.players.remove(this);
 				if(kind != IA && game.customScene.views.length == 1 && game.players.length > 0) {
 					var pl = game.players[0];
@@ -594,26 +653,35 @@ class Entity
 			}
 			return false;
 		});
-
-		//remove();
 	}
 
+	var box : h3d.scene.Box;
 	function hitTest() {
 		if(!enableCollides) return false;
 		var n = worldNormal;
+
 		var colBounds = obj.getBounds();
-		colBounds.scaleCenter(0.2);
-		colBounds.offset( -dir.x * 0.5, -dir.y * 0.5, -dir.z * 0.5);
+		colBounds.scaleCenter(0.1);
+		colBounds.offset( -dir.x * 0.75, -dir.y * 0.75 , -dir.z * 0.75);
+
 		for(w in game.world.walls) {
 			if(w.w == wall) continue;
 			if(w.w == lastwall) continue;
 			if(w.n.x != n.x || w.n.y != n.y || w.n.z != n.z) continue;
-			if(w.w.getBounds().collide(colBounds)) {
+			var b = w.w.getBounds();
+			if(b.collide(colBounds)) {
+				//new h3d.scene.Box(b, false, game.s3d);
 				destroy();
 				return true;
 			}
 		}
-
+/*
+		if(game.players[0] == this){
+			if(box != null) box.remove();
+			box = new h3d.scene.Box(colBounds, false, game.s3d);
+			obj.visible = false;
+		}
+*/
 		if(game.world.isCollide(this)) {
 			destroy();
 			return true;
@@ -622,11 +690,11 @@ class Entity
 	}
 
 	public function update(dt : Float) {
-		if(wall != null)
-			wall.scaleX = hxd.Math.distance(x - wall.x, y - wall.y, z - wall.z);
 		hitTest();
+		if(!dead && wall != null)
+			wall.scaleX = hxd.Math.distance(x - wall.x, y - wall.y, z - wall.z);
 
-		if(canMove && wall == null && enableWalls) {
+		if(!dead && canMove && wall == null && enableWalls) {
 			createWall();
 			if(fxParts != null) {
 				var fx = fxParts.get("TrailStart");

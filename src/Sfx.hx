@@ -1,3 +1,5 @@
+package;
+
 typedef SfxContext = Map<String, Array<hxd.res.Sound>>;
 
 class Sfx {

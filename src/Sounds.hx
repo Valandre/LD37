@@ -1,3 +1,5 @@
+package;
+
 
 import flash.events.Event;
 
@@ -9,7 +11,6 @@ typedef T = flash.media.SoundTransform;
 @:keep @:sound("res/sfx/bensound-happyrock.mp3")
 class Loop extends S {
 }
-
 
 @:keep @:sound("res/sfx/321.mp3")
 class Count extends S {
@@ -48,11 +49,11 @@ class Sounds {
 			sounds.set(name, s);
 		}
 
-		if(Game.inst.mute) return;
+		if(!Game.PREFS.music) return;
 
 		switch(name) {
 			case "Loop":
-				if(!Game.inst.mute) {
+				if(Game.PREFS.music) {
 					var t = new T();
 					t.volume = 0.5;
 					musicChannel = s.play(0, 99999, t);

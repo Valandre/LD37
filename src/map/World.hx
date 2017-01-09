@@ -80,7 +80,7 @@ class World {
 			r.normalize();
 			if(c.c.rayIntersection(r, pt) != null){
 				var n = new h3d.col.Point(pt.x - r.px, pt.y - r.py, pt.z - r.pz);
-				if(hxd.Math.distanceSq(n.x, n.y, n.z) > 2) continue;
+				if(hxd.Math.distanceSq(n.x, n.y, n.z) > 1) continue;
 				return true;
 			}
 		}

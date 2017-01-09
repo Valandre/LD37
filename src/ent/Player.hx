@@ -23,23 +23,27 @@ class Player extends Entity
 	override function hitTest() {
 		var b = super.hitTest();
 		if(b) canMove = false;
-
-		//if(this == game.players[0]) trace(game.world.isCollide(this));
 		return b;
 	}
 
+	var currFollow = null;
 	override public function update(dt:Float) {
 		if(dead) {
 			if(game.nbPlayers == 1 && game.players.length > 0 && game.players.indexOf(this) == -1) {
-
 				inline function setCam() {
 					var pl = game.players[0];
 					var v = game.customScene.views[0];
 					v.id = pl.id;
 					v.camera = game.initCamera(pl);
 					game.s3d.camera = v.camera;
+					currFollow = pl;
 				}
 
+				if(currFollow != null && currFollow.dead && game.players.indexOf(currFollow) == -1) {
+					game.players.unshift(game.players.pop());
+					setCam();
+					return;
+				}
 				if((game.nbPlayers == 1 && K.isPressed(K.LEFT)) || (controller != null && controller.pressed.xAxis < 0)) {
 					game.players.unshift(game.players.pop());
 					setCam();
@@ -51,10 +55,10 @@ class Player extends Entity
 			}
 			return;
 		}
-		super.update(dt);
 		if(canMove) {
 			updateKeys();
 			move(dt);
 		}
+		super.update(dt);
 	}
 }

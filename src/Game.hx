@@ -1,7 +1,21 @@
 import hxd.Key in K;
 import hxd.Res;
+import lib.Controller;
+import map.CustomScene;
+import map.Composite;
 import map.World;
+import Sounds;
+import ui.Menu;
+import ui.UI;
+import ui.Win;
 class Game extends hxd.App {
+
+	static public var PREFS = initPrefs();
+	static function initPrefs() {
+		var prefs = { fullScreen : #if hl false #else true #end, music : true };
+		prefs = hxd.Save.load(prefs, "prefs");
+		return prefs;
+	}
 
 	public var COLORS = [0xFFFFFF, 0xFF511C, 0x02DAD8, 0xA1F522, 0xF5227A];
 
@@ -10,8 +24,8 @@ class Game extends hxd.App {
 	public var entities : Array<ent.Entity>;
 	public var world : map.World;
 	public var players : Array<ent.Entity>;
-	public var renderer : Composite;
-	public var customScene : CustomScene;
+	public var renderer : map.Composite;
+	public var customScene : map.CustomScene;
 	public var inspector : hxd.inspect.Inspector;
 
 	public var size = 60;
@@ -20,33 +34,34 @@ class Game extends hxd.App {
 	var camPosOffset : h3d.col.Point;
 	var camTargetOffset : h3d.col.Point;
 
+	var camDist = 4;
+	var camZ = 5.5;
+
 	var bmpViews : Array<h2d.Bitmap>;
 
 	var pause = false;
 	var gameOver = true;
 	var IAOnly = false;
 
-	var menu : Menu;
-	var win : Win;
-	var ui : UI;
+	var menu : ui.Menu;
+	var win : ui.Win;
+	var ui : ui.UI;
 	var blackScreen : h2d.Bitmap;
-
-	public var mute = false;
 
 	public var nbPlayers = 1;
 	public var stars : Array<Int>;
 
-	public var controllers : Array<Controller> = [];
-	public var keys : Controller;
+	public var controllers : Array<lib.Controller> = [];
+	public var keys : lib.Controller;
 
 	var ambient = [];
 	var ambientId = 0;
 
 	override function init() {
 
-		customScene = new CustomScene();
+		customScene = new map.CustomScene();
 		setScene3D(customScene);
-		renderer = new Composite();
+		renderer = new map.Composite();
 		s3d.renderer = renderer;
 
 		try {
@@ -66,15 +81,21 @@ class Game extends hxd.App {
 		bmpViews = [];
 		stars = [0, 0, 0, 0];
 
-		menu = new Menu(s2d);
+		menu = new ui.Menu(s2d);
 		//restart();
 
 		hxd.Pad.wait(function(p) {
-			controllers.push(new Controller(controllers.length, p));
+			controllers.push(new lib.Controller(controllers.length, p));
 			if(controllers.length == 1)
 				keys = controllers[0];
 		});
-		Sounds.play("Loop");
+
+		if(PREFS.music)
+			Sounds.play("Loop");
+	}
+
+	public static function savePrefs() {
+		hxd.Save.save(PREFS, "prefs");
 	}
 
 	public function transition(?onReady : Void -> Void, ?onDone : Void -> Void, fadeIn = true ) {
@@ -108,7 +129,7 @@ class Game extends hxd.App {
 	public function endGame() {
 		transition(function() {
 			reset();
-			win = new Win(s2d);
+			win = new ui.Win(s2d);
 			for( c in controllers)
 				c.active = false;
 			stars = [0, 0, 0, 0];
@@ -118,7 +139,7 @@ class Game extends hxd.App {
 
 	public function choose() {
 		reset();
-		menu = new Menu(s2d);
+		menu = new ui.Menu(s2d);
 		menu.openChoose();
 		win = null;
 	}
@@ -195,7 +216,7 @@ class Game extends hxd.App {
 			addPlayer(IA, dirs.shift());
 
 		if(ui != null) ui.remove();
-		ui = new UI(s2d, function() {
+		ui = new ui.UI(s2d, function() {
 			gameOver = false;
 			for(p in players)
 				p.canMove = true;
@@ -219,17 +240,15 @@ class Game extends hxd.App {
 		cam.target.x = camTarget.x;
 		cam.target.y = camTarget.y;
 		cam.target.z = camTarget.z;
-		cam.fovY = 90;
+		cam.fovY = 80;
 		var pn = pl.worldNormal;
 		cam.up.x = pn.x;
 		cam.up.y = pn.y;
 		cam.up.z = pn.z;
 
-		var dz = 4;
-		var dist = 2;
-		var decal = dz * 0.75;
+		var decal = camZ * 0.75;
 		var n = new h3d.Vector(cam.pos.x - cam.target.x, cam.pos.y - cam.target.y, cam.pos.z - cam.target.z);
-		var d = dist + decal;
+		var d = camDist + decal;
 		if(n.x * n.x + n.y * n.y + n.z * n.z < d * d) {
 			n.normalize();
 			cam.pos.x = cam.target.x + n.x * d;
@@ -241,12 +260,10 @@ class Game extends hxd.App {
 
 	function setCameraValues(pl : ent.Entity) {
 		var pn = pl.worldNormal;
-		var dist = 2;
-		var dz = 4;
 		var dir = pl.dir;
-		var decal = dz * 0.75;
+		var decal = camZ * 0.75;
 
-		camPosOffset = new h3d.col.Point( -dist * dir.x + dz * pn.x, -dist * dir.y + dz * pn.y, -dist * dir.z + dz * pn.z);
+		camPosOffset = new h3d.col.Point( -camDist * dir.x + camZ * pn.x, -camDist * dir.y + camZ * pn.y, -camDist * dir.z + camZ * pn.z);
 		camTargetOffset = new h3d.col.Point(decal * pn.x, decal * pn.y, decal * pn.z);
 		camPos = new h3d.col.Point(pl.x + camPosOffset.x, pl.y + camPosOffset.y, pl.z  + camPosOffset.z);
 		camTarget = new h3d.col.Point(pl.x + camTargetOffset.x, pl.y + camTargetOffset.y, pl.z  + camTargetOffset.z);
@@ -256,12 +273,10 @@ class Game extends hxd.App {
 		setCameraValues(pl);
 
 		var pn = pl.worldNormal;
-		var dist = 2;
-		var dz = 4;
 		var dir = pl.dir;
-		var decal = dz * 0.75;
+		var decal = camZ * 0.75;
 
-		var sp = 0.1 * dt;
+		var sp = 0.15 * dt;
 		var v = customScene.getView(pl.id);
 		if(v == null) return null;
 		var cam = v.camera;
@@ -274,7 +289,7 @@ class Game extends hxd.App {
 		cam.target.z += (camTarget.z - cam.target.z) * sp;
 
 		var n = new h3d.Vector(cam.pos.x - cam.target.x, cam.pos.y - cam.target.y, cam.pos.z - cam.target.z);
-		var d = dist + decal;
+		var d = camDist + decal;
 		if(n.x * n.x + n.y * n.y + n.z * n.z < d * d) {
 			n.normalize();
 			cam.pos.x = cam.target.x + n.x * d;
@@ -282,9 +297,9 @@ class Game extends hxd.App {
 			cam.pos.z = cam.target.z + n.z * d;
 		}
 
-		cam.up.x += (pn.x - cam.up.x) * sp;
-		cam.up.y += (pn.y - cam.up.y) * sp;
-		cam.up.z += (pn.z - cam.up.z) * sp;
+		cam.up.x += (pn.x - cam.up.x) * sp * 0.5;
+		cam.up.y += (pn.y - cam.up.y) * sp * 0.5;
+		cam.up.z += (pn.z - cam.up.z) * sp * 0.5;
 
 
 		cam.target.x += pshake.x;
@@ -393,14 +408,14 @@ class Game extends hxd.App {
 	}
 
 	var pshake = new h2d.col.Point();
-	public function shake(pow : Float = 0.1) {
+	public function shake(pow = 0.1, fade = 0.8) {
 		pshake.x = 0;
 		pshake.y = 0;
 
 		event.waitUntil(function(dt) {
 			pshake.x = hxd.Math.srand(pow);
 			pshake.y = hxd.Math.srand(pow);
-			pow *= Math.pow(0.8, dt);
+			pow *= Math.pow(fade, dt);
 			if(pow < 0.01) {
 				pshake.x = pshake.y = 0;
 				return true;
@@ -445,14 +460,15 @@ class Game extends hxd.App {
 		}
 	}
 
-
+/*
 	override function loadAssets(done) {
 		new hxd.fmt.pak.Loader(s2d, done);
 	}
+*/
 
 	public static var inst : Game;
 	static function main() {
 		inst = new Game();
-		//hxd.Res.initLocal();
+		hxd.Res.initLocal();
 	}
 }
