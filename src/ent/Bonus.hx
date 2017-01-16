@@ -71,7 +71,16 @@ class Bonus extends Entity
 		c.addUVs();
 		c.addNormals();
 		var m = new h3d.scene.Mesh(c, obj);
-		m.material.color.setColor(0xFF00FF);
+		m.material.color.setColor(getBonusColor(bonusKind));
+	}
+
+	static public function getBonusColor(k : BonusKind) {
+		return switch(k) {
+			case SpeedUp: 0x40F010;
+			case Missile: 0xF04020;
+			case Rewind: 0x2080F0;
+			case Ghost: 0xF0F0FF;
+		}
 	}
 
 	function blink() {

@@ -2,6 +2,19 @@ package ent;
 import lib.Controller;
 import Sounds;
 
+
+private class Bonus {
+	public var kind : ent.Bonus.BonusKind;
+
+	public function new (k : ent.Bonus.BonusKind) {
+		kind = k;
+	}
+
+	public function remove() {
+
+	}
+}
+
 class Fairy extends Entity
 {
 	public var dir : h3d.col.Point;
@@ -26,6 +39,8 @@ class Fairy extends Entity
 
 	var sensor : h3d.col.Ray;
 	var dray = 5;
+
+	public var currBonus : Bonus;
 
 	public function new(kind, x = 0., y = 0., z = 0., scale = 1., ?id) {
 		if(id == null) this.id = game.players.length + 1;
@@ -315,7 +330,9 @@ class Fairy extends Entity
 	}
 
 	public function hitBonus(k : ent.Bonus.BonusKind) {
-		trace(k);
+		if(currBonus != null)
+			currBonus.remove();
+		currBonus = new Bonus(k);
 	}
 
 	function destroy() {

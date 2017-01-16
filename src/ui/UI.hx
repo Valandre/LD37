@@ -13,6 +13,7 @@ class UI extends h2d.Sprite
 
 	var stars = [];
 	var scores : Array<h2d.Flow> = [];
+	var bonus : Array<h2d.Bitmap> = [];
 
 	public function new(?parent, ?onReady) {
 		super(parent);
@@ -207,9 +208,56 @@ class UI extends h2d.Sprite
 		scores[2].y = game.s2d.height - scores[1].getSize().height - d;
 		scores[3].x = game.s2d.width - scores[1].getSize().width - d;
 		scores[3].y = game.s2d.height - scores[1].getSize().height - d;
+
+		placeBonus(0);
+		placeBonus(1);
+		placeBonus(2);
+		placeBonus(3);
+	}
+
+	function placeBonus(id : Int) {
+		var d = 50;
+		switch(id) {
+		case 0 :
+			if(bonus[0] != null) {
+				bonus[0].x = d + scores[0].getSize().width;
+				bonus[0].y = scores[0].y;
+			}
+		case 1 :
+			if(bonus[1] != null) {
+				bonus[1].x = scores[1].x - d - bonus[1].tile.width;
+				bonus[1].y = scores[1].y;
+			}
+		case 2 :
+			if(bonus[2] != null) {
+				bonus[2].x = d + scores[2].getSize().width;
+				bonus[2].y = scores[2].y;
+			}
+		case 3 :
+			if(bonus[3] != null) {
+				bonus[3].x = scores[3].x - d - bonus[1].tile.width;
+				bonus[3].y = scores[3].y;
+			}
+		}
 	}
 
 	public function update(dt : Float) {
+		for(p in game.players) {
+			var b = bonus[p.id - 1];
+			if(p.currBonus == null) {
+				if(b != null) {
+					b.remove();
+					b = null;
+				}
+				continue;
+			}
 
+			if(b == null) {
+				b = new h2d.Bitmap(h2d.Tile.fromColor(ent.Bonus.getBonusColor(p.currBonus.kind), 50, 50), this);
+				bonus[p.id - 1] = b;
+			}
+			else b.tile = h2d.Tile.fromColor(ent.Bonus.getBonusColor(p.currBonus.kind), 50, 50);
+			placeBonus(p.id - 1);
+		}
 	}
 }
