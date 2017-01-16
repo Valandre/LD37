@@ -314,6 +314,9 @@ class Fairy extends Entity
 		meshRotate(fx);
 	}
 
+	public function hitBonus(k : ent.Bonus.BonusKind) {
+		trace(k);
+	}
 
 	function destroy() {
 		dead = true;

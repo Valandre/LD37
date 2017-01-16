@@ -11,11 +11,12 @@ class Bonus extends Entity
 {
 	var bonusKind :BonusKind;
 	var w = 1.5;
-	var lifeTime = 0;
+	var lifeTime = 10.; //seconds
 
-	public function new(k : BonusKind)	{
+	public function new()	{
 		game = Game.inst;
-		bonusKind = k;
+		var all = BonusKind.createAll();
+		bonusKind = all[Std.random(all.length)];
 
 		var face = Std.random(6);
 		var x = 0.;
@@ -73,7 +74,29 @@ class Bonus extends Entity
 		m.material.color.setColor(0xFF00FF);
 	}
 
+	function blink() {
+		for(m in obj.getMeshes()) {
+			m.material.blendMode = Alpha;
+			m.material.color.w = (Std.int(lifeTime * 10) % 2) == 0 ? 1 : 0.2;
+		}
+	}
+
 	override public function update(dt:Float) {
 		super.update(dt);
+		lifeTime -= dt / 60;
+		if(lifeTime < 0) {
+			remove();
+			return;
+		}
+
+		if(lifeTime < 2)
+			blink();
+
+		for(p in game.players)
+			if(obj.getBounds().contains(new h3d.col.Point(p.x, p.y, p.z))) {
+				remove();
+				p.hitBonus(bonusKind);
+				break;
+			}
 	}
 }

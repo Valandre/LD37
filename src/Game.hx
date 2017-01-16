@@ -422,8 +422,7 @@ class Game extends hxd.App {
 
 		if(!gameOver) {
 			if(bonus.length < bonusMaxCount && Math.random() < 0.01) {
-				return;
-				var b = new ent.Bonus(SpeedUp);
+				var b = new ent.Bonus();
 				if(world.collideBounds(b.getBounds()))
 					b.remove();
 			}
