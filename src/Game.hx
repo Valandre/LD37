@@ -60,6 +60,8 @@ class Game extends hxd.App {
 	var ambient = [];
 	var ambientId = 0;
 
+	var hideEntities = false;
+
 	override function init() {
 
 		customScene = new map.CustomScene();
@@ -353,6 +355,7 @@ class Game extends hxd.App {
 			engine.fullScreen = !engine.fullScreen;
 		}
 
+		//ADMIN
 		if( K.isDown(K.CTRL) && K.isPressed("I".code) ) {
 			if( inspector != null ) {
 				inspector.dispose();
@@ -364,6 +367,15 @@ class Game extends hxd.App {
 
 		if(K.isPressed("P".code))
 			pause = !pause;
+
+		if(K.isPressed(K.F1) && !gameOver) {
+			hideEntities = !hideEntities;
+			for(e in entities)
+				@:privateAccess e.obj.visible = !hideEntities;
+			for(w in world.walls)
+				w.w.visible = !hideEntities;
+		}
+
 	}
 
 	override function update(dt:Float) {
@@ -374,12 +386,15 @@ class Game extends hxd.App {
 		if(ui != null) ui.update(dt);
 		if(win != null) win.update(dt);
 
+
+		//admin
 		if( K.isDown(K.SHIFT)) {
 			var speed = K.isDown(K.CTRL) ? 0.1 : 5;
 			hxd.Timer.deltaT *= speed;
 			hxd.Timer.tmod *= speed;
 			dt *= speed;
 		}
+		//
 
 		super.update(dt);
 		event.update(dt);
@@ -406,13 +421,11 @@ class Game extends hxd.App {
 			e.update(dt);
 
 		if(!gameOver) {
-			if(bonus.length < bonusMaxCount /*&& Math.random() < 0.01*/) {
+			if(bonus.length < bonusMaxCount && Math.random() < 0.01) {
 				return;
 				var b = new ent.Bonus(SpeedUp);
-				if(world.collideBounds(b.getBounds())) {
-					trace("here");
+				if(world.collideBounds(b.getBounds()))
 					b.remove();
-				}
 			}
 			if(players.length == 1) {
 				gameOver = true;
