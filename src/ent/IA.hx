@@ -1,7 +1,7 @@
 package ent;
 
 
-class IA extends Entity
+class IA extends Fairy
 {
 	var time = 0.;
 
@@ -10,6 +10,8 @@ class IA extends Entity
 		this.dir = dir;
 		var size = game.size >> 1;
 		super(IA, -size * 0.65 * dir.x, -size * 0.65 * dir.y, -size, scale, id);
+		this.x += Std.random(5) - 2;
+		this.y += Std.random(5) - 2;
 		this.z += w * 0.5;
 	}
 

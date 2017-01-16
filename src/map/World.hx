@@ -73,7 +73,7 @@ class World {
 	}
 
 	var pt = new h3d.col.Point();
-	public function isCollide(e : ent.Entity) {
+	public function collide(e : ent.Fairy) {
 		for(c in collides) {
 			var r = h3d.col.Ray.fromValues(e.x, e.y, e.z, e.dir.x, e.dir.y, e.dir.z);
 			r.transform(c.m);
@@ -83,6 +83,23 @@ class World {
 				if(hxd.Math.distanceSq(n.x, n.y, n.z) > 1) continue;
 				return true;
 			}
+		}
+
+		return false;
+	}
+
+	public function collideBounds(b : h3d.col.Bounds) {
+		if(!inBoundsBox(b)) return false;
+
+		for(c in collides) {
+			if(c.c.contains(new h3d.col.Point(b.xMin, b.yMin, b.zMin))) return true;
+			if(c.c.contains(new h3d.col.Point(b.xMin, b.yMin, b.zMax))) return true;
+			if(c.c.contains(new h3d.col.Point(b.xMin, b.yMax, b.zMin))) return true;
+			if(c.c.contains(new h3d.col.Point(b.xMin, b.yMax, b.zMax))) return true;
+			if(c.c.contains(new h3d.col.Point(b.xMax, b.yMin, b.zMin))) return true;
+			if(c.c.contains(new h3d.col.Point(b.xMax, b.yMin, b.zMax))) return true;
+			if(c.c.contains(new h3d.col.Point(b.xMax, b.yMax, b.zMin))) return true;
+			if(c.c.contains(new h3d.col.Point(b.xMax, b.yMax, b.zMax))) return true;
 		}
 
 		return false;

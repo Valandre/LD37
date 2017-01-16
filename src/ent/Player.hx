@@ -2,13 +2,15 @@ package ent;
 import hxd.Key in K;
 
 
-class Player extends Entity
+class Player extends Fairy
 {
 	public function new(dir, scale = 1., ?id)	{
 		game = Game.inst;
 		this.dir = dir;
 		var size = game.size >> 1;
 		super(Player, -size * 0.65 * dir.x, -size * 0.65 * dir.y, -size, scale, id);
+		this.x += Std.random(5) - 2;
+		this.y += Std.random(5) - 2;
 		this.z += w * 0.5;
 	}
 

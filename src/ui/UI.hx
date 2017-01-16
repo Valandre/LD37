@@ -111,7 +111,7 @@ class UI extends h2d.Sprite
 		});
 	}
 
-	public function nextRound(pl : ent.Entity) {
+	public function nextRound(pl : ent.Fairy) {
 		var t = hxd.Res.UI.Winner.toTile();
 		var bmp = new h2d.Bitmap(t, this);
 		bmp.filter = true;

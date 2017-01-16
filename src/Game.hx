@@ -21,9 +21,10 @@ class Game extends hxd.App {
 
 	public var modelCache : h3d.prim.ModelCache;
 	public var event : hxd.WaitEvent;
-	public var entities : Array<ent.Entity>;
 	public var world : map.World;
-	public var players : Array<ent.Entity>;
+	public var entities : Array<ent.Entity>;
+	public var players : Array<ent.Fairy>;
+	public var bonus : Array<ent.Bonus>;
 	public var renderer : map.Composite;
 	public var customScene : map.CustomScene;
 	public var inspector : hxd.inspect.Inspector;
@@ -47,6 +48,8 @@ class Game extends hxd.App {
 	var win : ui.Win;
 	var ui : ui.UI;
 	var blackScreen : h2d.Bitmap;
+
+	var bonusMaxCount : Int = 4;
 
 	public var nbPlayers = 1;
 	public var stars : Array<Int>;
@@ -78,6 +81,7 @@ class Game extends hxd.App {
 		world = new map.World(size);
 		entities = [];
 		players = [];
+		bonus = [];
 		bmpViews = [];
 		stars = [0, 0, 0, 0];
 
@@ -157,6 +161,8 @@ class Game extends hxd.App {
 		world.reset();
 		while(players.length > 0)
 			players.pop().remove();
+		while(bonus.length > 0)
+			bonus.pop().remove();
 		while(bmpViews.length > 0)
 			bmpViews.pop().remove();
 		if(menu != null) menu.remove();
@@ -231,7 +237,7 @@ class Game extends hxd.App {
 		new hxd.inspect.SceneProps(s3d).applyProps(ambient[id].s3d, function(msg) trace(msg));
 	}
 
-	public function initCamera(pl : ent.Entity) {
+	public function initCamera(pl : ent.Fairy) {
 		setCameraValues(pl);
 		var cam = new h3d.Camera();
 		cam.pos.x = camPos.x;
@@ -258,7 +264,7 @@ class Game extends hxd.App {
 		return cam;
 	}
 
-	function setCameraValues(pl : ent.Entity) {
+	function setCameraValues(pl : ent.Fairy) {
 		var pn = pl.worldNormal;
 		var dir = pl.dir;
 		var decal = camZ * 0.75;
@@ -269,7 +275,7 @@ class Game extends hxd.App {
 		camTarget = new h3d.col.Point(pl.x + camTargetOffset.x, pl.y + camTargetOffset.y, pl.z  + camTargetOffset.z);
 	}
 
-	function updatePlayerCamera(pl : ent.Entity, dt : Float) {
+	function updatePlayerCamera(pl : ent.Fairy, dt : Float) {
 		setCameraValues(pl);
 
 		var pn = pl.worldNormal;
@@ -355,9 +361,9 @@ class Game extends hxd.App {
 				inspector = new hxd.inspect.Inspector(s3d);
 			}
 		}
-/*
+
 		if(K.isPressed("P".code))
-			pause = !pause;*/
+			pause = !pause;
 	}
 
 	override function update(dt:Float) {
@@ -400,6 +406,14 @@ class Game extends hxd.App {
 			e.update(dt);
 
 		if(!gameOver) {
+			if(bonus.length < bonusMaxCount /*&& Math.random() < 0.01*/) {
+				return;
+				var b = new ent.Bonus(SpeedUp);
+				if(world.collideBounds(b.getBounds())) {
+					trace("here");
+					b.remove();
+				}
+			}
 			if(players.length == 1) {
 				gameOver = true;
 				ui.nextRound(players[0]);
