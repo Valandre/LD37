@@ -10,13 +10,14 @@ enum BonusKind {
 class Bonus extends Entity
 {
 	var bonusKind :BonusKind;
-	var w = 1.5;
+	var w = 2.;
 	var lifeTime = 10.; //seconds
 
 	public function new()	{
 		game = Game.inst;
 		var all = BonusKind.createAll();
 		bonusKind = all[Std.random(all.length)];
+		//bonusKind = Missile;
 
 		var face = Std.random(6);
 		var x = 0.;

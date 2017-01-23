@@ -5,13 +5,33 @@ import Sounds;
 
 private class Bonus {
 	public var kind : ent.Bonus.BonusKind;
+	public var value : Float;
+	public var time : Float;
 
 	public function new (k : ent.Bonus.BonusKind) {
 		kind = k;
+
+		switch(kind) {
+			case SpeedUp:
+				value = 0.9;
+				time = 0.25;
+			case Missile:
+				value = 2;
+			case Rewind:
+				value = 1;
+				time = 1;
+			case Ghost:
+				time = 3;
+		}
 	}
+}
 
-	public function remove() {
-
+class Wall extends h3d.scene.Mesh {
+	public var prev : Wall;
+	public var worldNormal : h3d.col.Point;
+	public var dir : h3d.col.Point;
+	public function new (?prim, ?parent) {
+		super(prim, null, parent);
 	}
 }
 
@@ -29,9 +49,10 @@ class Fairy extends Entity
 	var speedRef = 0.35;
 	var speed = 0.;
 	var speedAspi = 0.;
+	var speedBonus = 0.;
 
-	var wall : h3d.scene.Mesh;
-	var lastwall : h3d.scene.Mesh;
+	var walls : Array<Wall> = [];
+	var lastWall(get, null) : Wall;
 	var light : h3d.scene.PointLight;
 	var w = 1;
 	var wallSize = 0.3;
@@ -40,7 +61,9 @@ class Fairy extends Entity
 	var sensor : h3d.col.Ray;
 	var dray = 5;
 
+
 	public var currBonus : Bonus;
+	public var activeBonus : Bonus;
 
 	public function new(kind, x = 0., y = 0., z = 0., scale = 1., ?id) {
 		if(id == null) this.id = game.players.length + 1;
@@ -87,6 +110,10 @@ class Fairy extends Entity
 		fxParts = new Map();
 		addTrailFx();
 		addHeadFx();
+	}
+
+	function get_lastWall() {
+		return walls.length == 0 ? null : walls[walls.length - 1];
 	}
 
 	function addTrailFx() {
@@ -138,7 +165,6 @@ class Fairy extends Entity
 			addTrailFx();
 			return;
 		}
-		if(wall != null) lastwall = wall;
 
 		var n = worldNormal;
 		var c = new h3d.prim.Cube(1, wallSize, 1);
@@ -146,7 +172,12 @@ class Fairy extends Entity
 		c.addUVs();
 		c.translate(0, -wallSize * 0.5, -0.5);
 
-		wall = new h3d.scene.Mesh(c, game.s3d);
+		var wall = new Wall(c, game.s3d);
+		wall.prev = lastWall;
+		wall.worldNormal = worldNormal.clone();
+		wall.dir = dir.clone();
+
+
 		wall.material.mainPass.culling = None;
 		wall.material.blendMode = Add;
 		wall.material.texture = wallTex;
@@ -157,16 +188,24 @@ class Fairy extends Entity
 		wall.x = x - dir.x * 0.05;
 		wall.y = y - dir.y * 0.05;
 		wall.z = z - dir.z * 0.05;
+
+		walls.push(wall);
 		game.world.walls.push({w : wall, n : n.clone()});
 
 		meshRotate(wall);
 		addTrailFx();
 	}
 
+	function removeWall(w : Wall) {
+		w.remove();
+		walls.remove(w);
+		game.world.removeWall(w);
+	}
+
 	function move(dt : Float) {
 		speed = Math.min(speedRef, speed + 0.01 * dt);
 		speedAspi += (calcAspiration() - speedAspi) * 0.05 * dt;
-		speed += speedAspi;
+		speed += speedAspi + speedBonus;
 		x += dir.x * speed * dt;
 		y += dir.y * speed * dt;
 		z += dir.z * speed * dt;
@@ -186,7 +225,8 @@ class Fairy extends Entity
 	}
 
 	function faceRotate() {
-		if(wall != null)
+		var wall = lastWall;
+		if(wall != null && (activeBonus == null || activeBonus.kind != Ghost))
 			wall.scaleX = hxd.Math.distance(x + dir.x * 0.5 - wall.x, y + dir.y * 0.5 - wall.y, z + dir.z * 0.5 - wall.z);
 
 		fadeTrailFx();
@@ -226,7 +266,8 @@ class Fairy extends Entity
 
 	function changeDir(v : Int) {
 		if(v == 0) return;
-		if(wall != null)
+		var wall = lastWall;
+		if(wall != null && (activeBonus == null || activeBonus.kind != Ghost))
 			wall.scaleX = hxd.Math.distance(x + dir.x * wallSize * 0.5 - wall.x, y + dir.y * wallSize * 0.5 - wall.y, z + dir.z * wallSize * 0.5 - wall.z);
 		fadeTrailFx();
 		dir = setDir(dir, v);
@@ -276,9 +317,12 @@ class Fairy extends Entity
 	}
 
 	function sensorCollide(ray : Float) {
+		var wall = lastWall;
+		if(wall == null) return false;
+
 		for(w in game.world.walls) {
 			if(w.w == wall) continue;
-			if(w.w == lastwall) continue;
+			if(w.w == wall.prev) continue;
 			if(w.n.x != worldNormal.x || w.n.y != worldNormal.y || w.n.z != worldNormal.z) continue;
 			if(w.w.getBounds().rayIntersection(sensor, pt) != null) {
 				var n = new h3d.col.Point(pt.x - sensor.px, pt.y - sensor.py, pt.z - sensor.pz);
@@ -330,14 +374,13 @@ class Fairy extends Entity
 	}
 
 	public function hitBonus(k : ent.Bonus.BonusKind) {
-		if(currBonus != null)
-			currBonus.remove();
 		currBonus = new Bonus(k);
 	}
 
 	function destroy() {
 		dead = true;
-		if(wall != null)
+		var wall = lastWall;
+		if(wall != null && (activeBonus == null || activeBonus.kind != Ghost))
 			wall.scaleX = hxd.Math.distance(x - wall.x, y - wall.y, z - wall.z);
 
 		obj.visible = false;
@@ -415,15 +458,17 @@ class Fairy extends Entity
 	var box : h3d.scene.Box;
 	function hitTest() {
 		if(!enableCollides) return false;
-		var n = worldNormal;
+		var wall = lastWall;
+		if(wall == null) return false;
 
+		var n = worldNormal;
 		var colBounds = obj.getBounds();
 		colBounds.scaleCenter(0.1);
 		colBounds.offset( -dir.x * 0.75, -dir.y * 0.75 , -dir.z * 0.75);
 
 		for(w in game.world.walls) {
 			if(w.w == wall) continue;
-			if(w.w == lastwall) continue;
+			if(w.w == wall.prev) continue;
 			if(w.n.x != n.x || w.n.y != n.y || w.n.z != n.z) continue;
 			var b = w.w.getBounds();
 			if(b.collide(colBounds)) {
@@ -446,19 +491,88 @@ class Fairy extends Entity
 		return false;
 	}
 
+	function updateBonus(dt : Float) {
+		if(speedBonus > 0 && (activeBonus == null || activeBonus.kind != SpeedUp)) {
+			if(speedBonus > 0) speedBonus *= Math.pow(0.95, dt);
+			if(speedBonus < 0.01)  speedBonus = 0;
+		}
+
+		if(activeBonus == null)	return;
+		switch(activeBonus.kind) {
+			case SpeedUp:
+				activeBonus.time -= dt / 60;
+				if(activeBonus.time <= 0)
+					activeBonus = null;
+				speedBonus += (activeBonus.value - speedBonus) * 0.25 * dt;
+
+			case Missile:
+				//new ent.Missile(x, y, z, worldNormal, dir);
+
+			case Rewind:
+				var wall = lastWall;
+				worldNormal = wall.worldNormal.clone();
+				dir = wall.dir.clone();
+				meshRotate(obj);
+
+				activeBonus.time -= dt / 60;
+				if(activeBonus.time <= 0) {
+					activeBonus = null;
+					canMove = true;
+					return;
+				}
+
+				canMove = false;
+				x -= dir.x * activeBonus.value * dt;
+				y -= dir.y * activeBonus.value * dt;
+				z -= dir.z * activeBonus.value * dt;
+
+				var old = wall.scaleX;
+				wall.scaleX = hxd.Math.distance(x - wall.x, y - wall.y, z - wall.z);
+				if(wall.scaleX >= old) {
+					x = wall.x;
+					y = wall.y;
+					z = wall.z;
+					if(wall.prev == null) {
+						activeBonus = null;
+						canMove = true;
+						return;
+					}
+					else removeWall(wall);
+				}
+			case Ghost:
+				activeBonus.time -= dt / 60;
+				if(activeBonus.time <= 0) {
+					activeBonus = null;
+					enableWalls = true;
+					createWall();
+					lastWall.prev = null;
+					return;
+				}
+				enableWalls = false;
+		}
+	}
+
 	override public function update(dt : Float) {
 		super.update(dt);
-		hitTest();
-		if(!dead && wall != null)
-			wall.scaleX = hxd.Math.distance(x - wall.x, y - wall.y, z - wall.z);
 
-		if(!dead && canMove && wall == null && enableWalls) {
-			createWall();
-			if(fxParts != null) {
-				var fx = fxParts.get("TrailStart");
-				if(fx != null)
-					fx.visible = canMove;
+		if(canMove) hitTest();
+
+		if(activeBonus == null || activeBonus.kind != Ghost) {
+			var wall = lastWall;
+			if(!dead && wall != null)
+				wall.scaleX = hxd.Math.distance(x - wall.x, y - wall.y, z - wall.z);
+
+			if(!dead && canMove && wall == null && enableWalls) {
+				createWall();
+				if(fxParts != null) {
+					var fx = fxParts.get("TrailStart");
+					if(fx != null)
+						fx.visible = canMove;
+				}
 			}
 		}
+
+		if(!dead)
+			updateBonus(dt);
 	}
 }

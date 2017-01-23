@@ -72,6 +72,14 @@ class World {
 			lights.pop().remove();
 	}
 
+	public function removeWall(wall : h3d.scene.Mesh) {
+		for(w in walls)
+			if(w.w == wall) {
+				walls.remove(w);
+				break;
+			}
+	}
+
 	var pt = new h3d.col.Point();
 	public function collide(e : ent.Fairy) {
 		for(c in collides) {

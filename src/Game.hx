@@ -192,7 +192,7 @@ class Game extends hxd.App {
 			players.push(pl);
 			var cam = initCamera(pl);
 
-			if(k == Player) {
+			if(players.length <= nbPlayers) {
 				var tex = new h3d.mat.Texture(s2d.width >> renderer.width, s2d.height >> renderer.height, [Target]);
 				customScene.addView(pl.id, cam, tex);
 				var b = new h2d.Bitmap(h2d.Tile.fromTexture(tex), s2d);
@@ -495,6 +495,7 @@ class Game extends hxd.App {
 	public static var inst : Game;
 	static function main() {
 		inst = new Game();
+		hxd.res.Resource.LIVE_UPDATE = true;
 		hxd.Res.initLocal();
 	}
 }

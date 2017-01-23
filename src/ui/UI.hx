@@ -235,7 +235,7 @@ class UI extends h2d.Sprite
 			}
 		case 3 :
 			if(bonus[3] != null) {
-				bonus[3].x = scores[3].x - d - bonus[1].tile.width;
+				bonus[3].x = scores[3].x - d - bonus[3].tile.width;
 				bonus[3].y = scores[3].y;
 			}
 		}

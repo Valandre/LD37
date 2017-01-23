@@ -6,6 +6,7 @@ enum EntityKind {
 	Player;
 	IA;
 	Bonus;
+	Missile;
 }
 
 typedef PlayOptions = {

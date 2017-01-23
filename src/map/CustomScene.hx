@@ -50,11 +50,22 @@ class CustomScene extends h3d.scene.Scene
 		ctx.elapsedTime /= views.length;
 
 		for(v in views) {
+			updatePlayers(v.id);
 			camera = v.camera;
 			engine.pushTarget(v.target);
 			super.render(engine);
 			engine.popTarget();
 		}
+	}
 
+	function updatePlayers(id : Int) {
+		var players = Game.inst.players;
+		for(p in players) {
+			if(p.dead) continue;
+			@:privateAccess p.obj.visible = true;
+			if(p.id == id) continue;
+			if(p.activeBonus != null && p.activeBonus.kind == Ghost)
+				@:privateAccess p.obj.visible = false;
+		}
 	}
 }
