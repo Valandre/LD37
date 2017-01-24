@@ -15,7 +15,8 @@ private class Bonus {
 			case SpeedUp:
 				value = 0.9;
 				time = 0.25;
-			case Missile:
+			case Shield:
+				time = 5;
 				value = 2;
 			case Rewind:
 				value = 1;
@@ -57,6 +58,8 @@ class Fairy extends Entity
 	var w = 1;
 	var wallSize = 0.3;
 	var wallTex : h3d.mat.Texture;
+
+	var shield : h3d.scene.Mesh;
 
 	var sensor : h3d.col.Ray;
 	var dray = 5;
@@ -473,7 +476,11 @@ class Fairy extends Entity
 			var b = w.w.getBounds();
 			if(b.collide(colBounds)) {
 				//new h3d.scene.Box(b, false, game.s3d);
-				destroy();
+				if(shield != null) {
+					useShield(w.w);
+					return false;
+				}
+				else destroy();
 				return true;
 			}
 		}
@@ -491,6 +498,23 @@ class Fairy extends Entity
 		return false;
 	}
 
+	function useShield(w : h3d.scene.Object) {
+		shield.remove();
+		shield = null;
+
+		var colBounds = obj.getBounds();
+		colBounds.scaleCenter(0.1);
+		colBounds.offset( -dir.x * 0.75, -dir.y * 0.75 , -dir.z * 0.75);
+
+		inline function hit() {
+			var b = w.getBounds();
+			return b.collide(colBounds);
+		}
+
+		do move(0.1)
+		while(hit());
+	}
+
 	function updateBonus(dt : Float) {
 		if(speedBonus > 0 && (activeBonus == null || activeBonus.kind != SpeedUp)) {
 			if(speedBonus > 0) speedBonus *= Math.pow(0.95, dt);
@@ -505,8 +529,18 @@ class Fairy extends Entity
 					activeBonus = null;
 				speedBonus += (activeBonus.value - speedBonus) * 0.25 * dt;
 
-			case Missile:
-				//new ent.Missile(x, y, z, worldNormal, dir);
+			case Shield:
+				activeBonus = null;
+				if(shield != null) return;
+
+				var c = new h3d.prim.Sphere(2, 24, 24);
+				c.addUVs();
+				c.addNormals();
+
+				shield = new h3d.scene.Mesh(c, obj);
+				shield.material.color.setColor(0x2080F0);
+				shield.material.blendMode = Alpha;
+				shield.material.color.w = 0.5;
 
 			case Rewind:
 				var wall = lastWall;

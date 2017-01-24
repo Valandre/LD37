@@ -70,5 +70,10 @@ class IA extends Fairy
 			if(!checkSensors())
 				updateKeys();
 		}
+
+		if(currBonus != null && Math.random() < 0.01) {
+			activeBonus = currBonus;
+			currBonus = null;
+		}
 	}
 }

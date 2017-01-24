@@ -2,7 +2,7 @@ package ent;
 
 enum BonusKind {
 	SpeedUp;
-	Missile;
+	Shield;
 	Rewind;
 	Ghost;
 }
@@ -17,7 +17,7 @@ class Bonus extends Entity
 		game = Game.inst;
 		var all = BonusKind.createAll();
 		bonusKind = all[Std.random(all.length)];
-		//bonusKind = Missile;
+		bonusKind = Shield;
 
 		var face = Std.random(6);
 		var x = 0.;
@@ -65,6 +65,7 @@ class Bonus extends Entity
 		//TODO
 		return null;
 	}
+
 	override function init() {
 		obj = new h3d.scene.Object(game.s3d);
 		var c = new h3d.prim.Cube(w, w, w);
@@ -78,8 +79,8 @@ class Bonus extends Entity
 	static public function getBonusColor(k : BonusKind) {
 		return switch(k) {
 			case SpeedUp: 0x40F010;
-			case Missile: 0xF04020;
-			case Rewind: 0x2080F0;
+			case Shield: 0x2080F0;
+			case Rewind: 0xF04020;
 			case Ghost: 0xF0F0FF;
 		}
 	}

@@ -6,7 +6,6 @@ enum EntityKind {
 	Player;
 	IA;
 	Bonus;
-	Missile;
 }
 
 typedef PlayOptions = {
@@ -43,7 +42,7 @@ class Entity
 	var fxs = [];
 	var pt = new h3d.col.Point();
 
-	public function new(kind, x = 0., y = 0., z = 0., scale = 1., ?id) {
+	public function new(kind, x = 0., y = 0., z = 0., scale = 1.) {
 		game = Game.inst;
 		game.entities.push(this);
 		this.kind = kind;
