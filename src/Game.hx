@@ -49,7 +49,7 @@ class Game extends hxd.App {
 	var ui : ui.UI;
 	var blackScreen : h2d.Bitmap;
 
-	var bonusMaxCount : Int = 4;
+	var bonusMaxCount : Int = 10;
 
 	public var nbPlayers = 1;
 	public var stars : Array<Int>;
@@ -179,6 +179,7 @@ class Game extends hxd.App {
 
 	function start(){
 		entities = [];
+		nbPlayers = 4;
 
 		switch(nbPlayers) {
 			case 1 : renderer.width = 0; renderer.height = 0;

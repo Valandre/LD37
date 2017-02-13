@@ -1,6 +1,12 @@
 package ent;
 
 
+enum CollideDir {
+	Left;
+	Right;
+	Front;
+}
+
 class IA extends Fairy
 {
 	var time = 0.;
@@ -16,31 +22,83 @@ class IA extends Fairy
 	}
 
 	function updateKeys() {
+		//check around option
+		var dist = 20;
+		for(b in game.bonus) {
+			if(hxd.Math.distance(x - b.x, y - b.y, z - b.z) > dist) continue;
+			//if(Math.random() < 0.1) continue;
+
+			if(bonuscollide(b, Front, dist) && !scollide(Front, dist))
+				return;
+			if(bonuscollide(b, Left, dist) && !scollide(Left, dist)) {
+				changeDir(-1);
+				return;
+			}
+			if(bonuscollide(b, Right, dist) && !scollide(Right, dist)) {
+				changeDir(1);
+				return;
+			}
+		}
+
+		//random change dir
 		if(Math.random() < 0.01)
 			checkSensors(false);
+	}
+
+	function setSensor(x, y, z, dir) {
+		sensor.px = x; sensor.py = y; sensor.pz = z;
+		sensor.lx = dir.x; sensor.ly = dir.y; sensor.lz = dir.z;
+	}
+
+	//bonus collide
+	function bonuscollide(b : ent.Bonus, kdir : CollideDir, ray : Float) {
+		var d = switch(kdir) {
+			case Left :	setDir(dir, -1);
+			case Right : setDir(dir, 1);
+			case Front : dir.clone();
+		}
+		d.normalize();
+		d.x *= ray; d.y *= ray; d.z *= ray;
+		setSensor(x, y, z, d);
+
+		var bounds = b.getBounds();
+		var r = sensor.clone();
+		r.normalize();
+		if(bounds.rayIntersection(r, pt) != null){
+			var n = new h3d.col.Point(pt.x - r.px, pt.y - r.py, pt.z - r.pz);
+			if(hxd.Math.distanceSq(n.x, n.y, n.z) > ray * ray) return false;
+			return true;
+		}
+
+		return false;
+	}
+
+	//default collide
+	function scollide(kdir : CollideDir, ray : Float) {
+		var d = switch(kdir) {
+			case Left :	setDir(dir, -1);
+			case Right : setDir(dir, 1);
+			case Front : dir.clone();
+		}
+		d.normalize();
+		d.x *= ray; d.y *= ray; d.z *= ray;
+		setSensor(x, y, z, d);
+
+		return sensorCollide(ray);
 	}
 
 	function checkSensors(testFront = true ) {
 		if(!enableCollides) return false;
 
-		dray = 2 + Std.random(4);
-
+		var r = 2 + Std.random(4);
 		var col = true;
-		sensor.px = x; sensor.py = y; sensor.pz = z;
 
-		if(testFront) {
-			sensor.lx = dray * dir.x; sensor.ly = dray * dir.y; sensor.lz = dray * dir.z;
-			col = sensorCollide(dray);
-		}
+		if(testFront)
+			col = scollide(Front, r);
 
 		if(col) {
-			var d = setDir(dir, -1);
-			sensor.lx = dray * d.x; sensor.ly = dray * d.y; sensor.lz = dray * d.z;
-			var lcol = sensorCollide(dray);
-
-			var d = setDir(dir, 1);
-			sensor.lx = dray * d.x; sensor.ly = dray * d.y; sensor.lz = dray * d.z;
-			var rcol = sensorCollide(dray);
+			var lcol = scollide(Left, r);
+			var rcol = scollide(Right, r);
 
 			if(lcol && rcol) return false;
 			if(!lcol && !rcol) {
@@ -48,7 +106,7 @@ class IA extends Fairy
 				changeDir(v);
 			}
 			else if(lcol) changeDir(1);
-			else if(rcol) changeDir( -1);
+			else if(rcol) changeDir(-1);
 			return true;
 		}
 		return false;

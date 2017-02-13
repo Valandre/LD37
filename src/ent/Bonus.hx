@@ -17,7 +17,7 @@ class Bonus extends Entity
 		game = Game.inst;
 		var all = BonusKind.createAll();
 		bonusKind = all[Std.random(all.length)];
-		bonusKind = Shield;
+		//bonusKind = Shield;
 
 		var face = Std.random(6);
 		var x = 0.;

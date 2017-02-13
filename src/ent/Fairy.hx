@@ -62,8 +62,6 @@ class Fairy extends Entity
 	var shield : h3d.scene.Mesh;
 
 	var sensor : h3d.col.Ray;
-	var dray = 5;
-
 
 	public var currBonus : Bonus;
 	public var activeBonus : Bonus;
@@ -527,7 +525,7 @@ class Fairy extends Entity
 				activeBonus.time -= dt / 60;
 				if(activeBonus.time <= 0)
 					activeBonus = null;
-				speedBonus += (activeBonus.value - speedBonus) * 0.25 * dt;
+				else speedBonus += (activeBonus.value - speedBonus) * 0.25 * dt;
 
 			case Shield:
 				activeBonus = null;
