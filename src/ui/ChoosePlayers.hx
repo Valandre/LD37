@@ -2,69 +2,11 @@ package ui;
 import hxd.Key in K;
 import Sounds;
 
-private class Button extends h2d.Flow {
-	var game : Game;
-	public var selected(default, set) = false;
-	public var tiles = [];
-	public var bt : h2d.Bitmap;
-	var str : String;
-
-	public function new (name : String, ?parent : h2d.Sprite) {
-		super(parent);
-		game = Game.inst;
-
-		str = name;
-
-		switch(name) {
-			case "BACK":
-				tiles.push(hxd.Res.UI.Bt_Back0.toTile());
-				tiles.push(hxd.Res.UI.Bt_Back1.toTile());
-			case "READY":
-				tiles.push(hxd.Res.UI.Bt_Ready0.toTile());
-				tiles.push(hxd.Res.UI.Bt_Ready1.toTile());
-		}
-
-		bt = new h2d.Bitmap(tiles[0], this);
-		bt.blendMode = Alpha;
-		enableInteractive = true;
-	}
-
-	function onOver() {
-		bt.tile = tiles[1];
-	}
-
-	function onOut() {
-		bt.tile = tiles[0];
-	}
-
-	public function onclick() {
-		interactive.onClick(null);
-	}
-
-	public function setAlpha(v : Float) {
-		bt.alpha = v;
-	}
-
-	function set_selected(b : Bool) {
-		if(b) onOver();
-		else onOut();
-		return selected = b;
-	}
-}
-
-class ChoosePlayers extends h2d.Sprite
+class ChoosePlayers extends ui.Form
 {
-	var bg : h2d.Bitmap;
-	var game : Game;
-	var root : h2d.Flow;
-	var selectId = 0;
-	var title : h2d.Bitmap;
-
 	var players = [];
-	var contLeft : h2d.Flow;
 	var contRight : h2d.Flow;
 
-	var buttons : Array<Button> = [];
 	var onRemove : Bool -> Void;
 
 	var fairies = [];
@@ -73,33 +15,12 @@ class ChoosePlayers extends h2d.Sprite
 
 	public function new(?parent, onRemove : Bool -> Void ) {
 		super(parent);
-		game = Game.inst;
 
 		this.onRemove = onRemove;
-
-		bg = new h2d.Bitmap(hxd.Res.UI.Bg01.toTile(), this);
-		bg.blendMode = Add;
-		bg.filter = true;
-
-		title = new h2d.Bitmap(hxd.Res.UI.Title.toTile(), this);
-		title.blendMode = Alpha;
-		title.filter = true;
-		title.x = 50;
-		title.y = 50;
-
-		root = new h2d.Flow(this);
-		root.horizontalAlign = Middle;
-		root.verticalAlign = Middle;
-		root.isVertical = false;
-		root.horizontalSpacing = 0;
-		root.verticalSpacing = 0;
-
 		game.setAmbient(1);
-		init();
-		slideIn();
 	}
 
-	function slideOut(?onEnd : Void -> Void) {
+	override function slideOut(?onEnd : Void -> Void) {
 		var bmp = new h2d.Bitmap(h2d.Tile.fromColor(0xFFFFFF));
 		bmp.scaleY = game.s2d.height;
 		addChildAt(bmp, 0);
@@ -117,7 +38,7 @@ class ChoosePlayers extends h2d.Sprite
 			sp += 15;
 			bmp.scaleX = bg.x;
 			if(bmp.scaleX > game.s2d.width) {
-				contLeft.visible = false;
+				cont.visible = false;
 				contRight.visible = false;
 				bmp.remove();
 				bg.visible = false;
@@ -128,10 +49,10 @@ class ChoosePlayers extends h2d.Sprite
 		});
 	}
 
-	function slideIn(?onEnd : Void -> Void) {
+	override function slideIn(?onEnd : Void -> Void) {
 		bg.x = game.s2d.width + 100;
 		bg.visible = true;
-		contLeft.visible = true;
+		cont.visible = true;
 		contRight.visible = true;
 
 		title.alpha = 0;
@@ -173,18 +94,11 @@ class ChoosePlayers extends h2d.Sprite
 		});
 	}
 
-	function init() {
-		//
-		contLeft = new h2d.Flow(root);
-		contLeft.horizontalAlign = Middle;
-		contLeft.verticalAlign = Middle;
-		contLeft.verticalSpacing = 30;
-		contLeft.isVertical = true;
-		contLeft.paddingLeft = 170;
-		contLeft.paddingTop = 300;
+	override function init() {
+		super.init();
 
-		var ready = new Button("READY", contLeft);
-		ready.interactive.onClick = function(e) {
+		var next = addButton("NEXT", cont);
+		next.interactive.onClick = function(e) {
 			slideOut(function() {
 				remove();
 				while(game.players.length > 0)
@@ -198,9 +112,8 @@ class ChoosePlayers extends h2d.Sprite
 				game.restart();
 			});
 		}
-		buttons.push(ready);
 
-		var back = new Button("BACK", contLeft);
+		var back = addButton("BACK", cont);
 		back.interactive.onClick = function(e) {
 			slideOut(function() {
 				game.setAmbient(0);
@@ -210,9 +123,6 @@ class ChoosePlayers extends h2d.Sprite
 				remove();
 			});
 		}
-		buttons.push(back);
-
-		select(selectId);
 
 		//
 		contRight = new h2d.Flow(root);
@@ -229,11 +139,16 @@ class ChoosePlayers extends h2d.Sprite
 			e.z += 2 * (i < 2 ? 1 : 0);
 			e.play("stand");
 			var p = game.s3d.camera.pos;
-			@:privateAccess e.fxParts.get("ElfHead").z += 1;
-			@:privateAccess e.fxParts.get("ElfHead").x -= 0.5;
-			//@:privateAccess e.obj.setRotate(0, 0, hxd.Math.atan2(p.y - 6 - e.y, p.x - 5 - e.x));
-			@:privateAccess e.obj.currentAnimation.setFrame(Math.random() * (e.obj.currentAnimation.frameCount - 1));
-			@:privateAccess e.light.params = new h3d.Vector(0.8, 0.5, 0.1);
+			@:privateAccess {
+				var fx = e.fxParts.get("ElfHead");
+				if(fx != null) {
+					fx.z += 1;
+					fx.x -= 0.5;
+				}
+				// e.obj.setRotate(0, 0, hxd.Math.atan2(p.y - 6 - e.y, p.x - 5 - e.x));
+				e.obj.currentAnimation.setFrame(Math.random() * (e.obj.currentAnimation.frameCount - 1));
+				e.light.params = new h3d.Vector(0.8, 0.5, 0.1);
+			}
 
 			fairies.push(e);
 			game.players.push(e);
@@ -261,28 +176,11 @@ class ChoosePlayers extends h2d.Sprite
 			b.filter = true;
 			sticks.push(b);
 		}
-
-		onResize();
 	}
 
-	function select(id : Int) {
-		for( b in buttons)
-			b.selected = false;
-		buttons[id].selected = true;
-	}
-
-	public function onResize() {
+	override public function onResize() {
 		var sc = game.s2d.height / bg.tile.height;
-		bg.setScale(sc);
-
-		root.minWidth = root.maxWidth = Std.int(bg.scaleX);
-		root.minHeight = root.maxHeight = game.s2d.height;
-		root.needReflow = true;
-
-		title.setScale(sc);
-
-		contLeft.paddingLeft = Std.int(170 * sc);
-		contLeft.paddingTop = Std.int(300 * sc);
+		super.onResize();
 
 		contRight.minWidth = contRight.maxWidth = Std.int(game.s2d.width * 0.7);
 		contRight.minHeight = contRight.maxHeight = game.s2d.height;
@@ -307,23 +205,8 @@ class ChoosePlayers extends h2d.Sprite
 		sticks[3].y = game.s2d.height * 0.88;
 	}
 
-	public function update(dt : Float) {
-		if(K.isPressed(K.UP) || (game.keys != null && game.keys.pressed.yAxis < 0)) {
-			Sounds.play("Over");
-			selectId--;
-			if(selectId < 0) selectId = buttons.length - 1;
-			select(selectId);
-		}
-		if(K.isPressed(K.DOWN) || (game.keys != null && game.keys.pressed.yAxis > 0)) {
-			Sounds.play("Over");
-			selectId = (selectId + 1) % buttons.length;
-			select(selectId);
-		}
-
-		if(K.isPressed(K.ENTER) || K.isPressed(K.SPACE) || (game.keys != null && game.keys.pressed.A)) {
-			Sounds.play("Select");
-			buttons[selectId].onclick();
-		}
+	override function update(dt : Float) {
+		super.update(dt);
 
 		for(i in 0...game.controllers.length) {
 			if(i == 0) {

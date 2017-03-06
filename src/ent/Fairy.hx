@@ -118,6 +118,10 @@ class Fairy extends Entity
 	}
 
 	function addTrailFx() {
+		//////
+		return; //fxs emitter is static ? (cf Nico)
+		//////
+
 		for(i in 0...obj.numChildren) {
 			var o = obj.getChildAt(i);
 			if( o.name == null ) continue;
@@ -145,6 +149,10 @@ class Fairy extends Entity
 	}
 
 	function addHeadFx() {
+		//////
+		return; //fxs emitter is static ? (cf Nico)
+		//////
+
 		for(i in 0...obj.numChildren) {
 			var o = obj.getChildAt(i);
 			if( o.name == null ) continue;

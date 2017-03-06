@@ -179,7 +179,8 @@ class Game extends hxd.App {
 
 	function start(){
 		entities = [];
-		nbPlayers = 4;
+
+		//nbPlayers = 4;
 
 		switch(nbPlayers) {
 			case 1 : renderer.width = 0; renderer.height = 0;
