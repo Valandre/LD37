@@ -16,6 +16,9 @@ private class Button extends h2d.Flow {
 		str = name;
 
 		switch(name) {
+			case "NEWGAME":
+				tiles.push(hxd.Res.UI.Bt_Start0.toTile());
+				tiles.push(hxd.Res.UI.Bt_Start1.toTile());
 			case "START":
 				tiles.push(hxd.Res.UI.Bt_Start0.toTile());
 				tiles.push(hxd.Res.UI.Bt_Start1.toTile());

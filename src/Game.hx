@@ -51,6 +51,7 @@ class Game extends hxd.App {
 
 	var bonusMaxCount : Int = 10;
 
+	public var arenaId = 0;
 	public var nbPlayers = 1;
 	public var stars : Array<Int>;
 

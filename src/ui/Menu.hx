@@ -24,7 +24,7 @@ class Menu extends ui.Form
 	override function init() {
 		super.init();
 
-		var start = addButton("START", cont);
+		var start = addButton("NEWGAME", cont);
 		start.interactive.onClick = function(e) {
 			if(creditsBmp != null) toggleCredits();
 			slideOut(function() {

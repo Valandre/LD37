@@ -7,6 +7,7 @@ class ChoosePlayers extends ui.Form
 	var players = [];
 	var contRight : h2d.Flow;
 
+	public var choose : ui.ChooseArena;
 	var onRemove : Bool -> Void;
 
 	var fairies = [];
@@ -100,7 +101,6 @@ class ChoosePlayers extends ui.Form
 		var next = addButton("NEXT", cont);
 		next.interactive.onClick = function(e) {
 			slideOut(function() {
-				remove();
 				while(game.players.length > 0)
 					game.players.pop().remove();
 				game.nbPlayers = 0;
@@ -108,8 +108,13 @@ class ChoosePlayers extends ui.Form
 					if(c.active) game.nbPlayers++;
 				if(game.nbPlayers == 0)
 					game.nbPlayers = 1;
-				onRemove(true);
-				game.restart();
+
+				choose = new ui.ChooseArena(game.s2d, function(start : Bool) {
+					lock = start;
+					if(!lock) showPlayers();
+					choose = null;
+					slideIn();
+				});
 			});
 		}
 
@@ -129,30 +134,8 @@ class ChoosePlayers extends ui.Form
 		contRight.horizontalSpacing = 1;
 		contRight.verticalSpacing = 1;
 		contRight.isVertical = true;
-//
 
-		game.players = [];
-		for(i in 0...4) {
-			var e = new ent.Player(new h3d.col.Point(0, 0, 1));
-			e.x = 4;
-			e.y = -1 - 2 * (i % 2);
-			e.z += 2 * (i < 2 ? 1 : 0);
-			e.play("stand");
-			var p = game.s3d.camera.pos;
-			@:privateAccess {
-				var fx = e.fxParts.get("ElfHead");
-				if(fx != null) {
-					fx.z += 1;
-					fx.x -= 0.5;
-				}
-				// e.obj.setRotate(0, 0, hxd.Math.atan2(p.y - 6 - e.y, p.x - 5 - e.x));
-				e.obj.currentAnimation.setFrame(Math.random() * (e.obj.currentAnimation.frameCount - 1));
-				e.light.params = new h3d.Vector(0.8, 0.5, 0.1);
-			}
-
-			fairies.push(e);
-			game.players.push(e);
-		}
+		showPlayers();
 
 		ptiles = [];
 		ptiles.push(hxd.Res.UI.Player1.toTile());
@@ -175,6 +158,32 @@ class ChoosePlayers extends ui.Form
 			b.blendMode = Alpha;
 			b.filter = true;
 			sticks.push(b);
+		}
+	}
+
+	public function showPlayers() {
+		//
+		game.players = [];
+		for(i in 0...4) {
+			var e = new ent.Player(new h3d.col.Point(0, 0, 1));
+			e.x = 4;
+			e.y = -1 - 2 * (i % 2);
+			e.z += 2 * (i < 2 ? 1 : 0);
+			e.play("stand");
+			var p = game.s3d.camera.pos;
+			@:privateAccess {
+				var fx = e.fxParts.get("ElfHead");
+				if(fx != null) {
+					fx.z += 1;
+					fx.x -= 0.5;
+				}
+				// e.obj.setRotate(0, 0, hxd.Math.atan2(p.y - 6 - e.y, p.x - 5 - e.x));
+				e.obj.currentAnimation.setFrame(Math.random() * (e.obj.currentAnimation.frameCount - 1));
+				e.light.params = new h3d.Vector(0.8, 0.5, 0.1);
+			}
+
+			fairies.push(e);
+			game.players.push(e);
 		}
 	}
 
