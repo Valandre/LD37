@@ -8,6 +8,12 @@ import Sounds;
 import ui.Menu;
 import ui.UI;
 import ui.Win;
+
+enum CameraKind {
+	Menu;
+	Choose;
+}
+
 class Game extends hxd.App {
 
 	static public var PREFS = initPrefs();
@@ -34,6 +40,7 @@ class Game extends hxd.App {
 	var camTarget : h3d.col.Point;
 	var camPosOffset : h3d.col.Point;
 	var camTargetOffset : h3d.col.Point;
+	public var autoCameraKind : CameraKind;
 
 	var camDist = 4;
 	var camZ = 5.5;
@@ -44,16 +51,13 @@ class Game extends hxd.App {
 	var gameOver = true;
 	var IAOnly = false;
 
-	var menu : ui.Menu;
-	var win : ui.Win;
+	public var windows : Array<ui.Form>;
 	var ui : ui.UI;
 	var blackScreen : h2d.Bitmap;
 
 	var bonusMaxCount : Int = 10;
 
-	public var arenaId = 0;
-	public var nbPlayers = 1;
-	public var stars : Array<Int>;
+	public var state : {nbPlayers : Int, arenaId : Int, stars : Array<Int>};
 
 	public var controllers : Array<lib.Controller> = [];
 	public var keys : lib.Controller;
@@ -86,10 +90,12 @@ class Game extends hxd.App {
 		players = [];
 		bonus = [];
 		bmpViews = [];
-		stars = [0, 0, 0, 0];
 
-		menu = new ui.Menu(s2d);
-		//restart();
+
+		state = {nbPlayers : 0, arenaId : 0, stars : [0, 0, 0, 0]};
+
+		windows = [];
+		new ui.Menu();
 
 		hxd.Pad.wait(function(p) {
 			controllers.push(new lib.Controller(controllers.length, p));
@@ -136,19 +142,17 @@ class Game extends hxd.App {
 	public function endGame() {
 		transition(function() {
 			reset();
-			win = new ui.Win(s2d);
+			new ui.Win();
 			for( c in controllers)
 				c.active = false;
-			stars = [0, 0, 0, 0];
+			state.stars = [0, 0, 0, 0];
 			gameOver = true;
 		}, true);
 	}
 
 	public function choose() {
 		reset();
-		menu = new ui.Menu(s2d);
-		menu.openChoose();
-		win = null;
+		new ui.ChoosePlayers();
 	}
 
 	public function restart() {
@@ -159,6 +163,7 @@ class Game extends hxd.App {
 	}
 
 	function reset() {
+		autoCameraKind = null;
 		while(entities.length > 0)
 			entities[0].remove();
 		world.reset();
@@ -168,10 +173,8 @@ class Game extends hxd.App {
 			bonus.pop().remove();
 		while(bmpViews.length > 0)
 			bmpViews.pop().remove();
-		if(menu != null) menu.remove();
+		for(w in windows) w.remove();
 		if(ui != null) ui.remove();
-		menu = null;
-		ui = null;
 		customScene.clearViews();
 
 		if(controllers.length > 0)
@@ -183,7 +186,7 @@ class Game extends hxd.App {
 
 		//nbPlayers = 4;
 
-		switch(nbPlayers) {
+		switch(state.nbPlayers) {
 			case 1 : renderer.width = 0; renderer.height = 0;
 			case 2 : renderer.width = 1; renderer.height = 0;
 			case 3, 4 : renderer.width = 1; renderer.height = 1;
@@ -195,7 +198,7 @@ class Game extends hxd.App {
 			players.push(pl);
 			var cam = initCamera(pl);
 
-			if(players.length <= nbPlayers) {
+			if(players.length <= state.nbPlayers) {
 				var tex = new h3d.mat.Texture(s2d.width >> renderer.width, s2d.height >> renderer.height, [Target]);
 				customScene.addView(pl.id, cam, tex);
 				var b = new h2d.Bitmap(h2d.Tile.fromTexture(tex), s2d);
@@ -324,33 +327,31 @@ class Game extends hxd.App {
 	}
 
 	var camRot = -1.;
-	function updateDefaultCamera(dt : Float) {
+	function autoCameraUpdate(dt : Float) {
 		var cam = s3d.camera;
-		cam.pos.x = 12 * Math.cos(camRot);
-		cam.pos.y = 12 * Math.sin(camRot);
-		cam.pos.z = 12 - (size >> 1);
-		cam.target.x = 0;
-		cam.target.y = 0;
-		cam.target.z = 10 - size >> 1;
 		cam.up.x = 0;
 		cam.up.y = 0;
 		cam.up.z = 1;
-		cam.fovY = 90;
-		camRot += 0.0025 * dt;
-	}
-
-	function updateChooseCamera(dt : Float) {
-		var cam = s3d.camera;
-		cam.pos.x = 8;
-		cam.pos.y = -1.5;
-		cam.pos.z = 2.75 - (size >> 1);
-		cam.target.x = 0;
-		cam.target.y = 0;
-		cam.target.z = 1.75 - (size >> 1);
-		cam.up.x = 0;
-		cam.up.y = 0;
-		cam.up.z = 1;
-		cam.fovY = 60;
+		switch(autoCameraKind) {
+			case Menu:
+				cam.pos.x = 12 * Math.cos(camRot);
+				cam.pos.y = 12 * Math.sin(camRot);
+				cam.pos.z = 12 - (size >> 1);
+				cam.target.x = 0;
+				cam.target.y = 0;
+				cam.target.z = 10 - size >> 1;
+				cam.fovY = 90;
+				camRot += 0.0025 * dt;
+			case Choose:
+				cam.pos.x = 8;
+				cam.pos.y = -1.5;
+				cam.pos.z = 2.75 - (size >> 1);
+				cam.target.x = 0;
+				cam.target.y = 0;
+				cam.target.z = 1.75 - (size >> 1);
+				cam.fovY = 60;
+			default: trace("TODO");
+		}
 	}
 
 	function updateKeys(dt : Float) {
@@ -385,10 +386,8 @@ class Game extends hxd.App {
 		for(c in controllers)
 			c.update(dt);
 
-		if(menu != null) menu.update(dt);
-		if(ui != null) ui.update(dt);
-		if(win != null) win.update(dt);
-
+		for(w in windows)
+			w.update(dt);
 
 		//admin
 		if( K.isDown(K.SHIFT)) {
@@ -402,13 +401,8 @@ class Game extends hxd.App {
 		super.update(dt);
 		event.update(dt);
 
-		if(menu != null) {
-			if(menu.choose == null)
-				updateDefaultCamera(dt);
-			else updateChooseCamera(dt);
-		}
-		if(win != null)
-			updateChooseCamera(dt);
+		if(autoCameraKind != null)
+			autoCameraUpdate(dt);
 
 		if(blackScreen != null)
 			return;
@@ -459,12 +453,9 @@ class Game extends hxd.App {
 			blackScreen.scaleX = s2d.width;
 			blackScreen.scaleY = s2d.height;
 		}
-		if(menu != null)
-			menu.onResize();
-		if(ui != null)
-			ui.onResize();
-		if(win != null)
-			win.onResize();
+
+		for( w in windows)
+			w.onResize();
 
 		//
 		for(i in 0...customScene.views.length) {

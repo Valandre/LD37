@@ -16,14 +16,14 @@ class Player extends Fairy
 
 	function updateKeys() {
 		if(currBonus != null)
-			if((game.nbPlayers == 1 && K.isPressed(K.SPACE)) || (controller != null && controller.pressed.A )) {
+			if((game.state.nbPlayers == 1 && K.isPressed(K.SPACE)) || (controller != null && controller.pressed.A )) {
 				activeBonus = currBonus;
 				currBonus = null;
 			}
 
 		var v = 0;
-		if((game.nbPlayers == 1 && K.isPressed(K.LEFT)) || (controller != null && controller.pressed.xAxis < 0)) v = -1;
-		if((game.nbPlayers == 1 && K.isPressed(K.RIGHT)) || (controller != null && controller.pressed.xAxis > 0)) v = 1;
+		if((game.state.nbPlayers == 1 && K.isPressed(K.LEFT)) || (controller != null && controller.pressed.xAxis < 0)) v = -1;
+		if((game.state.nbPlayers == 1 && K.isPressed(K.RIGHT)) || (controller != null && controller.pressed.xAxis > 0)) v = 1;
 		if(v == 0) return;
 		changeDir(v);
 	}
@@ -37,7 +37,7 @@ class Player extends Fairy
 	var currFollow = null;
 	override public function update(dt:Float) {
 		if(dead) {
-			if(game.nbPlayers == 1 && game.players.length > 0 && game.players.indexOf(this) == -1) {
+			if(game.state.nbPlayers == 1 && game.players.length > 0 && game.players.indexOf(this) == -1) {
 				inline function setCam() {
 					var pl = game.players[0];
 					var v = game.customScene.views[0];
@@ -52,11 +52,11 @@ class Player extends Fairy
 					setCam();
 					return;
 				}
-				if((game.nbPlayers == 1 && K.isPressed(K.LEFT)) || (controller != null && controller.pressed.xAxis < 0)) {
+				if((game.state.nbPlayers == 1 && K.isPressed(K.LEFT)) || (controller != null && controller.pressed.xAxis < 0)) {
 					game.players.unshift(game.players.pop());
 					setCam();
 				}
-				if((game.nbPlayers == 1 && K.isPressed(K.RIGHT)) || (controller != null && controller.pressed.xAxis > 0)) {
+				if((game.state.nbPlayers == 1 && K.isPressed(K.RIGHT)) || (controller != null && controller.pressed.xAxis > 0)) {
 					game.players.push(game.players.shift());
 					setCam();
 				}

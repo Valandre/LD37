@@ -85,6 +85,7 @@ class Win extends h2d.Sprite
 		root.isVertical = true;
 
 		game.setAmbient(1);
+		game.autoCameraKind = Choose;
 		init();
 	}
 
@@ -113,10 +114,10 @@ class Win extends h2d.Sprite
 
 		var id = 0;
 		var n = 0;
-		for(i in 0...game.stars.length)
-			if(game.stars[i] > n){
+		for(i in 0...game.state.stars.length)
+			if(game.state.stars[i] > n){
 				id = i + 1;
-				n = game.stars[i];
+				n = game.state.stars[i];
 			}
 
 		var e = new ent.Player(new h3d.col.Point(0, 0, 1), 1, id);

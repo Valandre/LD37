@@ -7,18 +7,14 @@ class ChoosePlayers extends ui.Form
 	var players = [];
 	var contRight : h2d.Flow;
 
-	public var choose : ui.ChooseArena;
-	var onRemove : Bool -> Void;
-
 	var fairies = [];
 	var sticks : Array<h2d.Bitmap> = [];
 	var ptiles = [];
 
-	public function new(?parent, onRemove : Bool -> Void ) {
+	public function new(?parent) {
 		super(parent);
-
-		this.onRemove = onRemove;
 		game.setAmbient(1);
+		game.autoCameraKind = Choose;
 	}
 
 	override function slideOut(?onEnd : Void -> Void) {
@@ -103,28 +99,22 @@ class ChoosePlayers extends ui.Form
 			slideOut(function() {
 				while(game.players.length > 0)
 					game.players.pop().remove();
-				game.nbPlayers = 0;
+				game.state.nbPlayers = 0;
 				for( c in game.controllers)
-					if(c.active) game.nbPlayers++;
-				if(game.nbPlayers == 0)
-					game.nbPlayers = 1;
-
-				choose = new ui.ChooseArena(game.s2d, function(start : Bool) {
-					lock = start;
-					if(!lock) showPlayers();
-					choose = null;
-					slideIn();
-				});
+					if(c.active) game.state.nbPlayers++;
+				if(game.state.nbPlayers == 0)
+					game.state.nbPlayers = 1;
+				new ui.ChooseArena();
+				remove();
 			});
 		}
 
 		var back = addButton("BACK", cont);
 		back.interactive.onClick = function(e) {
 			slideOut(function() {
-				game.setAmbient(0);
 				while(game.players.length > 0)
 					game.players.pop().remove();
-				onRemove(false);
+				new ui.Menu();
 				remove();
 			});
 		}

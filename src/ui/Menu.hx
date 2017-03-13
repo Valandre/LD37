@@ -1,24 +1,15 @@
 package ui;
 import hxd.Key in K;
 import Sounds;
-import ui.ChoosePlayers;
 
 class Menu extends ui.Form
 {
-	public var choose : ui.ChoosePlayers;
 	var creditsBmp : h2d.Bitmap;
 
 	public function new(?parent) {
 		super(parent);
 		game.setAmbient(0);
-	}
-
-	public function openChoose() {
-		choose = new ui.ChoosePlayers(game.s2d, function(start : Bool) {
-			lock = start;
-			choose = null;
-			slideIn();
-		});
+		game.autoCameraKind = Menu;
 	}
 
 	override function init() {
@@ -30,17 +21,10 @@ class Menu extends ui.Form
 			slideOut(function() {
 				while(game.players.length > 0)
 					game.players.pop().remove();
-				choose = new ui.ChoosePlayers(game.s2d, function(start : Bool) {
-					lock = start;
-					choose = null;
-					slideIn();
-					while(game.players.length > 0)
-						game.players.pop().remove();
-					if(!lock) createFairies();
-				});
+				new ui.ChoosePlayers();
+				remove();
 			});
 		}
-
 
 		var sound = addButton("SOUND", cont);
 		if(!Game.PREFS.music) {
@@ -150,9 +134,6 @@ class Menu extends ui.Form
 	override function onResize() {
 		super.onResize();
 
-		if(choose != null)
-			choose.onResize();
-
 		if(creditsBmp != null) {
 			creditsBmp.x = game.s2d.width * 0.4;
 			creditsBmp.y = (game.s2d.height - creditsBmp.tile.height) * 0.5;
@@ -160,11 +141,5 @@ class Menu extends ui.Form
 		if(bmpSlide != null) {
 			bmpSlide.scaleY = game.s2d.height;
 		}
-	}
-
-	override public function update(dt:Float) {
-		if(choose != null)
-			choose.update(dt);
-		else super.update(dt);
 	}
 }

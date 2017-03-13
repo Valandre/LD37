@@ -60,7 +60,7 @@ class UI extends h2d.Sprite
 			var s = new h2d.Flow(this);
 			s.horizontalSpacing = -30;
 			for(j in 0...5) {
-				var b = new h2d.Bitmap(stars[game.stars[i] > j ? game.players[i].id : 0], s);
+				var b = new h2d.Bitmap(stars[game.state.stars[i] > j ? game.players[i].id : 0], s);
 				b.filter = true;
 				b.setScale(0.5);
 			}
@@ -161,7 +161,7 @@ class UI extends h2d.Sprite
 						var star = new h2d.Bitmap(t, this);
 						var sc = 3.;
 						star.setScale(sc);
-						var target = s.getChildAt(game.stars[pl.id-1]);
+						var target = s.getChildAt(game.state.stars[pl.id-1]);
 						Std.instance(target, h2d.Bitmap).tile = stars[pl.id];
 						star.x = target.absX;
 						star.y = target.absY + 25;
@@ -173,8 +173,8 @@ class UI extends h2d.Sprite
 								star.remove();
 								game.event.wait(2, function() {
 									bmp.remove();
-									game.stars[pl.id - 1]++;
-									if(game.stars[pl.id - 1] == 5)
+									game.state.stars[pl.id - 1]++;
+									if(game.state.stars[pl.id - 1] == 5)
 										game.endGame();
 									else game.restart();
 								});

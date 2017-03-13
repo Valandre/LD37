@@ -83,8 +83,10 @@ class Form extends h2d.Sprite
 	var lock = false;
 
 	public function new(?parent) {
-		super(parent);
 		game = Game.inst;
+		if(parent == null) parent = game.s2d;
+		super(parent);
+		game.windows.push(this);
 
 		bg = new h2d.Bitmap(hxd.Res.UI.Bg01.toTile(), this);
 		bg.blendMode = Add;
@@ -118,6 +120,11 @@ class Form extends h2d.Sprite
 		cont.isVertical = true;
 		cont.paddingLeft = 170;
 		cont.paddingTop = 300;
+	}
+
+	override public function remove() {
+		super.remove();
+		game.windows.remove(this);
 	}
 
 	public function addButton(name : String, ?parent : h2d.Flow) {
