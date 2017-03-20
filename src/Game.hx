@@ -6,12 +6,18 @@ import map.Composite;
 import map.World;
 import Sounds;
 import ui.Menu;
-import ui.UI;
+import ui.Scores;
 import ui.Win;
+import Const;
 
 enum CameraKind {
 	Menu;
 	Choose;
+}
+
+enum FontKind {
+	Default;
+	Corner;
 }
 
 class Game extends hxd.App {
@@ -52,7 +58,7 @@ class Game extends hxd.App {
 	var IAOnly = false;
 
 	public var windows : Array<ui.Form>;
-	var ui : ui.UI;
+	var ui : ui.Scores;
 	var blackScreen : h2d.Bitmap;
 
 	var bonusMaxCount : Int = 10;
@@ -68,7 +74,6 @@ class Game extends hxd.App {
 	var hideEntities = false;
 
 	override function init() {
-
 		customScene = new map.CustomScene();
 		setScene3D(customScene);
 		renderer = new map.Composite();
@@ -105,10 +110,27 @@ class Game extends hxd.App {
 
 		if(PREFS.music)
 			Sounds.play("Loop");
+
+		transition(false);
 	}
 
 	public static function savePrefs() {
 		hxd.Save.save(PREFS, "prefs");
+	}
+
+	public function text(str : String, ?kind : FontKind, ?parent) {
+		var tf = new h2d.Text(resolveFont(kind), parent);
+		tf.text = str;
+		return tf;
+	}
+
+	inline function resolveFont(kind : FontKind) {
+		if(kind == null) kind = Default;
+		var res = switch(kind) {
+			case Corner : hxd.Res.font.poetsen_one_regular_65;
+			case Default : hxd.Res.font.poetsen_one_regular_48;
+		}
+		return res.toFont();
 	}
 
 	public function transition(?onReady : Void -> Void, ?onDone : Void -> Void, fadeIn = true ) {
@@ -230,7 +252,7 @@ class Game extends hxd.App {
 			addPlayer(IA, dirs.shift());
 
 		if(ui != null) ui.remove();
-		ui = new ui.UI(s2d, function() {
+		ui = new ui.Scores(s2d, function() {
 			gameOver = false;
 			for(p in players)
 				p.canMove = true;
@@ -491,5 +513,6 @@ class Game extends hxd.App {
 		inst = new Game();
 		hxd.res.Resource.LIVE_UPDATE = true;
 		hxd.Res.initLocal();
+		Texts.load(hxd.Res.texts.entry.getText());
 	}
 }

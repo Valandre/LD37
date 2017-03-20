@@ -18,6 +18,11 @@ class ChoosePlayers extends ui.Form
 	}
 
 	override function slideOut(?onEnd : Void -> Void) {
+		if( onEnd != null) onEnd();
+		return;
+		///////////////////////
+
+
 		var bmp = new h2d.Bitmap(h2d.Tile.fromColor(0xFFFFFF));
 		bmp.scaleY = game.s2d.height;
 		addChildAt(bmp, 0);
@@ -47,6 +52,12 @@ class ChoosePlayers extends ui.Form
 	}
 
 	override function slideIn(?onEnd : Void -> Void) {
+		if( onEnd != null) onEnd();
+		return;
+		///////////////////////
+
+
+
 		bg.x = game.s2d.width + 100;
 		bg.visible = true;
 		cont.visible = true;
@@ -94,7 +105,7 @@ class ChoosePlayers extends ui.Form
 	override function init() {
 		super.init();
 
-		var next = addButton("NEXT", cont);
+		var next = addButtonOld("NEXT", cont);
 		next.interactive.onClick = function(e) {
 			slideOut(function() {
 				while(game.players.length > 0)
@@ -109,7 +120,7 @@ class ChoosePlayers extends ui.Form
 			});
 		}
 
-		var back = addButton("BACK", cont);
+		var back = addButtonOld("BACK", cont);
 		back.interactive.onClick = function(e) {
 			slideOut(function() {
 				while(game.players.length > 0)

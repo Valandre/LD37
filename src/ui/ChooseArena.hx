@@ -17,7 +17,7 @@ class ChooseArena extends ui.Form
 
 		game.state.arenaId = 0;
 
-		var next = addButton("START", cont);
+		var next = addButtonOld("START", cont);
 		next.interactive.onClick = function(e) {
 			slideOut(function() {
 				remove();
@@ -25,7 +25,7 @@ class ChooseArena extends ui.Form
 			});
 		}
 
-		var back = addButton("BACK", cont);
+		var back = addButtonOld("BACK", cont);
 		back.interactive.onClick = function(e) {
 			slideOut(function() {
 				new ui.ChoosePlayers();

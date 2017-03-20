@@ -15,7 +15,12 @@ class Menu extends ui.Form
 	override function init() {
 		super.init();
 
-		var start = addButton("NEWGAME", cont);
+		setInfos(Texts.ui.main_menu);
+
+		//TODO :
+		//var start = new ui.Button(Texts.button.single_player, cont);
+
+		var start = addButtonOld("NEWGAME", cont);
 		start.interactive.onClick = function(e) {
 			if(creditsBmp != null) toggleCredits();
 			slideOut(function() {
@@ -26,7 +31,7 @@ class Menu extends ui.Form
 			});
 		}
 
-		var sound = addButton("SOUND", cont);
+		var sound = addButtonOld("SOUND", cont);
 		if(!Game.PREFS.music) {
 			sound.tiles.push(sound.tiles.shift());
 			sound.tiles.push(sound.tiles.shift()); //twice !
@@ -43,9 +48,9 @@ class Menu extends ui.Form
 			if(creditsBmp != null) toggleCredits();
 		};
 
-		var credits = addButton("CREDITS", cont);
+		var credits = addButtonOld("CREDITS", cont);
 		credits.interactive.onClick = function(e){ toggleCredits(); };
-		var exit = addButton("EXIT", cont);
+		var exit = addButtonOld("EXIT", cont);
 		exit.interactive.onClick = function(e) hxd.System.exit();
 
 		createFairies();
