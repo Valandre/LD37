@@ -18,7 +18,7 @@ class Menu extends ui.Form
 		setInfos(Texts.ui.main_menu);
 
 		//TODO :
-		//var start = new ui.Button(Texts.button.single_player, cont);
+		var start = new ui.Button(Texts.button.single_player, cont);
 
 		var start = addButtonOld("NEWGAME", cont);
 		start.interactive.onClick = function(e) {
