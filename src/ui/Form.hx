@@ -77,7 +77,8 @@ class Form extends h2d.Sprite
 	var root : h2d.Flow;
 	var selectId = 0;
 
-	var buttons : Array<Button> = [];
+	var buttonsOld : Array<Button> = [];
+	var buttons : Array<MenuButton> = [];
 	var title : h2d.Bitmap;
 	var cont : h2d.Flow;
 	var lock = false;
@@ -145,85 +146,26 @@ class Form extends h2d.Sprite
 		game.windows.remove(this);
 	}
 
+	public function addButton(name : String, scaleOffset = 0, ?parent : h2d.Sprite) {
+		var bt = new MenuButton(name, scaleOffset, parent);
+		buttons.push(bt);
+		return bt;
+	}
+
 	public function addButtonOld(name : String, ?parent : h2d.Flow) {
 		var bt = new Button(name, parent);
-		buttons.push(bt);
+		buttonsOld.push(bt);
 		return bt;
 	}
 
 	function slideOut(?onEnd : Void -> Void) {
 		if( onEnd != null) onEnd();
 		return;
-		///////////////////////
-
-
-
-		var bmp = new h2d.Bitmap(h2d.Tile.fromColor(0xFFFFFF));
-		bmp.scaleY = game.s2d.height;
-		addChildAt(bmp, 0);
-
-		var a = 1.;
-		var sp = 10.;
-		game.event.waitUntil(function(dt){
-			a = Math.max(0, a - 0.1 * dt);
-			title.alpha = a;
-			for(b in buttons)
-				b.setAlpha(a);
-			bg.x += sp;
-			sp += 15;
-			bmp.scaleX = bg.x;
-			if(bmp.scaleX > game.s2d.width) {
-				cont.visible = false;
-				bmp.remove();
-				bg.visible = false;
-				if(onEnd != null) onEnd();
-				return true;
-			}
-			return false;
-		});
 	}
 
 	function slideIn(?onEnd : Void -> Void) {
 		if( onEnd != null) onEnd();
 		return;
-		///////////////////////
-
-		bg.x = game.s2d.width + 100;
-		bg.visible = true;
-		cont.visible = true;
-		title.alpha = 0;
-		for( b in buttons)
-			b.setAlpha(0);
-
-		var bmp = new h2d.Bitmap(h2d.Tile.fromColor(0xFFFFFF));
-		addChildAt(bmp, 0);
-		bmp.scaleX = bg.x;
-		bmp.scaleY = game.s2d.height;
-
-		var sp = 10.;
-		game.event.waitUntil(function(dt){
-			bg.x -= sp;
-			sp += 15;
-			bmp.scaleX = bg.x;
-			if(bmp.scaleX <= 0) {
-				bg.x = 0;
-				bmp.remove();
-				var a = 0.;
-				game.event.waitUntil(function(dt){
-					a = Math.min(1, a + 0.1 * dt);
-					title.alpha = a;
-					for(b in buttons)
-						b.setAlpha(a);
-					if(a == 1) {
-						if(onEnd != null) onEnd();
-						return true;
-					}
-					return false;
-				});
-				return true;
-			}
-			return false;
-		});
 	}
 
 	function select(id : Int) {
@@ -249,21 +191,21 @@ class Form extends h2d.Sprite
 
 	public function update(dt : Float) {
 		if(lock) return;
-		if(K.isPressed(K.UP) || (game.keys != null && game.keys.pressed.yAxis < 0)) {
+		if(K.isPressed(K.LEFT) || (game.keys != null && game.keys.pressed.xAxis < 0)) {
 			Sounds.play("Over");
 			selectId--;
 			if(selectId < 0) selectId = buttons.length - 1;
 			select(selectId);
 		}
-		if(K.isPressed(K.DOWN) || (game.keys != null && game.keys.pressed.yAxis > 0)) {
+		if(K.isPressed(K.RIGHT) || (game.keys != null && game.keys.pressed.xAxis > 0)) {
 			Sounds.play("Over");
 			selectId = (selectId + 1) % buttons.length;
 			select(selectId);
 		}
-
+/*
 		if(K.isPressed(K.ENTER) || K.isPressed(K.SPACE) || (game.keys != null && game.keys.pressed.A)) {
 			Sounds.play("Select");
-			buttons[selectId].onclick();
-		}
+			buttonsOld[selectId].onclick();
+		}*/
 	}
 }

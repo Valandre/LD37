@@ -5,6 +5,7 @@ import Sounds;
 class Menu extends ui.Form
 {
 	var creditsBmp : h2d.Bitmap;
+	var container: h2d.Sprite;
 
 	public function new(?parent) {
 		super(parent);
@@ -17,9 +18,24 @@ class Menu extends ui.Form
 
 		setInfos(Texts.ui.main_menu);
 
-		//TODO :
-		var start = new ui.Button(Texts.button.single_player, cont);
+		container = new h2d.Sprite(this);
+		var btSingle = addButton(Texts.button.single_player, 1, container);
+		var btLocal = addButton(Texts.button.local_battle, -1, container);
+		var btOnline = addButton(Texts.button.online_battle, 1, container);
+		var btShop = addButton(Texts.button.wizard_shop, -1, container);
+		var btSettings = addButton(Texts.button.settings, 1, container);
+		var btCredits = addButton(Texts.button.credits, -1, container);
 
+		var spacing = 5;
+		for(i in 0...buttons.length) {
+			var b = buttons[i];
+			var w = Std.int(b.getSize().width) >> 1;
+			b.x = (w + spacing) * i;
+			b.y = ((w >> 1) + spacing) * ((i % 2) == 0 ? -1 : 1);
+		}
+
+
+		/*
 		var start = addButtonOld("NEWGAME", cont);
 		start.interactive.onClick = function(e) {
 			if(creditsBmp != null) toggleCredits();
@@ -52,8 +68,12 @@ class Menu extends ui.Form
 		credits.interactive.onClick = function(e){ toggleCredits(); };
 		var exit = addButtonOld("EXIT", cont);
 		exit.interactive.onClick = function(e) hxd.System.exit();
+*/
 
 		createFairies();
+
+		onResize();
+		select(0);
 	}
 
 	function createFairies() {
@@ -138,6 +158,14 @@ class Menu extends ui.Form
 
 	override function onResize() {
 		super.onResize();
+
+		var sc = game.s2d.height / 1080;
+		container.setScale(sc);
+
+		var contSize = container.getSize();
+		container.x = (game.s2d.width - contSize.width) * 0.5 - contSize.x;
+		container.y = (game.s2d.height - contSize.height) * 0.5 - contSize.y;
+
 
 		if(creditsBmp != null) {
 			creditsBmp.x = game.s2d.width * 0.4;

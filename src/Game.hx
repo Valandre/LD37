@@ -128,7 +128,7 @@ class Game extends hxd.App {
 		if(kind == null) kind = Default;
 		var res = switch(kind) {
 			case Corner : hxd.Res.font.poetsen_one_regular_65;
-			case Default : hxd.Res.font.poetsen_one_regular_48;
+			case Default : hxd.Res.font.poetsen_one_regular_32;
 		}
 		return res.toFont();
 	}

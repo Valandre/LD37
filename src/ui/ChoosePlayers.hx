@@ -32,7 +32,7 @@ class ChoosePlayers extends ui.Form
 		game.event.waitUntil(function(dt){
 			a = Math.max(0, a - 0.1 * dt);
 			title.alpha = a;
-			for(b in buttons)
+			for(b in buttonsOld)
 				b.setAlpha(a);
 			for(b in sticks)
 				b.alpha = a;
@@ -64,7 +64,7 @@ class ChoosePlayers extends ui.Form
 		contRight.visible = true;
 
 		title.alpha = 0;
-		for( b in buttons)
+		for( b in buttonsOld)
 			b.setAlpha(0);
 		for(b in sticks)
 			b.alpha = 0;
@@ -86,7 +86,7 @@ class ChoosePlayers extends ui.Form
 				game.event.waitUntil(function(dt){
 					a = Math.min(1, a + 0.1 * dt);
 					title.alpha = a;
-					for(b in buttons)
+					for(b in buttonsOld)
 						b.setAlpha(a);
 					for(b in sticks)
 						b.alpha = a;
