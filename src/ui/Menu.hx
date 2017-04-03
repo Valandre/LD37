@@ -19,21 +19,28 @@ class Menu extends ui.Form
 		setInfos(Texts.ui.main_menu);
 
 		container = new h2d.Sprite(this);
-		var btSingle = addButton(Texts.button.single_player, 1, container);
-		var btLocal = addButton(Texts.button.local_battle, -1, container);
-		var btOnline = addButton(Texts.button.online_battle, 1, container);
-		var btShop = addButton(Texts.button.wizard_shop, -1, container);
-		var btSettings = addButton(Texts.button.settings, 1, container);
-		var btCredits = addButton(Texts.button.credits, -1, container);
-
-		var spacing = 5;
-		for(i in 0...buttons.length) {
-			var b = buttons[i];
-			var w = Std.int(b.getSize().width) >> 1;
-			b.x = (w + spacing) * i;
-			b.y = ((w >> 1) + spacing) * ((i % 2) == 0 ? -1 : 1);
+		var btSingle = addButton(Texts.button.single_player, container);
+		btSingle.onClick = function() {
+			while(game.players.length > 0)
+				game.players.pop().remove();
+			new ui.ChoosePlayers();
+			remove();
 		}
 
+		var btLocal = addButton(Texts.button.local_battle, container);
+		btLocal.onClick = function() {
+			while(game.players.length > 0)
+				game.players.pop().remove();
+			new ui.ChoosePlayers();
+			remove();
+		}
+
+		var btOnline = addButton(Texts.button.online_battle, container);
+		var btShop = addButton(Texts.button.wizard_shop, container);
+		var btSettings = addButton(Texts.button.settings, container);
+		var btCredits = addButton(Texts.button.credits, container);
+
+		orderButtons();
 
 		/*
 		var start = addButtonOld("NEWGAME", cont);

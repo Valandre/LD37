@@ -1,0 +1,47 @@
+{
+	"sheets": [
+		{
+			"name": "chars",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id"
+				},
+				{
+					"typeStr": "1",
+					"name": "name",
+					"opt": true,
+					"kind": "localizable"
+				}
+			],
+			"lines": [
+				{
+					"name": "Player1",
+					"id": "P1",
+					"index": 0
+				},
+				{
+					"id": "P2",
+					"name": "Player2",
+					"index": 1
+				},
+				{
+					"id": "P3",
+					"name": "Player3",
+					"index": 2
+				},
+				{
+					"id": "P4",
+					"name": "Player4",
+					"index": 3
+				}
+			],
+			"separators": [],
+			"props": {
+				"hasIndex": true
+			}
+		}
+	],
+	"customTypes": [],
+	"compress": true
+}

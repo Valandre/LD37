@@ -11,100 +11,26 @@ class ChoosePlayers extends ui.Form
 	var sticks : Array<h2d.Bitmap> = [];
 	var ptiles = [];
 
+	var container: h2d.Sprite;
+
 	public function new(?parent) {
 		super(parent);
 		game.setAmbient(1);
 		game.autoCameraKind = Choose;
 	}
 
-	override function slideOut(?onEnd : Void -> Void) {
-		if( onEnd != null) onEnd();
-		return;
-		///////////////////////
-
-
-		var bmp = new h2d.Bitmap(h2d.Tile.fromColor(0xFFFFFF));
-		bmp.scaleY = game.s2d.height;
-		addChildAt(bmp, 0);
-
-		var a = 1.;
-		var sp = 10.;
-		game.event.waitUntil(function(dt){
-			a = Math.max(0, a - 0.1 * dt);
-			title.alpha = a;
-			for(b in buttonsOld)
-				b.setAlpha(a);
-			for(b in sticks)
-				b.alpha = a;
-			bg.x += sp;
-			sp += 15;
-			bmp.scaleX = bg.x;
-			if(bmp.scaleX > game.s2d.width) {
-				cont.visible = false;
-				contRight.visible = false;
-				bmp.remove();
-				bg.visible = false;
-				if(onEnd != null) onEnd();
-				return true;
-			}
-			return false;
-		});
-	}
-
-	override function slideIn(?onEnd : Void -> Void) {
-		if( onEnd != null) onEnd();
-		return;
-		///////////////////////
-
-
-
-		bg.x = game.s2d.width + 100;
-		bg.visible = true;
-		cont.visible = true;
-		contRight.visible = true;
-
-		title.alpha = 0;
-		for( b in buttonsOld)
-			b.setAlpha(0);
-		for(b in sticks)
-			b.alpha = 0;
-
-		var bmp = new h2d.Bitmap(h2d.Tile.fromColor(0xFFFFFF));
-		bmp.scaleX = bg.x;
-		bmp.scaleY = game.s2d.height;
-		addChildAt(bmp, 0);
-
-		var sp = 10.;
-		game.event.waitUntil(function(dt){
-			bg.x -= sp;
-			sp += 15;
-			bmp.scaleX = bg.x;
-			if(bmp.scaleX <= 0) {
-				bg.x = 0;
-				bmp.remove();
-				var a = 0.;
-				game.event.waitUntil(function(dt){
-					a = Math.min(1, a + 0.1 * dt);
-					title.alpha = a;
-					for(b in buttonsOld)
-						b.setAlpha(a);
-					for(b in sticks)
-						b.alpha = a;
-					if(a == 1) {
-						if(onEnd != null) onEnd();
-						return true;
-					}
-					return false;
-				});
-				return true;
-			}
-			return false;
-		});
-	}
-
 	override function init() {
 		super.init();
 
+		setInfos(Texts.ui.choose_character);
+
+		container = new h2d.Sprite(this);
+		showPlayers();
+
+		//var btSingle = addButton(Texts.button.single_player, container);
+
+
+/*
 		var next = addButtonOld("NEXT", cont);
 		next.interactive.onClick = function(e) {
 			slideOut(function() {
@@ -159,11 +85,16 @@ class ChoosePlayers extends ui.Form
 			b.blendMode = Alpha;
 			b.filter = true;
 			sticks.push(b);
-		}
+		}*/
 	}
 
 	public function showPlayers() {
+		players = [];
+
+		for(a in Data.chars.all)
+			var bt = addButton(a.name, container);
 		//
+		/*
 		game.players = [];
 		for(i in 0...4) {
 			var e = new ent.Player(new h3d.col.Point(0, 0, 1));
@@ -185,7 +116,7 @@ class ChoosePlayers extends ui.Form
 
 			fairies.push(e);
 			game.players.push(e);
-		}
+		}*/
 	}
 
 	override public function onResize() {

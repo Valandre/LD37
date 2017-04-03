@@ -2,73 +2,6 @@ package ui;
 import hxd.Key in K;
 import Sounds;
 
-private class Button extends h2d.Flow {
-	var game : Game;
-	public var selected(default, set) = false;
-	public var tiles = [];
-	public var bt : h2d.Bitmap;
-	var str : String;
-
-	public function new (name : String, ?parent : h2d.Sprite) {
-		super(parent);
-		game = Game.inst;
-
-		str = name;
-
-		switch(name) {
-			case "NEWGAME":
-				tiles.push(hxd.Res.UI.Bt_Start0.toTile());
-				tiles.push(hxd.Res.UI.Bt_Start1.toTile());
-			case "START":
-				tiles.push(hxd.Res.UI.Bt_Start0.toTile());
-				tiles.push(hxd.Res.UI.Bt_Start1.toTile());
-			case "SOUND":
-				tiles.push(hxd.Res.UI.Bt_SoundOn0.toTile());
-				tiles.push(hxd.Res.UI.Bt_SoundOn1.toTile());
-				tiles.push(hxd.Res.UI.Bt_SoundOff0.toTile());
-				tiles.push(hxd.Res.UI.Bt_SoundOff1.toTile());
-			case "CREDITS":
-				tiles.push(hxd.Res.UI.Bt_Credits0.toTile());
-				tiles.push(hxd.Res.UI.Bt_Credits1.toTile());
-			case "EXIT":
-				tiles.push(hxd.Res.UI.Bt_Exit0.toTile());
-				tiles.push(hxd.Res.UI.Bt_Exit1.toTile());
-			case "BACK":
-				tiles.push(hxd.Res.UI.Bt_Back0.toTile());
-				tiles.push(hxd.Res.UI.Bt_Back1.toTile());
-			case "NEXT":
-				tiles.push(hxd.Res.UI.Bt_Ready0.toTile());
-				tiles.push(hxd.Res.UI.Bt_Ready1.toTile());
-		}
-
-		bt = new h2d.Bitmap(tiles[0], this);
-		bt.blendMode = Alpha;
-		enableInteractive = true;
-	}
-
-	function onOver() {
-		bt.tile = tiles[1];
-	}
-
-	function onOut() {
-		bt.tile = tiles[0];
-	}
-
-	public function onclick() {
-		interactive.onClick(null);
-	}
-
-	public function setAlpha(v : Float) {
-		bt.alpha = v;
-	}
-
-	function set_selected(b : Bool) {
-		if(b) onOver();
-		else onOut();
-		return selected = b;
-	}
-}
-
 class Form extends h2d.Sprite
 {
 	var bg : h2d.Bitmap;
@@ -77,11 +10,8 @@ class Form extends h2d.Sprite
 	var root : h2d.Flow;
 	var selectId = 0;
 
-	var buttonsOld : Array<Button> = [];
 	var buttons : Array<MenuButton> = [];
 	var title : h2d.Bitmap;
-	var cont : h2d.Flow;
-	var lock = false;
 
 	var infos : h2d.Sprite;
 
@@ -132,13 +62,6 @@ class Form extends h2d.Sprite
 	}
 
 	function init() {
-		cont = new h2d.Flow(root);
-		cont.horizontalAlign = Middle;
-		cont.verticalAlign = Middle;
-		cont.verticalSpacing = 30;
-		cont.isVertical = true;
-		cont.paddingLeft = 170;
-		cont.paddingTop = 300;
 	}
 
 	override public function onRemove() {
@@ -146,16 +69,20 @@ class Form extends h2d.Sprite
 		game.windows.remove(this);
 	}
 
-	public function addButton(name : String, scaleOffset = 0, ?parent : h2d.Sprite) {
-		var bt = new MenuButton(name, scaleOffset, parent);
+	public function addButton(name : String, ?parent : h2d.Sprite) {
+		var bt = new MenuButton(name, parent);
 		buttons.push(bt);
 		return bt;
 	}
 
-	public function addButtonOld(name : String, ?parent : h2d.Flow) {
-		var bt = new Button(name, parent);
-		buttonsOld.push(bt);
-		return bt;
+	function orderButtons() {
+		var spacing = 18;
+		for(i in 0...buttons.length) {
+			var b = buttons[i];
+			var w = Std.int(b.getSize().width) >> 1;
+			b.x = (w + spacing) * i;
+			b.y = ((w >> 1) + spacing*0.5) * ((i % 2) == 0 ? -1 : 1);
+		}
 	}
 
 	function slideOut(?onEnd : Void -> Void) {
@@ -184,13 +111,9 @@ class Form extends h2d.Sprite
 		root.needReflow = true;
 
 		title.setScale(sc);
-
-		cont.paddingLeft = Std.int(170 * sc);
-		cont.paddingTop = Std.int(300 * sc);
 	}
 
 	public function update(dt : Float) {
-		if(lock) return;
 		if(K.isPressed(K.LEFT) || (game.keys != null && game.keys.pressed.xAxis < 0)) {
 			Sounds.play("Over");
 			selectId--;
@@ -202,10 +125,10 @@ class Form extends h2d.Sprite
 			selectId = (selectId + 1) % buttons.length;
 			select(selectId);
 		}
-/*
+
 		if(K.isPressed(K.ENTER) || K.isPressed(K.SPACE) || (game.keys != null && game.keys.pressed.A)) {
 			Sounds.play("Select");
-			buttonsOld[selectId].onclick();
-		}*/
+			buttons[selectId].onClick();
+		}
 	}
 }

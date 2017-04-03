@@ -12,14 +12,11 @@ class MenuButton extends h2d.Sprite
 	var title : h2d.Text;
 
 	var root : h2d.Sprite;
-	var scaleOffset : Int;
 	var size = 256;
 
-	public function new(str : String, scaleOffset, ?parent) {
+	public function new(str : String, ?parent) {
 		super(parent);
 		game = Game.inst;
-
-		this.scaleOffset = scaleOffset;
 
 		root = new h2d.Sprite(this);
 
@@ -52,7 +49,7 @@ class MenuButton extends h2d.Sprite
 	function set_selected(b : Bool) {
 		if(b) {
 			bg.tile = tiles[1];
-			scaleTo(1.15);
+			scaleTo(1.08);
 		}
 		else {
 			bg.tile = tiles[0];
@@ -66,18 +63,16 @@ class MenuButton extends h2d.Sprite
 		game.event.waitUntil(function(dt) {
 			sc += (v - sc) * 0.3 * dt;
 			setScale(sc);
-			root.y = (size >> 1) * 1.4 * scaleOffset * (1 - sc);
 
 			if(Math.abs(v - sc) < 0.01) {
 				setScale(v);
-				root.y = (size >> 1) * 1.4 * scaleOffset * (1 - sc);
 				return true;
 			}
 			return false;
 		});
 	}
 
-	public function onResize() {
+	dynamic public function onClick() {
 
 	}
 
