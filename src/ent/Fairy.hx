@@ -306,7 +306,7 @@ class Fairy extends Entity
 	}
 
 	function calcAspiration() {
-		//return 0.;
+		return 0.;
 
 		var v = 0.;
 		var r = 1.5;

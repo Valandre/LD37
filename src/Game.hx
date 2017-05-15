@@ -479,6 +479,8 @@ class Game extends hxd.App {
 		for( w in windows)
 			w.onResize();
 
+		if(ui != null) ui.onResize();
+
 		//
 		for(i in 0...customScene.views.length) {
 			var v = customScene.views[i];
