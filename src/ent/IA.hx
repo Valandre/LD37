@@ -65,7 +65,7 @@ class IA extends Fairy
 		var r = sensor.clone();
 		var d = bounds.rayIntersection(r, false);
 		if(d != -1){
-			if(d > ray * ray) return false;
+			if(d > ray) return false;
 			return true;
 		}
 

@@ -339,7 +339,7 @@ class Fairy extends Entity
 			if(w.n.x != worldNormal.x || w.n.y != worldNormal.y || w.n.z != worldNormal.z) continue;
 			d = w.w.getBounds().rayIntersection(sensor, false);
 			if(d != -1) {
-				if(d > ray * ray) continue;
+				if(d > ray) continue;
 				/*
 				var n = new h3d.col.Point(pt.x - sensor.px, pt.y - sensor.py, pt.z - sensor.pz);
 				n.normalize();
@@ -355,7 +355,7 @@ class Fairy extends Entity
 			r.transform(c.m);
 			d = c.c.rayIntersection(r, false);
 			if(d != -1){
-				if(d > ray * ray) continue;
+				if(d > ray) continue;
 				return d;
 			}
 		}
