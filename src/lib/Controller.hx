@@ -196,10 +196,10 @@ class Controller {
 		//buttons
 		down.start = (K.isDown(K.CTRL) && K.isPressed("F".code)) || pad.buttons[padConfig.start];
 		down.X = K.isPressed("C".code) || pad.buttons[padConfig.X];
-		down.A = K.isPressed(K.SPACE) || pad.buttons[padConfig.A];
+		down.A = K.isPressed(K.SPACE) || K.isPressed(K.ENTER) || pad.buttons[padConfig.A];
 		down.Y = K.isPressed("V".code) || pad.buttons[padConfig.Y];
 		down.B = K.isPressed("X".code) || pad.buttons[padConfig.B];
-		down.back = pad.buttons[padConfig.back];
+		down.back = K.isPressed(K.BACKSPACE) || pad.buttons[padConfig.back];
 
 		updateState();
 	}

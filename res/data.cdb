@@ -34,12 +34,66 @@
 					"id": "P4",
 					"name": "Player4",
 					"index": 3
+				},
+				{
+					"id": "P5",
+					"index": 4,
+					"name": "Player5"
+				},
+				{
+					"id": "P6",
+					"index": 5,
+					"name": "Player6"
+				},
+				{
+					"id": "P7",
+					"index": 6,
+					"name": "Player7"
+				},
+				{
+					"id": "P8",
+					"index": 7,
+					"name": "Player8"
 				}
 			],
 			"separators": [],
 			"props": {
 				"hasIndex": true
 			}
+		},
+		{
+			"name": "arenas",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id"
+				},
+				{
+					"typeStr": "1",
+					"name": "name",
+					"display": null
+				}
+			],
+			"lines": [
+				{
+					"id": "A1",
+					"name": "Arena1"
+				},
+				{
+					"id": "A2",
+					"name": "Arena2"
+				},
+				{
+					"id": "A3",
+					"name": "Arena3"
+				},
+				{
+					"id": "A4",
+					"name": "Arena4"
+				}
+			],
+			"separators": [],
+			"props": {}
 		}
 	],
 	"customTypes": [],

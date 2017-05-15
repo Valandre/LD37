@@ -5,13 +5,15 @@ import Sounds;
 class ChoosePlayers extends ui.Form
 {
 	var players = [];
-	var contRight : h2d.Flow;
+	//var contRight : h2d.Flow;
 
 	var fairies = [];
 	var sticks : Array<h2d.Bitmap> = [];
 	var ptiles = [];
 
 	var container: h2d.Sprite;
+	var btBack: NavigateButton;
+	var btNext: NavigateButton;
 
 	public function new(?parent) {
 		super(parent);
@@ -27,9 +29,21 @@ class ChoosePlayers extends ui.Form
 		container = new h2d.Sprite(this);
 		showPlayers();
 
-		//var btSingle = addButton(Texts.button.single_player, container);
 
+		btBack = new NavigateButton(Texts.navigate.back, this);
+		btBack.onClick = function() {
+			new ui.Menu();
+			remove();
+		}
 
+		btNext = new NavigateButton(Texts.navigate.next, this);
+		btNext.onClick = function() {
+			game.state.nbPlayers = 1;
+			new ui.ChooseArena();
+			remove();
+		}
+
+		onResize();
 /*
 		var next = addButtonOld("NEXT", cont);
 		next.interactive.onClick = function(e) {
@@ -92,7 +106,10 @@ class ChoosePlayers extends ui.Form
 		players = [];
 
 		for(a in Data.chars.all)
-			var bt = addButton(a.name, container);
+			var bt = addButton(a.name, CharSelect, container);
+
+		orderButtons(8, true);
+
 		//
 		/*
 		game.players = [];
@@ -120,9 +137,22 @@ class ChoosePlayers extends ui.Form
 	}
 
 	override public function onResize() {
-		var sc = game.s2d.height / bg.tile.height;
 		super.onResize();
 
+		var sc = game.s2d.height / 1080;
+		container.setScale(sc);
+
+		var contSize = container.getSize();
+		container.x = (game.s2d.width - contSize.width) * 0.5 - contSize.x;
+		container.y = (game.s2d.height - contSize.height) * 0.2 - contSize.y;
+
+		btBack.x = 50;
+		btBack.y = game.s2d.height - btBack.getSize().height - 50;
+
+		btNext.x = game.s2d.width - btBack.getSize().width - 50;
+		btNext.y = game.s2d.height - btBack.getSize().height - 50;
+
+		/*
 		contRight.minWidth = contRight.maxWidth = Std.int(game.s2d.width * 0.7);
 		contRight.minHeight = contRight.maxHeight = game.s2d.height;
 		contRight.needReflow = true;
@@ -144,27 +174,36 @@ class ChoosePlayers extends ui.Form
 		sticks[3].setScale(0.85 * sc);
 		sticks[3].x = game.s2d.width * 0.78;
 		sticks[3].y = game.s2d.height * 0.88;
+		*/
 	}
 
 	override function update(dt : Float) {
 		super.update(dt);
 
+
+		var c = game.controllers[0];
+		c.active = true;
+		if(c.pressed.B) btBack.onClick();
+		if(c.pressed.A) btNext.onClick();
+
+		/*
 		for(i in 0...game.controllers.length) {
 			if(i == 0) {
 				game.controllers[0].active = true;
 				continue;
 			}
 			var c = game.controllers[i];
+
 			if(c.pressed.start) {
-				Sounds.play("Select");
+				//Sounds.play("Select");
 				c.active = !c.active;
-				sticks[i].tile = c.active ? ptiles[i] : ptiles[4];
+				//sticks[i].tile = c.active ? ptiles[i] : ptiles[4];
 			}
 			if(c.pressed.B) {
-				Sounds.play("Select");
+				//Sounds.play("Select");
 				c.active = false;
-				sticks[i].tile = ptiles[4];
+				//sticks[i].tile = ptiles[4];
 			}
-		}
+		}*/
 	}
 }

@@ -85,10 +85,9 @@ class World {
 		for(c in collides) {
 			var r = h3d.col.Ray.fromValues(e.x, e.y, e.z, e.dir.x, e.dir.y, e.dir.z);
 			r.transform(c.m);
-			r.normalize();
-			if(c.c.rayIntersection(r, pt) != null){
-				var n = new h3d.col.Point(pt.x - r.px, pt.y - r.py, pt.z - r.pz);
-				if(hxd.Math.distanceSq(n.x, n.y, n.z) > 1) continue;
+			var d = c.c.rayIntersection(r, false);
+			if(d != -1){
+				if(d > 1) continue;
 				return true;
 			}
 		}

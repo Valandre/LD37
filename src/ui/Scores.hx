@@ -36,7 +36,7 @@ class Scores extends h2d.Sprite
 
 		bmp2 = new h2d.Bitmap(null, this);
 		bmp2.blendMode = Alpha;
-		bmp2.filter = true;
+		bmp2.smooth = true;
 		bmp2.alpha = 0;
 		bmp2.x = game.s2d.width >> 1;
 		bmp2.y = game.s2d.height >> 1;
@@ -44,7 +44,7 @@ class Scores extends h2d.Sprite
 
 		bmp = new h2d.Bitmap(null, this);
 		bmp.blendMode = Alpha;
-		bmp.filter = true;
+		bmp.smooth = true;
 		bmp.alpha = 0;
 		bmp.x = game.s2d.width >> 1;
 		bmp.y = game.s2d.height >> 1;
@@ -60,7 +60,7 @@ class Scores extends h2d.Sprite
 			s.horizontalSpacing = -30;
 			for(j in 0...5) {
 				var b = new h2d.Bitmap(stars[game.state.stars[i] > j ? game.players[i].id : 0], s);
-				b.filter = true;
+				b.smooth = true;
 				b.setScale(0.5);
 			}
 			scores.push(s);
@@ -114,7 +114,7 @@ class Scores extends h2d.Sprite
 	public function nextRound(pl : ent.Fairy) {
 		var t = hxd.Res.UI.Winner.toTile();
 		var bmp = new h2d.Bitmap(t, this);
-		bmp.filter = true;
+		bmp.smooth = true;
 		var sc = 1;
 		bmp.setScale(sc);
 

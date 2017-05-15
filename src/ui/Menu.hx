@@ -19,7 +19,7 @@ class Menu extends ui.Form
 		setInfos(Texts.ui.main_menu);
 
 		container = new h2d.Sprite(this);
-		var btSingle = addButton(Texts.button.single_player, container);
+		var btSingle = addButton(Texts.button.single_player, MainMenu, container);
 		btSingle.onClick = function() {
 			while(game.players.length > 0)
 				game.players.pop().remove();
@@ -27,7 +27,7 @@ class Menu extends ui.Form
 			remove();
 		}
 
-		var btLocal = addButton(Texts.button.local_battle, container);
+		var btLocal = addButton(Texts.button.local_battle, MainMenu, container);
 		btLocal.onClick = function() {
 			while(game.players.length > 0)
 				game.players.pop().remove();
@@ -35,12 +35,12 @@ class Menu extends ui.Form
 			remove();
 		}
 
-		var btOnline = addButton(Texts.button.online_battle, container);
-		var btShop = addButton(Texts.button.wizard_shop, container);
-		var btSettings = addButton(Texts.button.settings, container);
-		var btCredits = addButton(Texts.button.credits, container);
+		var btOnline = addButton(Texts.button.online_battle, MainMenu, container);
+		var btShop = addButton(Texts.button.wizard_shop, MainMenu, container);
+		var btSettings = addButton(Texts.button.settings, MainMenu, container);
+		var btCredits = addButton(Texts.button.credits, MainMenu, container);
 
-		orderButtons();
+		orderButtons(18);
 
 		/*
 		var start = addButtonOld("NEWGAME", cont);
@@ -110,7 +110,7 @@ class Menu extends ui.Form
 		if(creditsBmp == null) {
 			creditsBmp = new h2d.Bitmap(hxd.Res.UI.Credits.toTile());
 			creditsBmp.blendMode = Alpha;
-			creditsBmp.filter = true;
+			creditsBmp.smooth = true;
 			creditsBmp.alpha = 0;
 			creditsBmp.x = game.s2d.width * 0.4;
 			creditsBmp.y = (game.s2d.height - creditsBmp.tile.height) * 0.5;
@@ -172,7 +172,6 @@ class Menu extends ui.Form
 		var contSize = container.getSize();
 		container.x = (game.s2d.width - contSize.width) * 0.5 - contSize.x;
 		container.y = (game.s2d.height - contSize.height) * 0.5 - contSize.y;
-
 
 		if(creditsBmp != null) {
 			creditsBmp.x = game.s2d.width * 0.4;

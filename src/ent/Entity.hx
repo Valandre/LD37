@@ -1,6 +1,6 @@
 package ent;
 import lib.Controller;
-import Sounds;
+//import Sounds;
 
 enum EntityKind {
 	Player;
@@ -40,7 +40,6 @@ class Entity
 	var currFx : h3d.scene.Object;
 	var fxParts : Map<String,h3d.parts.GpuParticles>;
 	var fxs = [];
-	var pt = new h3d.col.Point();
 
 	public function new(kind, x = 0., y = 0., z = 0., scale = 1.) {
 		game = Game.inst;

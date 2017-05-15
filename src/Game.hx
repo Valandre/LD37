@@ -75,7 +75,7 @@ class Game extends hxd.App {
 
 	override function init() {
 		customScene = new map.CustomScene();
-		setScene3D(customScene);
+		setScene(customScene);
 		renderer = new map.Composite();
 		s3d.renderer = renderer;
 
@@ -502,17 +502,12 @@ class Game extends hxd.App {
 		}
 	}
 
-/*
-	override function loadAssets(done) {
-		new hxd.fmt.pak.Loader(s2d, done);
-	}
-*/
-
 	public static var inst : Game;
 	static function main() {
 		inst = new Game();
 		hxd.res.Resource.LIVE_UPDATE = true;
 		hxd.Res.initLocal();
+		Data.load(hxd.Res.data.entry.getText());
 		Texts.load(hxd.Res.texts.entry.getText());
 	}
 }

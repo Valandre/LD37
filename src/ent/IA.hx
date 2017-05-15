@@ -63,10 +63,9 @@ class IA extends Fairy
 
 		var bounds = b.getBounds();
 		var r = sensor.clone();
-		r.normalize();
-		if(bounds.rayIntersection(r, pt) != null){
-			var n = new h3d.col.Point(pt.x - r.px, pt.y - r.py, pt.z - r.pz);
-			if(hxd.Math.distanceSq(n.x, n.y, n.z) > ray * ray) return false;
+		var d = bounds.rayIntersection(r, false);
+		if(d != -1){
+			if(d > ray * ray) return false;
 			return true;
 		}
 
@@ -84,7 +83,7 @@ class IA extends Fairy
 		d.x *= ray; d.y *= ray; d.z *= ray;
 		setSensor(x, y, z, d);
 
-		return sensorCollide(ray);
+		return sensorCollide(ray) != -1;
 	}
 
 	function checkSensors(testFront = true ) {

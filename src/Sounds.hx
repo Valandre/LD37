@@ -27,10 +27,6 @@ class Select extends S {
 @:keep @:sound("res/sfx/winner.mp3")
 class Winner extends S {
 }
-/*
-@:keep @:sound("res/sfx/crash.mp3")
-class Crash extends S {
-}*/
 @:keep @:sound("res/sfx/xplode.wav")
 class Crash extends S {
 }

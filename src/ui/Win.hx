@@ -70,11 +70,11 @@ class Win extends h2d.Sprite
 
 		bg = new h2d.Bitmap(hxd.Res.UI.Bg01.toTile(), this);
 		bg.blendMode = Add;
-		bg.filter = true;
+		bg.smooth = true;
 
 		title = new h2d.Bitmap(hxd.Res.UI.Title.toTile(), this);
 		title.blendMode = Alpha;
-		title.filter = true;
+		title.smooth = true;
 		title.x = 50;
 		title.y = 50;
 
@@ -135,7 +135,7 @@ class Win extends h2d.Sprite
 
 		var t = hxd.Res.UI.Winner.toTile();
 		bmpwin = new h2d.Bitmap(t);
-		bmpwin.filter = true;
+		bmpwin.smooth = true;
 		bmpwin.x = -t.width;
 		bmpwin.y = 50;
 		bmpwin.blendMode = Alpha;

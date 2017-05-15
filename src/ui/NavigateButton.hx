@@ -1,12 +1,6 @@
 package ui;
 
-enum ButtonKind {
-	MainMenu;
-	CharSelect;
-	ArenaSelect;
-}
-
-class MenuButton extends h2d.Sprite
+class NavigateButton extends h2d.Sprite
 {
 	public var enable(default, set) : Bool;
 	public var selected(default, set) : Bool;
@@ -15,40 +9,24 @@ class MenuButton extends h2d.Sprite
 	var tiles : Array<h2d.Tile> = [];
 	var bg : h2d.Bitmap;
 	var title : h2d.Text;
-	var kind : ButtonKind;
 
 	var root : h2d.Sprite;
-	var size = 256;
 
-	public function new(str : String, kind : ButtonKind, ?parent) {
+	public function new(str : String, ?parent) {
 		super(parent);
 		game = Game.inst;
-		this.kind = kind;
 
 		root = new h2d.Sprite(this);
 
-		var res = switch(kind) {
-			case MainMenu : hxd.Res.UI.menuButton;
-			case CharSelect : hxd.Res.UI.charButton;
-			case ArenaSelect : hxd.Res.UI.arenaButton;
-			default: throw "TODO";
-		}
-
-		size = switch(kind) {
-			case MainMenu :  256;
-			case CharSelect :  128;
-			case ArenaSelect :  256;
-			default: throw "TODO";
-		}
-
-		tiles = res.toTile().gridFlatten(size, -size >> 1, -size >> 1);
+		var t = hxd.Res.UI.navigateButton.toTile();
+		var size = t.height;
+		tiles = t.gridFlatten(size, -size >> 1, -size >> 1);
 		bg = new h2d.Bitmap(tiles[0], root);
-		bg.smooth = true;
-		bg.rotation = -Math.PI * 0.25;
+		bg.rotation = Math.PI * 0.25;
 
 		title = game.text(str, root);
-		title.x = -title.textWidth >> 1;
-		title.y = -title.textHeight >> 1;
+		title.x = 5;
+		title.y = -14 - title.textHeight >> 1;
 		title.smooth = true;
 	}
 

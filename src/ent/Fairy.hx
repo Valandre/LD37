@@ -315,47 +315,52 @@ class Fairy extends Entity
 
 		var d = setDir(dir, -1);
 		sensor.lx = r * d.x; sensor.ly = r * d.y; sensor.lz = r * d.z;
-		if(sensorCollide(r))
-			v += r - Math.min(r, hxd.Math.distance(pt.x - x, pt.y - y));
+
+		var d = sensorCollide(r);
+		if(d != -1) v += r - Math.min(r, d);
 
 		var d = setDir(dir, 1);
 		sensor.lx = r * d.x; sensor.ly = r * d.y; sensor.lz = r * d.z;
-		if(sensorCollide(r))
-			v += r - Math.min(r, hxd.Math.distance(pt.x - x, pt.y - y));
+
+		var d = sensorCollide(r);
+		if(d != -1) v += r - Math.min(r, d);
+
 		return v * 0.15;
 	}
 
 	function sensorCollide(ray : Float) {
+		var d = -1.;
 		var wall = lastWall;
-		if(wall == null) return false;
+		if(wall == null) return d;
 
 		for(w in game.world.walls) {
 			if(w.w == wall) continue;
 			if(w.w == wall.prev) continue;
 			if(w.n.x != worldNormal.x || w.n.y != worldNormal.y || w.n.z != worldNormal.z) continue;
-			if(w.w.getBounds().rayIntersection(sensor, pt) != null) {
+			d = w.w.getBounds().rayIntersection(sensor, false);
+			if(d != -1) {
+				if(d > ray * ray) continue;
+				/*
 				var n = new h3d.col.Point(pt.x - sensor.px, pt.y - sensor.py, pt.z - sensor.pz);
-				if(hxd.Math.distanceSq(n.x, n.y, n.z) > ray * ray) continue;
 				n.normalize();
 				var v = sensor.getDir();
 				v.normalize();
-				if(v.dot(n) > 0)
-					return true;
+				if(v.dot(n) > 0)*/
+					return d;
 			}
 		}
 
 		for(c in game.world.collides) {
 			var r = sensor.clone();
 			r.transform(c.m);
-			r.normalize();
-			if(c.c.rayIntersection(r, pt) != null){
-				var n = new h3d.col.Point(pt.x - r.px, pt.y - r.py, pt.z - r.pz);
-				if(hxd.Math.distanceSq(n.x, n.y, n.z) > ray * ray) continue;
-				return true;
+			d = c.c.rayIntersection(r, false);
+			if(d != -1){
+				if(d > ray * ray) continue;
+				return d;
 			}
 		}
 
-		return false;
+		return d;
 	}
 
 	function fadeTrailFx() {
