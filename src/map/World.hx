@@ -96,7 +96,7 @@ class World {
 			var r = h3d.col.Ray.fromValues(e.x, e.y, e.z, e.dir.x, e.dir.y, e.dir.z);
 			r.transform(c.m);
 			var d = c.c.rayIntersection(r, true);
-			if(e.kind == Player) trace(d, r); //incomprehensible -> renvoi brutalement -1 alors que 'd' diminue correctement préalablement (cf Nico)
+			//if(e.kind == Player) trace(d, r); //incomprehensible -> renvoi brutalement -1 alors que 'd' diminue correctement préalablement (cf Nico)
 			if(d != -1){
 				if(d > 1) continue;
 				return true;
