@@ -18,7 +18,7 @@ class NavigateButton extends h2d.Sprite
 
 		root = new h2d.Sprite(this);
 
-		var t = hxd.Res.UI.navigateButton.toTile();
+		var t = hxd.Res.UI.v2.navigateButton.toTile();
 		var size = t.height;
 		tiles = t.gridFlatten(size, -size >> 1, -size >> 1);
 		bg = new h2d.Bitmap(tiles[0], root);

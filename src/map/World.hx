@@ -5,16 +5,20 @@ class World {
 
 	var game : Game;
 	var room : h3d.scene.Object;
-	var obj : h3d.scene.Object;
+	var col : h3d.scene.Object;
 	var size : Int;
+	var arenaId : Int;
+
+
 	public var bounds : h3d.col.Bounds;
 	public var walls : Array<{w : h3d.scene.Mesh, n : h3d.col.Point}>;
 	public var lights : Array<h3d.scene.PointLight>;
 	public var collides : Array<{m : h3d.Matrix, c : h3d.col.Collider}>;
 
-	public function new(size : Int) {
+	public function new(size : Int, arenaId : Int) {
 		game = Game.inst;
 		this.size = size;
+		this.arenaId = arenaId;
 
 		walls = [];
 		collides = [];
@@ -46,12 +50,12 @@ class World {
 		//
 		var res = hxd.Res.load("Room/Window01.FBX").toModel();
 		if( res == null ) return;
-		obj = game.modelCache.loadModel(res);
-		obj.inheritCulled = true;
-		obj.setScale(size / 100);
-		game.s3d.addChild(obj);
+		col = game.modelCache.loadModel(res);
+		col.inheritCulled = true;
+		col.setScale(size / 100);
+		game.s3d.addChild(col);
 
-		for(m in obj.getMeshes()) {
+		for(m in col.getMeshes()) {
 			if(m.name.substr(0, 7) == "Collide") {
 				collides.push({m : m.getInvPos(), c : m.primitive.getCollider()});
 				m.remove();
@@ -62,7 +66,13 @@ class World {
 			m.material.allocPass("depth");
 			m.material.allocPass("normal");
 		}
+	}
 
+	public function remove() {
+		reset();
+		room.remove();
+		col.remove();
+		bounds = null;
 	}
 
 	public function reset() {
@@ -85,7 +95,8 @@ class World {
 		for(c in collides) {
 			var r = h3d.col.Ray.fromValues(e.x, e.y, e.z, e.dir.x, e.dir.y, e.dir.z);
 			r.transform(c.m);
-			var d = c.c.rayIntersection(r, false);
+			var d = c.c.rayIntersection(r, true);
+			if(e.kind == Player) trace(d, r); //incomprehensible -> renvoi brutalement -1 alors que 'd' diminue correctement préalablement (cf Nico)
 			if(d != -1){
 				if(d > 1) continue;
 				return true;

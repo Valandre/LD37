@@ -84,8 +84,8 @@ class Win extends h2d.Sprite
 		root.verticalSpacing = 5;
 		root.isVertical = true;
 
-		game.setAmbient(1);
-		game.autoCameraKind = Choose;
+		//game.setAmbient(1);
+		//game.autoCameraKind = Choose;
 		init();
 	}
 

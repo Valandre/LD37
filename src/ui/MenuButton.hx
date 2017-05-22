@@ -18,7 +18,6 @@ class MenuButton extends h2d.Sprite
 	var kind : ButtonKind;
 
 	var root : h2d.Sprite;
-	var size = 256;
 
 	public function new(str : String, kind : ButtonKind, ?parent) {
 		super(parent);
@@ -27,21 +26,15 @@ class MenuButton extends h2d.Sprite
 
 		root = new h2d.Sprite(this);
 
-		var res = switch(kind) {
-			case MainMenu : hxd.Res.UI.menuButton;
-			case CharSelect : hxd.Res.UI.charButton;
-			case ArenaSelect : hxd.Res.UI.arenaButton;
+		var t = switch(kind) {
+			case MainMenu : hxd.Res.UI.v2.menuButton.toTile();
+			case CharSelect : hxd.Res.UI.v2.charButton.toTile();
+			case ArenaSelect : hxd.Res.UI.v2.arenaButton.toTile();
 			default: throw "TODO";
 		}
 
-		size = switch(kind) {
-			case MainMenu :  256;
-			case CharSelect :  128;
-			case ArenaSelect :  256;
-			default: throw "TODO";
-		}
-
-		tiles = res.toTile().gridFlatten(size, -size >> 1, -size >> 1);
+		var size = t.height;
+		tiles = t.gridFlatten(size, -size >> 1, -size >> 1);
 		bg = new h2d.Bitmap(tiles[0], root);
 		bg.smooth = true;
 		bg.rotation = -Math.PI * 0.25;

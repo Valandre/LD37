@@ -17,8 +17,8 @@ class ChoosePlayers extends ui.Form
 
 	public function new(?parent) {
 		super(parent);
-		game.setAmbient(1);
-		game.autoCameraKind = Choose;
+		//game.setAmbient(1);
+		//game.autoCameraKind = Choose;
 	}
 
 	override function init() {
@@ -180,11 +180,10 @@ class ChoosePlayers extends ui.Form
 	override function update(dt : Float) {
 		super.update(dt);
 
-
 		var c = game.controllers[0];
 		c.active = true;
-		if(c.pressed.B) btBack.onClick();
-		if(c.pressed.A) btNext.onClick();
+		if(c.pressed.B || K.isPressed(K.BACKSPACE)) btBack.onClick();
+		if(c.pressed.A || K.isPressed(K.ENTER) || K.isPressed(K.SPACE)) btNext.onClick();
 
 		/*
 		for(i in 0...game.controllers.length) {

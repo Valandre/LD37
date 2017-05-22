@@ -68,7 +68,7 @@ class ChooseArena extends ui.Form
 
 		var c = game.controllers[0];
 		c.active = true;
-		if(c.pressed.B) btBack.onClick();
-		if(c.pressed.A) btNext.onClick();
+		if(c.pressed.B || K.isPressed(K.BACKSPACE)) btBack.onClick();
+		if(c.pressed.A || K.isPressed(K.ENTER) || K.isPressed(K.SPACE)) btNext.onClick();
 	}
 }

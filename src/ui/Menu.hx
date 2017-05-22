@@ -9,8 +9,8 @@ class Menu extends ui.Form
 
 	public function new(?parent) {
 		super(parent);
-		game.setAmbient(0);
-		game.autoCameraKind = Menu;
+		//game.setAmbient(0);
+		//game.autoCameraKind = Menu;
 	}
 
 	override function init() {
@@ -77,7 +77,7 @@ class Menu extends ui.Form
 		exit.interactive.onClick = function(e) hxd.System.exit();
 */
 
-		createFairies();
+		//createFairies();
 
 		onResize();
 		select(0);

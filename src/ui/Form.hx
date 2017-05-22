@@ -21,7 +21,7 @@ class Form extends h2d.Sprite
 		super(parent);
 		game.windows.push(this);
 
-		bg = new h2d.Bitmap(hxd.Res.UI.corner.toTile(), this);
+		bg = new h2d.Bitmap(hxd.Res.UI.v2.corner.toTile(), this);
 
 		title = new h2d.Bitmap(hxd.Res.UI.Title.toTile(), this);
 		title.blendMode = Alpha;

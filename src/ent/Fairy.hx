@@ -340,13 +340,7 @@ class Fairy extends Entity
 			d = w.w.getBounds().rayIntersection(sensor, false);
 			if(d != -1) {
 				if(d > ray) continue;
-				/*
-				var n = new h3d.col.Point(pt.x - sensor.px, pt.y - sensor.py, pt.z - sensor.pz);
-				n.normalize();
-				var v = sensor.getDir();
-				v.normalize();
-				if(v.dot(n) > 0)*/
-					return d;
+				return d;
 			}
 		}
 

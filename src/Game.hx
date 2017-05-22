@@ -77,7 +77,6 @@ class Game extends hxd.App {
 		customScene = new map.CustomScene();
 		setScene(customScene);
 		renderer = new map.Composite();
-		s3d.renderer = renderer;
 
 		try {
 			ambient.push(haxe.Json.parse(hxd.Res.load("title.js").entry.getText()));
@@ -90,7 +89,7 @@ class Game extends hxd.App {
 		modelCache = new h3d.prim.ModelCache();
 		event = new hxd.WaitEvent();
 
-		world = new map.World(size);
+		//world = new map.World(size, 0);
 		entities = [];
 		players = [];
 		bonus = [];
@@ -188,7 +187,6 @@ class Game extends hxd.App {
 		autoCameraKind = null;
 		while(entities.length > 0)
 			entities[0].remove();
-		world.reset();
 		while(players.length > 0)
 			players.pop().remove();
 		while(bonus.length > 0)
@@ -201,10 +199,18 @@ class Game extends hxd.App {
 
 		if(controllers.length > 0)
 			controllers[0].active = true;
+
+		if(world != null) {
+			world.reset();
+			s3d.renderer = null;
+		}
 	}
 
 	function start(){
 		entities = [];
+		if(world != null) world.remove();
+		world = new map.World(size, state.arenaId );
+		s3d.renderer = renderer;
 
 		//nbPlayers = 4;
 
@@ -440,11 +446,12 @@ class Game extends hxd.App {
 			e.update(dt);
 
 		if(!gameOver) {
+			/*
 			if(bonus.length < bonusMaxCount && Math.random() < 0.01) {
 				var b = new ent.Bonus();
 				if(world.collideBounds(b.getBounds()))
 					b.remove();
-			}
+			}*/
 			if(players.length == 1) {
 				gameOver = true;
 				ui.nextRound(players[0]);
