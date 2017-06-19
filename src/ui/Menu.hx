@@ -15,7 +15,7 @@ class Menu extends ui.Form
 
 	override function init() {
 		super.init();
-
+/*
 		setInfos(Texts.ui.main_menu);
 
 		container = new h2d.Sprite(this);
@@ -41,7 +41,7 @@ class Menu extends ui.Form
 		var btCredits = addButton(Texts.button.credits, MainMenu, container);
 
 		orderButtons(18);
-
+*/
 		/*
 		var start = addButtonOld("NEWGAME", cont);
 		start.interactive.onClick = function(e) {
@@ -80,7 +80,7 @@ class Menu extends ui.Form
 		//createFairies();
 
 		onResize();
-		select(0);
+		//select(0);
 	}
 
 	function createFairies() {
@@ -105,7 +105,7 @@ class Menu extends ui.Form
 				e.update(1);
 		}
 	}
-
+/*
 	function toggleCredits() {
 		if(creditsBmp == null) {
 			creditsBmp = new h2d.Bitmap(hxd.Res.UI.Credits.toTile());
@@ -162,10 +162,10 @@ class Menu extends ui.Form
 			});
 		}
 	}
-
+*/
 	override function onResize() {
 		super.onResize();
-
+/*
 		var sc = game.s2d.height / 1080;
 		container.setScale(sc);
 
@@ -179,6 +179,6 @@ class Menu extends ui.Form
 		}
 		if(bmpSlide != null) {
 			bmpSlide.scaleY = game.s2d.height;
-		}
+		}*/
 	}
 }

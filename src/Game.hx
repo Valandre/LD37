@@ -77,7 +77,7 @@ class Game extends hxd.App {
 		customScene = new map.CustomScene();
 		setScene(customScene);
 		renderer = new map.Composite();
-
+		/*
 		try {
 			ambient.push(haxe.Json.parse(hxd.Res.load("title.js").entry.getText()));
 			ambient.push(haxe.Json.parse(hxd.Res.load("ambient.js").entry.getText()));
@@ -85,6 +85,7 @@ class Game extends hxd.App {
 			new hxd.inspect.SceneProps(s3d).applyProps(ambient[0].s3d, function(msg) trace(msg));
 		}
 		catch(e : hxd.res.NotFound) {};
+		*/
 
 		modelCache = new h3d.prim.ModelCache();
 		event = new hxd.WaitEvent();
@@ -95,11 +96,11 @@ class Game extends hxd.App {
 		bonus = [];
 		bmpViews = [];
 
-
 		state = {nbPlayers : 0, arenaId : 0, stars : [0, 0, 0, 0]};
 
 		windows = [];
-		new ui.Menu();
+		//new ui.Menu();
+		new ui.ChoosePlayers();
 
 		hxd.Pad.wait(function(p) {
 			controllers.push(new lib.Controller(controllers.length, p));
@@ -371,13 +372,7 @@ class Game extends hxd.App {
 				cam.fovY = 90;
 				camRot += 0.0025 * dt;
 			case Choose:
-				cam.pos.x = 8;
-				cam.pos.y = -1.5;
-				cam.pos.z = 2.75 - (size >> 1);
-				cam.target.x = 0;
-				cam.target.y = 0;
-				cam.target.z = 1.75 - (size >> 1);
-				cam.fovY = 60;
+				cam.fovY = 20;
 			default: trace("TODO");
 		}
 	}
@@ -437,7 +432,7 @@ class Game extends hxd.App {
 
 		updateKeys(dt);
 
-		if(pause) return;
+		if(pause || gameOver) return;
 
 		for( pl in players)
 			updatePlayerCamera(pl, dt);

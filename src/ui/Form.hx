@@ -4,9 +4,10 @@ import Sounds;
 
 class Form extends h2d.Sprite
 {
+	var game : Game;
+	/*
 	var bg : h2d.Bitmap;
 	var bmpSlide : h2d.Bitmap;
-	var game : Game;
 	var root : h2d.Flow;
 	var selectId = 0;
 
@@ -14,6 +15,7 @@ class Form extends h2d.Sprite
 	var title : h2d.Bitmap;
 
 	var infos : h2d.Sprite;
+	*/
 
 	public function new(?parent) {
 		game = Game.inst;
@@ -21,6 +23,9 @@ class Form extends h2d.Sprite
 		super(parent);
 		game.windows.push(this);
 
+		init();
+
+		/*
 		bg = new h2d.Bitmap(hxd.Res.UI.v2.corner.toTile(), this);
 
 		title = new h2d.Bitmap(hxd.Res.UI.Title.toTile(), this);
@@ -28,8 +33,8 @@ class Form extends h2d.Sprite
 		title.smooth = true;
 		title.x = 50;
 		title.y = 50;
-		title.visible = false;
-
+		title.visible = false;*/
+/*
 		root = new h2d.Flow(this);
 		root.horizontalAlign = Middle;
 		root.verticalAlign = Middle;
@@ -41,9 +46,9 @@ class Form extends h2d.Sprite
 
 		select(selectId);
 		onResize();
-		slideIn();
+		slideIn();*/
 	}
-
+/*
 	function setInfos(str : String) {
 		if(infos != null)
 			infos.remove();
@@ -59,7 +64,7 @@ class Form extends h2d.Sprite
 		tf.smooth = true;
 		tf.x -= tf.textWidth * 0.5;
 		tf.y -= tf.textHeight * 0.5;
-	}
+	}*/
 
 	function init() {
 	}
@@ -68,13 +73,13 @@ class Form extends h2d.Sprite
 		super.onRemove();
 		game.windows.remove(this);
 	}
-
+/*
 	public function addButton(name : String, kind : MenuButton.ButtonKind, ?parent : h2d.Sprite) {
 		var bt = new MenuButton(name, kind, parent);
 		buttons.push(bt);
 		return bt;
-	}
-
+	}*/
+/*
 	function orderButtons(spacing : Int, ?reverseY = false ) {
 		for(i in 0...buttons.length) {
 			var b = buttons[i];
@@ -100,8 +105,10 @@ class Form extends h2d.Sprite
 			b.selected = false;
 		buttons[id].selected = true;
 	}
+*/
 
 	public function onResize() {
+		/*
 		var sc = game.s2d.height / 1080;
 
 		bg.smooth = sc != 1;
@@ -110,10 +117,13 @@ class Form extends h2d.Sprite
 		root.minHeight = root.maxHeight = game.s2d.height;
 		root.needReflow = true;
 
-		title.setScale(sc);
+
+		title.setScale(sc);*/
+
 	}
 
 	public function update(dt : Float) {
+		/*
 		if(K.isPressed(K.LEFT) || (game.keys != null && game.keys.pressed.xAxis < 0)) {
 			Sounds.play("Over");
 			selectId--;
@@ -130,6 +140,6 @@ class Form extends h2d.Sprite
 			if(buttons.length == 0) return;
 			Sounds.play("Select");
 			buttons[selectId].onClick();
-		}
+		}*/
 	}
 }

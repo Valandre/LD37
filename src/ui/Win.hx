@@ -248,9 +248,6 @@ class Win extends h2d.Sprite
 
 		cont.paddingLeft = Std.int(170 * sc);
 		cont.paddingTop = Std.int(300 * sc);
-
-		if(choose != null)
-			choose.onResize();
 	}
 
 	public function update(dt : Float) {
