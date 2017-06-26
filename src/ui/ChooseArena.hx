@@ -4,10 +4,21 @@ import Sounds;
 
 class ChooseArena extends ui.Form
 {
-	var btBack: NavigateButton;
-	var btNext: NavigateButton;
+	var obj : h3d.scene.Object;
+	var selector : h3d.scene.Object;
 
-	var container: h2d.Sprite;
+	var ready = false;
+
+	var mview : h3d.scene.Mesh;
+	var mname : h3d.scene.Mesh;
+	var mthumbs : Array<h3d.scene.Object> = [];
+	var pbutton : h3d.scene.Mesh;
+
+	var viewTex : Array<h3d.mat.Texture> = [];
+	var nameTex : Array<h3d.mat.Texture> = [];
+	var buttonTex : Array<h3d.mat.Texture> = [];
+
+	var selectId = 0;
 
 	public function new(?parent) {
 		super(parent);
@@ -17,12 +28,48 @@ class ChooseArena extends ui.Form
 	override function init() {
 		super.init();
 
-		setInfos(Texts.ui.choose_character);
+		//init scene
+		var m = hxd.Res.UI.WorldSelect.Model;
+		obj = game.modelCache.loadModel(m);
+		var a = game.modelCache.loadAnimation(m);
+		a.loop = false;
+		obj.playAnimation(a);
+		obj.currentAnimation.onAnimEnd = function() {
+			ready = true;
+		}
 
-		container = new h2d.Sprite(this);
-		showArenas();
+		for(m in obj.getMeshes())
+			m.material.shadows = false;
+
+		game.s3d.addChild(obj);
+		game.s3d.camera.follow = {pos : obj.getObjectByName("CamScreen"), target : obj.getObjectByName("CamScreen.Target")};
+		game.autoCameraKind = Choose;
+		game.s3d.lightSystem.ambientLight.setColor(0xFFFFFF);
+
+		for(i in 0...6)
+			mthumbs.push(obj.getObjectByName("PosThumb0" + (i + 1)));
+
+		mname = obj.getObjectByName("Name").toMesh();
+		mview = obj.getObjectByName("View").toMesh();
+		pbutton = obj.getObjectByName("ButtonP1").toMesh();
+
+		viewTex.push(hxd.Res.UI.WorldSelect.View01.toTexture());
+		viewTex.push(hxd.Res.UI.WorldSelect.View02.toTexture());
+
+		nameTex.push(hxd.Res.UI.WorldSelect.Name01.toTexture());
+		nameTex.push(hxd.Res.UI.WorldSelect.Name02.toTexture());
+
+		buttonTex.push(hxd.Res.UI.CharacterSelect.ButtonX01.toTexture());
+		buttonTex.push(hxd.Res.UI.CharacterSelect.ButtonX02.toTexture());
+
+		var m = hxd.Res.UI.Selector.Model;
+		selector = game.modelCache.loadModel(m);
+		for(m in selector.getMeshes())
+			m.material.shadows = false;
+		game.s3d.addChild(selector);
 
 
+/*
 		btBack = new NavigateButton(Texts.navigate.back, this);
 		btBack.onClick = function() {
 			new ui.ChoosePlayers();
@@ -34,41 +81,60 @@ class ChooseArena extends ui.Form
 			remove();
 			game.state.arenaId = selectId;
 			game.restart();
-		}
+		}*/
 
+		updateView();
 		onResize();
 	}
 
-	public function showArenas() {
-		for(a in Data.arenas.all)
-			var bt = addButton(a.name, ArenaSelect, container);
-
-		orderButtons(18, true);
+	override public function onRemove() {
+		super.onRemove();
+		obj.remove();
+		selector.remove();
 	}
 
-	override public function onResize() {
-		super.onResize();
+	function updateView() {
+		mview.material.texture = viewTex[selectId];
+		mname.material.texture = nameTex[selectId];
 
-		var sc = game.s2d.height / 1080;
-		container.setScale(sc);
-
-		var contSize = container.getSize();
-		container.x = (game.s2d.width - contSize.width) * 0.5 - contSize.x;
-		container.y = (game.s2d.height - contSize.height) * 0.2 - contSize.y;
-
-		btBack.x = 50;
-		btBack.y = game.s2d.height - btBack.getSize().height - 50;
-
-		btNext.x = game.s2d.width - btBack.getSize().width - 50;
-		btNext.y = game.s2d.height - btBack.getSize().height - 50;
+		var th = mthumbs[selectId];
+		var pos = th.getAbsPos();
+		selector.x = pos.tx;
+		selector.y = pos.ty;
+		selector.z = pos.tz;
 	}
 
+	var time = 0.;
 	override function update(dt : Float) {
 		super.update(dt);
 
+		time += dt;
+		pbutton.material.texture = buttonTex[(time % 40) < 20 ? 1 : 0];
+
 		var c = game.controllers[0];
-		c.active = true;
-		if(c.pressed.B || K.isPressed(K.BACKSPACE)) btBack.onClick();
-		if(c.pressed.A || K.isPressed(K.ENTER) || K.isPressed(K.SPACE)) btNext.onClick();
+		if(c != null) {
+			c.active = true;
+			if(c.pressed.B) {
+				new ui.ChoosePlayers();
+				remove();
+			}
+			if(c.pressed.A) {
+				remove();
+				game.state.arenaId = selectId;
+				game.restart();
+			}
+
+			if(c.pressed.yAxis < 0) {
+				selectId--;
+				if(selectId < 0) selectId = viewTex.length - 1;
+				updateView();
+			}
+
+			if(c.pressed.yAxis > 0) {
+				selectId++;
+				if(selectId >= viewTex.length) selectId = 0;
+				updateView();
+			}
+		}
 	}
 }
