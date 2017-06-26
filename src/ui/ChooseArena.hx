@@ -36,6 +36,7 @@ class ChooseArena extends ui.Form
 		obj.playAnimation(a);
 		obj.currentAnimation.onAnimEnd = function() {
 			ready = true;
+			selector.visible = true;
 		}
 
 		for(m in obj.getMeshes())
@@ -64,6 +65,7 @@ class ChooseArena extends ui.Form
 
 		var m = hxd.Res.UI.Selector.Model;
 		selector = game.modelCache.loadModel(m);
+		selector.visible = false;
 		for(m in selector.getMeshes())
 			m.material.shadows = false;
 		game.s3d.addChild(selector);
@@ -118,7 +120,7 @@ class ChooseArena extends ui.Form
 				new ui.ChoosePlayers();
 				remove();
 			}
-			if(c.pressed.A) {
+			if(c.pressed.A && ready) {
 				remove();
 				game.state.arenaId = selectId;
 				game.restart();

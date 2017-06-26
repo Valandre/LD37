@@ -28,7 +28,7 @@ class World {
 	}
 
 	function init() {
-		var res = hxd.Res.load("Room/Model.FBX").toModel();
+		var res = hxd.Res.load("World/World0" + (arenaId + 1) + "/Model.FBX").toModel();
 		if( res == null ) return;
 		room = game.modelCache.loadModel(res);
 		room.inheritCulled = true;
@@ -48,30 +48,34 @@ class World {
 		bounds.addPoint(new h3d.col.Point( w * 0.5, w * 0.5, w * 0.5));
 
 		//
-		var res = hxd.Res.load("Room/Window01.FBX").toModel();
-		if( res == null ) return;
-		col = game.modelCache.loadModel(res);
-		col.inheritCulled = true;
-		col.setScale(size / 100);
-		game.s3d.addChild(col);
+		switch(arenaId) {
+			case 1:
+				var res = hxd.Res.load("World/World0" + (arenaId + 1) + "/Window01.FBX").toModel();
+				if( res == null ) return;
+				col = game.modelCache.loadModel(res);
+				col.inheritCulled = true;
+				col.setScale(size / 100);
+				game.s3d.addChild(col);
 
-		for(m in col.getMeshes()) {
-			if(m.name.substr(0, 7) == "Collide") {
-				collides.push({m : m.getInvPos(), c : m.primitive.getCollider()});
-				m.remove();
-				continue;
-			}
-			m.material.mainPass.enableLights = true;
-			m.material.shadows = false;
-			m.material.allocPass("depth");
-			m.material.allocPass("normal");
+				for(m in col.getMeshes()) {
+					if(m.name.substr(0, 7) == "Collide") {
+						collides.push({m : m.getInvPos(), c : m.primitive.getCollider()});
+						m.remove();
+						continue;
+					}
+					m.material.mainPass.enableLights = true;
+					m.material.shadows = false;
+					m.material.allocPass("depth");
+					m.material.allocPass("normal");
+				}
+			default:
 		}
 	}
 
 	public function remove() {
 		reset();
-		room.remove();
-		col.remove();
+		if(room != null) room.remove();
+		if(col != null) col.remove();
 		bounds = null;
 	}
 
