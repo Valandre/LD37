@@ -66,49 +66,31 @@ class Scores extends h2d.Sprite
 			scores.push(s);
 		}
 
-		game.event.wait(1, function() start(0));
+		game.event.wait(1, function() start());
 		onResize();
 	}
 
-	function start(id : Int) {
-		bmp.alpha = 1;
-		bmp2.alpha = 0;
-		bmp.tile = tiles[id];
-		bmp2.tile = tiles[id];
-		bmp2.setScale(1);
+	function start() {
+		var m = hxd.Res.UI.Countdown.Model;
+		var obj = game.modelCache.loadModel(m);
+		var a = game.modelCache.loadAnimation(m);
+		a.loop = false;
+		obj.playAnimation(a);
+		obj.currentAnimation.onAnimEnd = function() {
+			if(onReady != null) onReady();
+			obj.remove();
+		}
 
-		var sc = 5.;
-		bmp.setScale(sc);
-		game.event.waitUntil(function(dt) {
-			sc -= 0.4 * dt;
-			bmp.setScale(sc);
-			if(sc <= 1){
-				game.shake(0.025);
-				Sounds.play(id < 3 ? "Count" : "Go");
-				bmp2.alpha = 1;
-				game.event.waitUntil(function(dt) {
-					sc += 0.05 * dt;
-					bmp2.setScale(sc);
-					bmp2.alpha -= 0.08 * dt;
-					return bmp2.alpha <= 0;
-				});
-				game.event.wait(0.5, function() {
-					if(id < 3)
-						start(++id);
-					else {
-						if(onReady != null) onReady();
-						game.event.waitUntil(function(dt) {
-							bmp.alpha -= 0.05 * dt;
-							if(bmp.alpha <= 0)
-								return true;
-							return false;
-						});
-					}
-				});
-				return true;
-			}
-			return false;
-		});
+		for(m in obj.getMeshes())
+			m.material.shadows = false;
+		game.s3d.addChild(obj);
+
+		var cam = game.s3d.camera;
+		var a = hxd.Math.atan2(cam.pos.y - cam.target.y, cam.pos.x - cam.target.x);
+		obj.x = cam.target.x;
+		obj.y = cam.target.y;
+		obj.z = cam.target.z;
+		obj.rotate(0, 0, a);
 	}
 
 	public function nextRound(pl : ent.Fairy) {
