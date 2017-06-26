@@ -372,7 +372,7 @@ class Game extends hxd.App {
 				cam.fovY = 90;
 				camRot += 0.0025 * dt;
 			case Choose:
-				cam.fovY = 20;
+				cam.fovY = 11.5;
 			default: trace("TODO");
 		}
 	}
