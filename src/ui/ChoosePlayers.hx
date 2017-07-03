@@ -80,6 +80,8 @@ class ChoosePlayers extends ui.Form
 
 	var players : Array<PlayerSlot> = [];
 
+	var CharsIds : Array<Int> = [];
+
 	override function init() {
 		super.init();
 
@@ -138,8 +140,6 @@ class ChoosePlayers extends ui.Form
 
 	function nextStep() {
 		game.state.nbPlayers = 1;
-		//game.state.arenaId = 0;
-		//game.restart();
 		new ui.ChooseArena();
 		remove();
 	}
