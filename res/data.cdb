@@ -1,0 +1,77 @@
+{
+	"sheets": [
+		{
+			"name": "chars",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id"
+				},
+				{
+					"typeStr": "1",
+					"name": "name",
+					"opt": true,
+					"kind": "localizable"
+				},
+				{
+					"typeStr": "3",
+					"name": "selectId"
+				}
+			],
+			"lines": [
+				{
+					"name": "Emperor",
+					"id": "Emperor",
+					"index": 0,
+					"selectId": 4
+				},
+				{
+					"id": "Magician",
+					"name": "Magician",
+					"index": 1,
+					"selectId": 1
+				}
+			],
+			"separators": [],
+			"props": {
+				"hasIndex": true
+			}
+		},
+		{
+			"name": "arenas",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id"
+				},
+				{
+					"typeStr": "1",
+					"name": "name",
+					"display": null
+				}
+			],
+			"lines": [
+				{
+					"id": "A1",
+					"name": "Arena1"
+				},
+				{
+					"id": "A2",
+					"name": "Arena2"
+				},
+				{
+					"id": "A3",
+					"name": "Arena3"
+				},
+				{
+					"id": "A4",
+					"name": "Arena4"
+				}
+			],
+			"separators": [],
+			"props": {}
+		}
+	],
+	"customTypes": [],
+	"compress": true
+}

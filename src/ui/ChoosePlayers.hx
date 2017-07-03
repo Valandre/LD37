@@ -5,18 +5,43 @@ import Sounds;
 class PlayerSlot {
 	var game : Game;
 	var obj : h3d.scene.Object;
+	var follow : h3d.scene.Object;
 	var selector : h3d.scene.Object;
-	var id : Int;
+	var pid : Int;
+	var chars = Data.chars.all;
 
-	public var selectId : Int = 3;
+	public var selectId(default, set) : Int;
 	public var state(default, set) : Int;
 	public var color = 0;
 
-	public function new(id, follow) {
+	public function new(pid, follow) {
 		game = Game.inst;
-		this.id = id;
-		obj = game.modelCache.loadModel(hxd.Res.Chars.Emperor01.Model);
-		var a = game.modelCache.loadAnimation(hxd.Res.Chars.Emperor01.Anim_selection);
+		this.pid = pid;
+		this.follow = follow;
+		selectId = chars[Std.random(chars.length)].selectId;
+	}
+
+	function getModel() {
+		for(c in chars)
+			if(c.selectId == selectId)
+				return hxd.Res.load("Chars/" + c.id.toString() + "01/Model.FBX").toModel();
+		return null;
+	}
+
+	function getAnimSelection() {
+		for(c in chars)
+			if(c.selectId == selectId)
+				return hxd.Res.load("Chars/" + c.id.toString() + "01/Anim_selection.FBX").toModel();
+		return null;
+	}
+
+	function updateModel () {
+		var res = getModel();
+		if(res == null) return;
+
+		if(obj != null) obj.remove();
+		obj = game.modelCache.loadModel(res);
+		var a = game.modelCache.loadAnimation(getAnimSelection());
 		obj.playAnimation(a);
 		obj.currentAnimation.setFrame(Std.random(a.frameCount));
 		obj.currentAnimation.speed *= 1 - hxd.Math.random(0.1);
@@ -24,6 +49,13 @@ class PlayerSlot {
 			m.material.shadows = false;
 		game.s3d.addChild(obj);
 		obj.follow = follow;
+	}
+
+	function set_selectId(v : Int) {
+		if(selectId == v) return v;
+		selectId = v;
+		updateModel();
+		return selectId;
 	}
 
 	function set_state(v : Int) {
@@ -39,7 +71,7 @@ class PlayerSlot {
 		selector = game.modelCache.loadModel(m);
 		for(m in selector.getMeshes()) {
 			m.material.shadows = false;
-			m.material.texture = hxd.Res.load("UI/Selector/SelectorP" + (id + 1) + ".png").toTexture();
+			m.material.texture = hxd.Res.load("UI/Selector/SelectorP" + (pid + 1) + ".png").toTexture();
 		}
 		game.s3d.addChild(selector);
 	}
@@ -74,6 +106,7 @@ class ChoosePlayers extends ui.Form
 	var mthumbs : Array<h3d.scene.Object> = [];
 	var ready = false;
 
+	var nameTex : Array<h3d.mat.Texture> = [];
 	var joinTex : Array<h3d.mat.Texture> = [];
 	var stateTex : Array<h3d.mat.Texture> = [];
 	var buttonTex : Array<h3d.mat.Texture> = [];
@@ -103,8 +136,16 @@ class ChoosePlayers extends ui.Form
 		game.autoCameraKind = Choose;
 		game.s3d.lightSystem.ambientLight.setColor(0xFFFFFF);
 
-		for(i in 0...10)
+		for(i in 0...10) {
 			mthumbs.push(obj.getObjectByName("PosThumb" + ((i < 9 ? "0" : "") + (i + 1))));
+
+			var name = null;
+			try {
+				name = hxd.Res.load("UI/CharacterSelect/Name" + ((i < 9 ? "0" : "") + (i + 1)) + ".png").toTexture();
+			}
+			catch(e:hxd.res.NotFound) {};
+			nameTex.push(name);
+		}
 
 		for(i in 0...4) {
 			pname.push(obj.getObjectByName("NameP" + (i + 1)).toMesh());
@@ -170,12 +211,31 @@ class ChoosePlayers extends ui.Form
 			if(players[i] == null) addPlayer(i, ppos[i]);
 			var pl = players[i];
 			if(c != null && c.active) {
-				if(c.pressed.A)
+				if(pl.state == 1) {
+					if(c.pressed.xAxis > 0)
+						pl.selectId = pl.selectId >= mthumbs.length ? 1 : pl.selectId + 1;
+					else if(c.pressed.xAxis < 0)
+						pl.selectId = pl.selectId <= 1 ? mthumbs.length : pl.selectId - 1;
+					else if(c.pressed.yAxis < 0) {
+						if(pl.selectId <= 1) pl.selectId = mthumbs.length;
+						else if(pl.selectId == 3 || pl.selectId == 6 || pl.selectId == 9)
+							pl.selectId -= 2;
+						else pl.selectId--;
+					}
+					else if(c.pressed.yAxis > 0) {
+						if(pl.selectId >= mthumbs.length) pl.selectId = 1;
+						else if(pl.selectId == 2 || pl.selectId == 5 || pl.selectId == 8)
+							pl.selectId += 2;
+						else pl.selectId++;
+					}
+				}
+
+				if(c.pressed.A && pname[i].visible)
 					pl.state = hxd.Math.imin(4, pl.state + 1);
 				if(c.pressed.B)
 					pl.state = hxd.Math.imax(0, pl.state - 1);
 				if(ready && pl.state != 0)
-					pl.setPos(mthumbs[pl.selectId]);
+					pl.setPos(mthumbs[pl.selectId - 1]);
 			}
 
 			/////
@@ -199,6 +259,8 @@ class ChoosePlayers extends ui.Form
 				default: but.material.texture = buttonTex[(time % 40) < 20 ? 1 : 0];
 			}
 			pstate[i].material.texture = stateTex[c != null && c.active ? i + 1 : 0];
+			pname[i].material.texture = nameTex[pl.selectId - 1];
+			pname[i].visible = @:privateAccess pl.obj.visible = pname[i].material.texture != null;
 		}
 
 		/*
