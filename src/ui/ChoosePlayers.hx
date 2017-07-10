@@ -122,11 +122,14 @@ class ChoosePlayers extends ui.Form
 		var m = hxd.Res.UI.CharacterSelect.Model;
 		obj = game.modelCache.loadModel(m);
 		var a = game.modelCache.loadAnimation(m);
-		a.loop = false;
-		obj.playAnimation(a);
-		obj.currentAnimation.onAnimEnd = function() {
-			ready = true;
+		if(a != null) {
+			a.loop = false;
+			obj.playAnimation(a);
+			obj.currentAnimation.onAnimEnd = function() {
+				ready = true;
+			}
 		}
+		else ready = true;
 
 		for(m in obj.getMeshes())
 			m.material.shadows = false;
