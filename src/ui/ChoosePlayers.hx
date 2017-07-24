@@ -7,9 +7,9 @@ class PlayerSlot {
 	var obj : h3d.scene.Object;
 	var follow : h3d.scene.Object;
 	var selector : h3d.scene.Object;
-	var pid : Int;
 	var chars = Data.chars.all;
 
+	public var pid : Int;
 	public var selectId(default, set) : Int;
 	public var state(default, set) : Int;
 	public var color = 0;
@@ -19,6 +19,13 @@ class PlayerSlot {
 		this.pid = pid;
 		this.follow = follow;
 		selectId = chars[Std.random(chars.length)].selectId;
+	}
+
+	public function getKind() {
+		for(c in chars)
+			if(c.selectId == selectId)
+				return c.id;
+		return null;
 	}
 
 	function getModel() {
@@ -183,7 +190,12 @@ class ChoosePlayers extends ui.Form
 	}
 
 	function nextStep() {
-		game.state.nbPlayers = 1;
+		game.state.players = [];
+		for(p in players) {
+			var k = p.getKind();
+			var props : ent.Fairy.Props = {kind : p.state <= 1 ? IA : Player, modelId : k, color : 0};
+			if(k != null) game.state.players[p.pid] = props;
+		}
 		new ui.ChooseArena();
 		remove();
 	}
@@ -240,6 +252,7 @@ class ChoosePlayers extends ui.Form
 				if(ready && pl.state != 0)
 					pl.setPos(mthumbs[pl.selectId - 1]);
 			}
+			else pl.state = 0;
 
 			/////
 			// pl.state = 0 -> not a player : show join

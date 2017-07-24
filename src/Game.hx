@@ -63,7 +63,7 @@ class Game extends hxd.App {
 
 	var bonusMaxCount : Int = 10;
 
-	public var state : {nbPlayers : Int, arenaId : Int, stars : Array<Int>};
+	public var state : {players : Array<ent.Fairy.Props>, arenaId : Int, stars : Array<Int>};
 
 	public var controllers : Array<lib.Controller> = [];
 	public var keys : lib.Controller;
@@ -96,7 +96,7 @@ class Game extends hxd.App {
 		bonus = [];
 		bmpViews = [];
 
-		state = {nbPlayers : 0, arenaId : 0, stars : [0, 0, 0, 0]};
+		state = {players : [], arenaId : 0, stars : [0, 0, 0, 0]};
 
 		windows = [];
 		//new ui.Menu();
@@ -213,21 +213,26 @@ class Game extends hxd.App {
 		world = new map.World(size, state.arenaId );
 		s3d.renderer = renderer;
 
-		//nbPlayers = 4;
+		var nbPlayers = 0;
+		for(p in state.players)
+			if(p.kind == Player) nbPlayers++;
 
-		switch(state.nbPlayers) {
+		switch(nbPlayers) {
 			case 1 : renderer.width = 0; renderer.height = 0;
 			case 2 : renderer.width = 1; renderer.height = 0;
 			case 3, 4 : renderer.width = 1; renderer.height = 1;
 			default : renderer.width = 0; renderer.height = 0;
 		}
 
-		function addPlayer(k : ent.Entity.EntityKind, dir : h3d.col.Point) {
-			var pl = k == Player ? new ent.Player(dir) : new ent.IA(dir);
+		var allChars = Data.chars.all;
+		function addPlayer(k : ent.Entity.EntityKind, dir : h3d.col.Point, ?props : ent.Fairy.Props) {
+			if(props == null)
+				props = {kind : k, modelId : allChars[Std.random(allChars.length)].id, color : 0 };
+			var pl = k == Player ? new ent.Player(props, dir) : new ent.IA(props, dir);
 			players.push(pl);
 			var cam = initCamera(pl);
 
-			if(players.length <= state.nbPlayers) {
+			if(players.length <= nbPlayers) {
 				var tex = new h3d.mat.Texture(s2d.width >> renderer.width, s2d.height >> renderer.height, [Target]);
 				customScene.addView(pl.id, cam, tex);
 				var b = new h2d.Bitmap(h2d.Tile.fromTexture(tex), s2d);
@@ -245,18 +250,15 @@ class Game extends hxd.App {
 			];
 
 
-		if(controllers.length == 0)
-			addPlayer(Player, dirs.shift());
-		for(c in controllers) {
-			if(c.active) {
-				var pl = addPlayer(Player, dirs.shift());
-				pl.controller = c;
-			}
-			else addPlayer(IA, dirs.shift());
+		for(i in 0...state.players.length) {
+			var p = state.players[i];
+			addPlayer(p.kind, dirs.shift(), p);
 		}
 
-		for(i in 0...4 - players.length)
-			addPlayer(IA, dirs.shift());
+		for(c in controllers) {
+			if(c.active)
+				players[c.id].controller = c;
+		}
 
 		if(ui != null) ui.remove();
 		ui = new ui.Scores(s2d, function() {

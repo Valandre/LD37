@@ -119,7 +119,7 @@ class Win extends h2d.Sprite
 				id = i + 1;
 				n = game.state.stars[i];
 			}
-
+/*
 		var e = new ent.Player(new h3d.col.Point(0, 0, 1), 1, id);
 		e.x = 3;
 		e.y = -2;
@@ -131,7 +131,7 @@ class Win extends h2d.Sprite
 		//@:privateAccess e.light.params = new h3d.Vector(0.8, 0.5, 0.1);
 		@:privateAccess e.obj.setScale(1.5);
 		game.players.push(e);
-
+*/
 
 		var t = hxd.Res.UI.Winner.toTile();
 		bmpwin = new h2d.Bitmap(t);

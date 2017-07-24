@@ -3,6 +3,13 @@ import lib.Controller;
 import Sounds;
 
 
+
+typedef Props = {
+	kind : Entity.EntityKind,
+	modelId : Data.CharsKind,
+	color : Int,
+}
+
 private class Bonus {
 	public var kind : ent.Bonus.BonusKind;
 	public var value : Float;
@@ -46,6 +53,7 @@ class Fairy extends Entity
 	public var enableCollides = true;
 	public var canMove = false;
 
+	var props : Props;
 	var color : Int = 0xFFFFFF;
 	var speedRef = 0.35;
 	var speed = 0.;
@@ -60,16 +68,16 @@ class Fairy extends Entity
 	var wallTex : h3d.mat.Texture;
 
 	var shield : h3d.scene.Mesh;
-
 	var sensor : h3d.col.Ray;
 
 	public var currBonus : Bonus;
 	public var activeBonus : Bonus;
 
-	public function new(kind, x = 0., y = 0., z = 0., scale = 1., ?id) {
+	public function new(kind, props, x = 0., y = 0., z = 0., scale = 1., ?id) {
 		if(id == null) this.id = game.players.length + 1;
 		else this.id = id;
 		color = game.COLORS[this.id];
+		this.props = props;
 
 		super(kind, x, y, z, scale);
 
@@ -84,7 +92,8 @@ class Fairy extends Entity
 	}
 
 	override function getModel() : hxd.res.Model {
-		return hxd.Res.load("Elf/Model.FBX").toModel();
+		return hxd.Res.load("Chars/" + props.modelId + "01/Model.FBX").toModel();
+		//return hxd.Res.load("Elf/Model.FBX").toModel();
 	}
 
 	override function init() {
@@ -95,12 +104,12 @@ class Fairy extends Entity
 			m.material.shadows = false;
 			m.material.allocPass("depth");
 			m.material.allocPass("normal");
-			m.material.texture = hxd.Res.load("Elf/0" + id + ".jpg").toTexture();
+			//m.material.texture = hxd.Res.load("Elf/0" + id + ".jpg").toTexture();
 			m.setScale(1.2);
 		}
 
 		meshRotate(obj);
-		play("fly");
+		play("stand");
 		obj.currentAnimation.setFrame(Math.random() * (obj.currentAnimation.frameCount - 1));
 
 		light = new h3d.scene.PointLight();
@@ -110,7 +119,7 @@ class Fairy extends Entity
 		obj.addChild(light);
 		fxParts = new Map();
 		addTrailFx();
-		addHeadFx();
+		//addHeadFx();
 	}
 
 	function get_lastWall() {
@@ -474,6 +483,8 @@ class Fairy extends Entity
 		colBounds.scaleCenter(0.1);
 		colBounds.offset( -dir.x * 0.75, -dir.y * 0.75 , -dir.z * 0.75);
 
+		//var box = new h3d.scene.Box(colBounds, game.s3d);
+
 		for(w in game.world.walls) {
 			if(w.w == wall) continue;
 			if(w.w == wall.prev) continue;
@@ -594,7 +605,10 @@ class Fairy extends Entity
 	override public function update(dt : Float) {
 		super.update(dt);
 
-		if(canMove) hitTest();
+		if(canMove && !dead) {
+			play("run");
+			hitTest();
+		}
 
 		if(activeBonus == null || activeBonus.kind != Ghost) {
 			var wall = lastWall;

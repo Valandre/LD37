@@ -92,6 +92,7 @@ class Menu extends ui.Form
 		];
 
 		game.players = [];
+		/*
 		for( i in 0...12) {
 			var e = new ent.IA(dirs[Std.random(dirs.length)], 1, 1 + Std.random(4));
 			e.x = hxd.Math.srand(game.size * 0.4);
@@ -103,7 +104,7 @@ class Menu extends ui.Form
 			game.players.push(e);
 			for(j in 0...100)
 				e.update(1);
-		}
+		}*/
 	}
 /*
 	function toggleCredits() {
