@@ -33,10 +33,18 @@ class Player extends Fairy
 		return b;
 	}
 
+	function getNonIAPlayersCount() {
+		var count = 0;
+		for(p in game.state.players)
+			if(p.kind == Player) count++;
+		return count;
+	}
+
 	var currFollow = null;
 	override public function update(dt:Float) {
 		if(dead) {
-			if(game.state.players.length == 1 && game.players.length > 0 && game.players.indexOf(this) == -1) {
+			var nb = getNonIAPlayersCount();
+			if(nb == 1 && game.players.length > 0 && game.players.indexOf(this) == -1) {
 				inline function setCam() {
 					var pl = game.players[0];
 					var v = game.customScene.views[0];
@@ -51,11 +59,11 @@ class Player extends Fairy
 					setCam();
 					return;
 				}
-				if((game.state.players.length == 1 && K.isPressed(K.LEFT)) || (controller != null && controller.pressed.xAxis < 0)) {
+				if((nb == 1 && K.isPressed(K.LEFT)) || (controller != null && controller.pressed.xAxis < 0)) {
 					game.players.unshift(game.players.pop());
 					setCam();
 				}
-				if((game.state.players.length == 1 && K.isPressed(K.RIGHT)) || (controller != null && controller.pressed.xAxis > 0)) {
+				if((nb == 1 && K.isPressed(K.RIGHT)) || (controller != null && controller.pressed.xAxis > 0)) {
 					game.players.push(game.players.shift());
 					setCam();
 				}

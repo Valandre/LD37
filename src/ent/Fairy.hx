@@ -69,6 +69,7 @@ class Fairy extends Entity
 
 	var shield : h3d.scene.Mesh;
 	var sensor : h3d.col.Ray;
+	var boxCollide : h3d.scene.Box;
 
 	public var currBonus : Bonus;
 	public var activeBonus : Bonus;
@@ -479,11 +480,22 @@ class Fairy extends Entity
 		if(wall == null) return false;
 
 		var n = worldNormal;
-		var colBounds = obj.getBounds();
-		colBounds.scaleCenter(0.1);
-		colBounds.offset( -dir.x * 0.75, -dir.y * 0.75 , -dir.z * 0.75);
 
-		//var box = new h3d.scene.Box(colBounds, game.s3d);
+		var b = obj.getBounds();
+		if(boxCollide == null) {
+			boxCollide = new h3d.scene.Box(game.s3d);
+			boxCollide.visible = false;
+		}
+
+		var sc = 0.4;
+		boxCollide.x = x + n.x * sc;
+		boxCollide.y = y + n.y * sc;
+		boxCollide.z = z + n.z * sc;
+
+		var colBounds = boxCollide.getBounds();
+		colBounds.scaleCenter(sc);
+		colBounds.offset( -dir.x * 0.1, -dir.y * 0.1, -dir.z * 0.1);
+		//var bbox = new h3d.scene.Box(0xFF00FF, colBounds, game.s3d);
 
 		for(w in game.world.walls) {
 			if(w.w == wall) continue;

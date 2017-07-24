@@ -434,7 +434,8 @@ class Game extends hxd.App {
 
 		updateKeys(dt);
 
-		if(pause || gameOver) return;
+		trace(pause, gameOver);
+		if(pause) return;
 
 		for( pl in players)
 			updatePlayerCamera(pl, dt);
