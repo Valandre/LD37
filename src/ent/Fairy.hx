@@ -1,8 +1,6 @@
 package ent;
 import lib.Controller;
-import Sounds;
-
-
+//import Sounds;
 
 typedef Props = {
 	kind : Entity.EntityKind,
@@ -405,7 +403,7 @@ class Fairy extends Entity
 		fadeTrailFx();
 
 		//
-		Sounds.play("Crash");
+		//Sounds.play("Crash");
 		if(game.players[0] == this)
 			game.shake(0.1, 0.9);
 

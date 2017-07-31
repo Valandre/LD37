@@ -4,7 +4,7 @@ import lib.Controller;
 import map.CustomScene;
 import map.Composite;
 import map.World;
-import Sounds;
+//import Sounds;
 import ui.Menu;
 import ui.Scores;
 import ui.Win;
@@ -39,7 +39,6 @@ class Game extends hxd.App {
 	public var bonus : Array<ent.Bonus>;
 	public var renderer : map.Composite;
 	public var customScene : map.CustomScene;
-	public var inspector : hxd.inspect.Inspector;
 
 	public var size = 60;
 	var camPos : h3d.col.Point;
@@ -77,12 +76,12 @@ class Game extends hxd.App {
 		customScene = new map.CustomScene();
 		setScene(customScene);
 		renderer = new map.Composite();
+
 		/*
 		try {
 			ambient.push(haxe.Json.parse(hxd.Res.load("title.js").entry.getText()));
 			ambient.push(haxe.Json.parse(hxd.Res.load("ambient.js").entry.getText()));
 			ambientId = 0;
-			new hxd.inspect.SceneProps(s3d).applyProps(ambient[0].s3d, function(msg) trace(msg));
 		}
 		catch(e : hxd.res.NotFound) {};
 		*/
@@ -107,9 +106,9 @@ class Game extends hxd.App {
 			if(controllers.length == 1)
 				keys = controllers[0];
 		});
-
+/*
 		if(PREFS.music)
-			Sounds.play("Loop");
+			Sounds.play("Loop");*/
 
 		transition(false);
 	}
@@ -273,7 +272,6 @@ class Game extends hxd.App {
 		if(ambientId == id) return;
 		if(ambient.length <= id) return;
 		ambientId = id;
-		new hxd.inspect.SceneProps(s3d).applyProps(ambient[id].s3d, function(msg) trace(msg));
 	}
 
 	public function initCamera(pl : ent.Fairy) {
@@ -384,16 +382,6 @@ class Game extends hxd.App {
 			engine.fullScreen = !engine.fullScreen;
 		}
 
-		//ADMIN
-		if( K.isDown(K.CTRL) && K.isPressed("I".code) ) {
-			if( inspector != null ) {
-				inspector.dispose();
-				inspector = null;
-			} else {
-				inspector = new hxd.inspect.Inspector(s3d);
-			}
-		}
-
 		if(K.isPressed("P".code))
 			pause = !pause;
 
@@ -434,7 +422,6 @@ class Game extends hxd.App {
 
 		updateKeys(dt);
 
-		trace(pause, gameOver);
 		if(pause) return;
 
 		for( pl in players)

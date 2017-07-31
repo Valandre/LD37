@@ -1,5 +1,5 @@
 package ui;
-import Sounds;
+//import Sounds;
 
 class Scores extends h2d.Sprite
 {
@@ -134,7 +134,7 @@ class Scores extends h2d.Sprite
 					if(c <= 0) {
 						bmp.colorAdd = null;
 
-						Sounds.play("Winner");
+						//Sounds.play("Winner");
 
 						var t = stars[pl.id].clone();
 						t.dx -= t.width >> 1;

@@ -1,6 +1,6 @@
 package ui;
 import hxd.Key in K;
-import Sounds;
+//import Sounds;
 import ui.ChoosePlayers;
 
 private class Button extends h2d.Flow {
@@ -252,7 +252,7 @@ class Win extends h2d.Sprite
 
 	public function update(dt : Float) {
 		if(K.isPressed(K.ENTER) || K.isPressed(K.SPACE) || (game.keys != null && game.keys.pressed.A)) {
-			Sounds.play("Select");
+			//Sounds.play("Select");
 			buttons[selectId].onclick();
 		}
 	}

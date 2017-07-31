@@ -1,0 +1,9 @@
+-cp src
+-cp src/lib
+-hl LD37.hl
+-main Game
+-lib heaps
+-lib castle
+-lib hscript
+-lib hlsdl
+-D windowSize=1366x768

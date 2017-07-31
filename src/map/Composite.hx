@@ -84,7 +84,7 @@ class Composite extends h3d.scene.Renderer {
 	}
 
 	override function render() {
-		//shadow.draw(get("shadow"));
+		shadow.draw(get("shadow"));
 
 		var colorTex, depthTex, normalTex;
 		depth.draw(get("depth"));
