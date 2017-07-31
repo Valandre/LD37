@@ -1,30 +1,35 @@
 {
 	"Chars": {
 		"Emperor01": {
-			"Anim_run.FBX": "3ea94939c95a519e9e5f034e928c115759061779",
 			"Anim_stand.FBX": "e6aae8306a8eb77b8a9b4b3bfe7b092d43eb37c2",
+			"Anim_run.FBX": "3ea94939c95a519e9e5f034e928c115759061779",
 			"Model.FBX": "1670b1b7458508f1c7cbb7d781b98af219c6922b",
 			"Anim_selection.FBX": "e6aae8306a8eb77b8a9b4b3bfe7b092d43eb37c2"
 		},
 		"Magician01": {
-			"Anim_run.FBX": "d744a5f576893613599fe32f49cafb26b8392440",
 			"Anim_stand.FBX": "481a6b4efe0ae0522ac974233d81c9d8f57b9de9",
+			"Anim_run.FBX": "d744a5f576893613599fe32f49cafb26b8392440",
 			"Model.FBX": "72d1be7d076be58e349b090c6723a60dcccf00cd",
 			"Anim_selection.FBX": "481a6b4efe0ae0522ac974233d81c9d8f57b9de9"
+		}
+	},
+	"Fx": {
+		"Cells": {
+			"Model.FBX": "a5a935bf047e195280b4556e50a85e3b2438c002"
 		}
 	},
 	"UI": {
 		"Selector": {
 			"Model.FBX": "684b956a39b1c47243f4b62f2ce13bf9ccf1acdf"
 		},
-		"WorldSelect": {
-			"Model.FBX": "7c50b78ab004474a01c0acdf3feee359077b5ebe"
-		},
 		"CharacterSelect": {
 			"Model.FBX": "1fab3badb57b4b7c7cfb23263e1bc12a5a8ac9b5"
 		},
 		"Countdown": {
 			"Model.FBX": "b28b5e1b836407f5f4a98df0579683f7ea26b318"
+		},
+		"WorldSelect": {
+			"Model.FBX": "7c50b78ab004474a01c0acdf3feee359077b5ebe"
 		}
 	},
 	"Elf": {
@@ -36,8 +41,8 @@
 			"Model.FBX": "3b4fa202b64d5a2440657a757ab8defd2b139806"
 		},
 		"World02": {
-			"Model.FBX": "2182528ecc8991111fb8575f4d5029a7be2c5f45",
-			"Window01.FBX": "66563b276c660ccdb982a74bd56fc8f18a15519b"
+			"Window01.FBX": "66563b276c660ccdb982a74bd56fc8f18a15519b",
+			"Model.FBX": "2182528ecc8991111fb8575f4d5029a7be2c5f45"
 		}
 	}
 }

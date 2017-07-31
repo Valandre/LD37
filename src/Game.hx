@@ -36,7 +36,7 @@ class Game extends hxd.App {
 	public var world : map.World;
 	public var entities : Array<ent.Entity>;
 	public var players : Array<ent.Fairy>;
-	public var bonus : Array<ent.Bonus>;
+	public var bonus : Array<ent.Energy>;
 	public var renderer : map.Composite;
 	public var customScene : map.CustomScene;
 
@@ -431,12 +431,12 @@ class Game extends hxd.App {
 			e.update(dt);
 
 		if(!gameOver) {
-			/*
+
 			if(bonus.length < bonusMaxCount && Math.random() < 0.01) {
-				var b = new ent.Bonus();
+				var b = new ent.Energy();
 				if(world.collideBounds(b.getBounds()))
 					b.remove();
-			}*/
+			}
 			if(players.length == 1) {
 				gameOver = true;
 				ui.nextRound(players[0]);

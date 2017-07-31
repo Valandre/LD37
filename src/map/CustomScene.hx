@@ -64,7 +64,7 @@ class CustomScene extends h3d.scene.Scene
 			if(p.dead) continue;
 			@:privateAccess p.obj.visible = true;
 			if(p.id == id) continue;
-			if(p.activeBonus != null && p.activeBonus.kind == Ghost)
+			if(p.isPowerActive(Ghost))
 				@:privateAccess p.obj.visible = false;
 		}
 	}

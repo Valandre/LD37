@@ -14,11 +14,9 @@ class Player extends Fairy
 	}
 
 	function updateKeys() {
-		if(currBonus != null)
-			if((game.state.players.length == 1 && K.isPressed(K.SPACE)) || (controller != null && controller.pressed.A )) {
-				activeBonus = currBonus;
-				currBonus = null;
-			}
+		if(power.ready())
+			if((game.state.players.length == 1 && K.isPressed(K.SPACE)) || (controller != null && controller.pressed.A ))
+				power.start();
 
 		var v = 0;
 		if((game.state.players.length == 1 && K.isPressed(K.LEFT)) || (controller != null && controller.pressed.xAxis < 0)) v = -1;

@@ -253,10 +253,10 @@ class UI extends h2d.Sprite
 			}
 
 			if(b == null) {
-				b = new h2d.Bitmap(h2d.Tile.fromColor(ent.Bonus.getBonusColor(p.currBonus.kind), 50, 50), this);
+				b = new h2d.Bitmap(h2d.Tile.fromColor(ent.Energy.getBonusColor(p.currBonus.kind), 50, 50), this);
 				bonus[p.id - 1] = b;
 			}
-			else b.tile = h2d.Tile.fromColor(ent.Bonus.getBonusColor(p.currBonus.kind), 50, 50);
+			else b.tile = h2d.Tile.fromColor(ent.Energy.getBonusColor(p.currBonus.kind), 50, 50);
 			placeBonus(p.id - 1);
 		}
 	}

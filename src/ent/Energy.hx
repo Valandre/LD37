@@ -1,23 +1,12 @@
 package ent;
 
-enum BonusKind {
-	SpeedUp;
-	Shield;
-	Rewind;
-	Ghost;
-}
-
-class Bonus extends Entity
+class Energy extends Entity
 {
-	var bonusKind :BonusKind;
-	var w = 2.;
+	var w = 2;
 	var lifeTime = 10.; //seconds
 
 	public function new()	{
 		game = Game.inst;
-		var all = BonusKind.createAll();
-		bonusKind = all[Std.random(all.length)];
-		//bonusKind = Shield;
 
 		var face = Std.random(6);
 		var x = 0.;
@@ -52,8 +41,26 @@ class Bonus extends Entity
 				z = hxd.Math.srand(ray * 0.95);
 		}
 
-		super(Bonus, x, y, z);
+		super(Energy, x, y, z);
 		game.bonus.push(this);
+	}
+
+	function meshRotate() {
+		var n = worldNormal;
+		var a = Math.PI;
+
+		obj.setRotate(0, 0, 0);
+		if(n.z != 0) {
+			if(n.z < 0) obj.rotate(a, 0, 0);
+		}
+		else if(n.x != 0) {
+			obj.rotate(0, a * 0.5, 0);
+			if(n.x < 0) obj.rotate(0, a, 0);
+		}
+		else if(n.y != 0) {
+			obj.rotate(a * 0.5, 0, 0);
+			if(n.y < 0) obj.rotate(a, 0, 0);
+		}
 	}
 
 	override public function remove() {
@@ -61,29 +68,18 @@ class Bonus extends Entity
 		game.bonus.remove(this);
 	}
 
-	override function getModel() {
-		//TODO
-		return null;
+	override function getModel() : hxd.res.Model {
+		return hxd.Res.Fx.Cells.Model;
 	}
 
 	override function init() {
-		obj = new h3d.scene.Object(game.s3d);
-		var c = new h3d.prim.Cube(w, w, w);
-		c.translate( -w * 0.5, -w * 0.5, -w * 0.5);
-		c.addUVs();
-		c.addNormals();
-		var m = new h3d.scene.Mesh(c, obj);
-		m.material.color.setColor(getBonusColor(bonusKind));
+		super.init();
+		var a = game.modelCache.loadAnimation(model);
+		a.loop = true;
+		obj.playAnimation(a);
+		meshRotate();
 	}
 
-	static public function getBonusColor(k : BonusKind) {
-		return switch(k) {
-			case SpeedUp: 0x40F010;
-			case Shield: 0x2080F0;
-			case Rewind: 0xF04020;
-			case Ghost: 0xF0F0FF;
-		}
-	}
 
 	function blink() {
 		for(m in obj.getMeshes()) {
@@ -106,7 +102,7 @@ class Bonus extends Entity
 		for(p in game.players)
 			if(obj.getBounds().contains(new h3d.col.Point(p.x, p.y, p.z))) {
 				remove();
-				p.hitBonus(bonusKind);
+				p.hitEnergy();
 				break;
 			}
 	}

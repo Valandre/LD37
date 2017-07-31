@@ -8,14 +8,25 @@ typedef Props = {
 	color : Int,
 }
 
-private class Bonus {
-	public var kind : ent.Bonus.BonusKind;
+enum PowerKind {
+	SpeedUp;
+	Shield;
+	Rewind;
+	Ghost;
+}
+
+private class Power {
+	public var kind : PowerKind;
 	public var value : Float;
 	public var time : Float;
+	public var progress(default, set) : Float = 0;
+	public var active : Bool;
 
-	public function new (k : ent.Bonus.BonusKind) {
+	public function new (k : PowerKind) {
 		kind = k;
+	}
 
+	public function start() {
 		switch(kind) {
 			case SpeedUp:
 				value = 0.9;
@@ -29,6 +40,16 @@ private class Bonus {
 			case Ghost:
 				time = 3;
 		}
+		progress = 0;
+		active = true;
+	}
+
+	function set_progress(v : Float) {
+		return progress = hxd.Math.clamp(0, 1);
+	}
+
+	public function ready() {
+		return !active && progress == 1;
 	}
 }
 
@@ -69,14 +90,15 @@ class Fairy extends Entity
 	var sensor : h3d.col.Ray;
 	var boxCollide : h3d.scene.Box;
 
-	public var currBonus : Bonus;
-	public var activeBonus : Bonus;
+	public var power : Power;
 
 	public function new(kind, props, x = 0., y = 0., z = 0., scale = 1., ?id) {
 		if(id == null) this.id = game.players.length + 1;
 		else this.id = id;
 		color = game.COLORS[this.id];
 		this.props = props;
+
+		power = new Power(PowerKind.Shield); //TODO : replace by chars power (use database)!
 
 		super(kind, x, y, z, scale);
 
@@ -243,7 +265,7 @@ class Fairy extends Entity
 
 	function faceRotate() {
 		var wall = lastWall;
-		if(wall != null && (activeBonus == null || activeBonus.kind != Ghost))
+		if(wall != null && !isPowerActive(Ghost))
 			wall.scaleX = hxd.Math.distance(x + dir.x * 0.5 - wall.x, y + dir.y * 0.5 - wall.y, z + dir.z * 0.5 - wall.z);
 
 		fadeTrailFx();
@@ -284,7 +306,7 @@ class Fairy extends Entity
 	function changeDir(v : Int) {
 		if(v == 0) return;
 		var wall = lastWall;
-		if(wall != null && (activeBonus == null || activeBonus.kind != Ghost))
+		if(wall != null && !isPowerActive(Ghost))
 			wall.scaleX = hxd.Math.distance(x + dir.x * wallSize * 0.5 - wall.x, y + dir.y * wallSize * 0.5 - wall.y, z + dir.z * wallSize * 0.5 - wall.z);
 		fadeTrailFx();
 		dir = setDir(dir, v);
@@ -389,14 +411,14 @@ class Fairy extends Entity
 		meshRotate(fx);
 	}
 
-	public function hitBonus(k : ent.Bonus.BonusKind) {
-		currBonus = new Bonus(k);
+	public function hitEnergy() {
+		power.progress += 0.2;
 	}
 
 	function destroy() {
 		dead = true;
 		var wall = lastWall;
-		if(wall != null && (activeBonus == null || activeBonus.kind != Ghost))
+		if(wall != null && !isPowerActive(Ghost))
 			wall.scaleX = hxd.Math.distance(x - wall.x, y - wall.y, z - wall.z);
 
 		obj.visible = false;
@@ -541,22 +563,26 @@ class Fairy extends Entity
 		while(hit());
 	}
 
-	function updateBonus(dt : Float) {
-		if(speedBonus > 0 && (activeBonus == null || activeBonus.kind != SpeedUp)) {
+	public function isPowerActive(k : PowerKind) {
+		return power.active && power.kind == k;
+	}
+
+	function updatePower(dt : Float) {
+		if(speedBonus > 0 && !isPowerActive(SpeedUp)) {
 			if(speedBonus > 0) speedBonus *= Math.pow(0.95, dt);
 			if(speedBonus < 0.01)  speedBonus = 0;
 		}
 
-		if(activeBonus == null)	return;
-		switch(activeBonus.kind) {
+		if(!power.active) return;
+		switch(power.kind) {
 			case SpeedUp:
-				activeBonus.time -= dt / 60;
-				if(activeBonus.time <= 0)
-					activeBonus = null;
-				else speedBonus += (activeBonus.value - speedBonus) * 0.25 * dt;
+				power.time -= dt / 60;
+				if(power.time <= 0)
+					power.active = false;
+				else speedBonus += (power.value - speedBonus) * 0.25 * dt;
 
 			case Shield:
-				activeBonus = null;
+				power.active = false;
 				if(shield != null) return;
 
 				var c = new h3d.prim.Sphere(2, 24, 24);
@@ -574,17 +600,17 @@ class Fairy extends Entity
 				dir = wall.dir.clone();
 				meshRotate(obj);
 
-				activeBonus.time -= dt / 60;
-				if(activeBonus.time <= 0) {
-					activeBonus = null;
+				power.time -= dt / 60;
+				if(power.time <= 0) {
+					power.active = false;
 					canMove = true;
 					return;
 				}
 
 				canMove = false;
-				x -= dir.x * activeBonus.value * dt;
-				y -= dir.y * activeBonus.value * dt;
-				z -= dir.z * activeBonus.value * dt;
+				x -= dir.x * power.value * dt;
+				y -= dir.y * power.value * dt;
+				z -= dir.z * power.value * dt;
 
 				var old = wall.scaleX;
 				wall.scaleX = hxd.Math.distance(x - wall.x, y - wall.y, z - wall.z);
@@ -593,16 +619,16 @@ class Fairy extends Entity
 					y = wall.y;
 					z = wall.z;
 					if(wall.prev == null) {
-						activeBonus = null;
+						power.active = false;
 						canMove = true;
 						return;
 					}
 					else removeWall(wall);
 				}
 			case Ghost:
-				activeBonus.time -= dt / 60;
-				if(activeBonus.time <= 0) {
-					activeBonus = null;
+				power.time -= dt / 60;
+				if(power.time <= 0) {
+					power.active = false;
 					enableWalls = true;
 					createWall();
 					lastWall.prev = null;
@@ -620,7 +646,7 @@ class Fairy extends Entity
 			hitTest();
 		}
 
-		if(activeBonus == null || activeBonus.kind != Ghost) {
+		if(!isPowerActive(Ghost)) {
 			var wall = lastWall;
 			if(!dead && wall != null)
 				wall.scaleX = hxd.Math.distance(x - wall.x, y - wall.y, z - wall.z);
@@ -636,6 +662,6 @@ class Fairy extends Entity
 		}
 
 		if(!dead)
-			updateBonus(dt);
+			updatePower(dt);
 	}
 }

@@ -5,7 +5,7 @@ import lib.Controller;
 enum EntityKind {
 	Player;
 	IA;
-	Bonus;
+	Energy;
 }
 
 typedef PlayOptions = {

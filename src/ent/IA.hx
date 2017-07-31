@@ -51,7 +51,7 @@ class IA extends Fairy
 	}
 
 	//bonus collide
-	function bonuscollide(b : ent.Bonus, kdir : CollideDir, ray : Float) {
+	function bonuscollide(b : ent.Energy, kdir : CollideDir, ray : Float) {
 		var d = switch(kdir) {
 			case Left :	setDir(dir, -1);
 			case Right : setDir(dir, 1);
@@ -128,9 +128,7 @@ class IA extends Fairy
 				updateKeys();
 		}
 
-		if(currBonus != null && Math.random() < 0.01) {
-			activeBonus = currBonus;
-			currBonus = null;
-		}
+		if(power.ready() && Math.random() < 0.01)
+			power.start();
 	}
 }

@@ -225,7 +225,7 @@ class Scores extends h2d.Sprite
 	public function update(dt : Float) {
 		for(p in game.players) {
 			var b = bonus[p.id - 1];
-			if(p.currBonus == null) {
+			if(!p.power.active) {
 				if(b != null) {
 					b.remove();
 					b = null;
@@ -234,10 +234,10 @@ class Scores extends h2d.Sprite
 			}
 
 			if(b == null) {
-				b = new h2d.Bitmap(h2d.Tile.fromColor(ent.Bonus.getBonusColor(p.currBonus.kind), 50, 50), this);
+				b = new h2d.Bitmap(h2d.Tile.fromColor(0xFF00FF, 50, 50), this);
 				bonus[p.id - 1] = b;
 			}
-			else b.tile = h2d.Tile.fromColor(ent.Bonus.getBonusColor(p.currBonus.kind), 50, 50);
+			else b.tile = h2d.Tile.fromColor(0xFF00FF, 50, 50);
 			placeBonus(p.id - 1);
 		}
 	}
