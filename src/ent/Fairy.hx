@@ -218,7 +218,7 @@ class Fairy extends Entity
 
 
 		wall.material.mainPass.culling = None;
-		wall.material.blendMode = Add;
+		//wall.material.blendMode = Add;
 		wall.material.texture = wallTex;
 		wall.material.texture.wrap = Repeat;
 		wall.scaleX = 0;
