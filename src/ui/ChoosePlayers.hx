@@ -146,8 +146,11 @@ class ChoosePlayers extends ui.Form
 		game.autoCameraKind = Choose;
 		game.s3d.lightSystem.ambientLight.setColor(0xFFFFFF);
 
-		for(i in 0...10) {
-			mthumbs.push(obj.getObjectByName("PosThumb" + ((i < 9 ? "0" : "") + (i + 1))));
+		var i = 0;
+		while(true) {
+			var o = obj.getObjectByName("PosThumb" + ((i < 9 ? "0" : "") + (i + 1)));
+			if(o == null) break;
+			mthumbs.push(o);
 
 			var name = null;
 			try {
@@ -155,6 +158,7 @@ class ChoosePlayers extends ui.Form
 			}
 			catch(e:hxd.res.NotFound) {};
 			nameTex.push(name);
+			i++;
 		}
 
 		for(i in 0...4) {
