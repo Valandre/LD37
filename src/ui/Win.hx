@@ -18,8 +18,8 @@ private class Button extends h2d.Flow {
 
 		switch(name) {
 			case "BACK":
-				tiles.push(hxd.Res.UI.Bt_Back0.toTile());
-				tiles.push(hxd.Res.UI.Bt_Back1.toTile());
+				//tiles.push(hxd.Res.UI.Bt_Back0.toTile());
+				//tiles.push(hxd.Res.UI.Bt_Back1.toTile());
 		}
 
 		bt = new h2d.Bitmap(tiles[0], this);
@@ -68,11 +68,11 @@ class Win extends h2d.Sprite
 		super(parent);
 		game = Game.inst;
 
-		bg = new h2d.Bitmap(hxd.Res.UI.Bg01.toTile(), this);
+		//bg = new h2d.Bitmap(hxd.Res.UI.Bg01.toTile(), this);
 		bg.blendMode = Add;
 		bg.smooth = true;
 
-		title = new h2d.Bitmap(hxd.Res.UI.Title.toTile(), this);
+		//title = new h2d.Bitmap(hxd.Res.UI.Title.toTile(), this);
 		title.blendMode = Alpha;
 		title.smooth = true;
 		title.x = 50;
