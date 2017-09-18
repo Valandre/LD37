@@ -430,8 +430,10 @@ class Game extends hxd.App {
 		for(e in entities)
 			e.update(dt);
 
-		if(!gameOver) {
+		if(ui != null)
+			ui.update(dt);
 
+		if(!gameOver) {
 			if(bonus.length < bonusMaxCount && Math.random() < 0.01) {
 				var b = new ent.Energy();
 				if(world.collideBounds(b.getBounds()))

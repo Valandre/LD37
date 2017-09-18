@@ -1,18 +1,101 @@
 package ui;
 //import Sounds;
 
+private class EnergyGauge extends h2d.Flow {
+
+	var bg : h2d.Tile;
+	var fg : h2d.Tile;
+	var bar : h2d.Bitmap;
+
+	public var value(default, set) : Float;
+
+	public function new(parent) {
+		super(parent);
+		var t = hxd.Res.UI.gauge.toTile();
+		bg = t.sub(0, 0, t.width, t.height >> 1);
+		fg = t.sub(0, t.height >> 1, t.width, t.height >> 1);
+
+		var bmp = new h2d.Bitmap(bg, this);
+
+		bar = new h2d.Bitmap(fg, this);
+		getProperties(bar).isAbsolute = true;
+		value = 0;
+	}
+
+	function set_value(v : Float) {
+		bar.tile = fg.sub(0, 0, Math.ceil(fg.width * v), fg.height);
+		return value = v;
+	}
+}
+
+private class PlayerScore extends h2d.Flow {
+
+	var game : Game;
+	var pid : Int;
+
+	var portrait : h2d.Bitmap;
+	var stars : Array<h2d.Bitmap> = [];
+	var starTileBg : h2d.Tile;
+	public var starTile : h2d.Tile;
+
+	var gauge : EnergyGauge;
+
+	public function new(parent, pid) {
+		super(parent);
+		this.game = Game.inst;
+		this.pid = pid;
+
+		isVertical = false;
+		verticalAlign = Top;
+
+		/*
+		var modelId = Data.chars.get(game.state.players[pid - 1].modelId).selectId;
+		var res = hxd.Res.load("UI/CharacterSelect/Thumb" + (modelId < 10 ? "0" : "") + modelId + ".png");
+		*/
+		var res = hxd.Res.UI.portrait;
+		portrait = new h2d.Bitmap(res.toTile(), this);
+		portrait.smooth = true;
+
+		//
+		var right = new h2d.Flow(this);
+		right.isVertical = true;
+		right.verticalSpacing = 15;
+
+		var sub = new h2d.Flow(right);
+		starTileBg = hxd.Res.UI.pointSlotEmpty.toTile();
+		starTile = hxd.Res.UI.pointSlot.toTile();
+		sub.horizontalSpacing = 1;
+		for(j in 0...5) {
+			var b = new h2d.Bitmap(game.state.stars[pid - 1] > j ? starTile : starTileBg, sub);
+			b.smooth = true;
+			stars.push(b);
+		}
+
+		gauge = new EnergyGauge(right);
+	}
+
+	public function addStar() {
+		stars[game.state.stars[pid - 1]].tile = starTile;
+	}
+
+	public function update(dt : Float) {
+		var p = null;
+		for( pl in game.players )
+			if(pl.id == pid) {
+				p = pl;
+				break;
+			}
+		if(p != null)
+			gauge.value = p.power.progress;
+	}
+}
+
+
 class Scores extends h2d.Sprite
 {
 	var game : Game;
 	var onReady : Void -> Void;
-
-	var tiles = [];
-	var bmp : h2d.Bitmap;
-	var bmp2 : h2d.Bitmap;
-
-	var stars = [];
-	var scores : Array<h2d.Flow> = [];
-	var bonus : Array<h2d.Bitmap> = [];
+	var scores : Array<PlayerScore> = [];
 
 	public function new(?parent, ?onReady) {
 		super(parent);
@@ -24,47 +107,8 @@ class Scores extends h2d.Sprite
 	}
 
 	function init() {
-		tiles.push(hxd.Res.UI.num3.toTile());
-		tiles.push(hxd.Res.UI.num2.toTile());
-		tiles.push(hxd.Res.UI.num1.toTile());
-		tiles.push(hxd.Res.UI.Go.toTile());
-
-		for( t in tiles) {
-			t.dx -= t.width >> 1;
-			t.dy -= t.height >> 1;
-		}
-
-		bmp2 = new h2d.Bitmap(null, this);
-		bmp2.blendMode = Alpha;
-		bmp2.smooth = true;
-		bmp2.alpha = 0;
-		bmp2.x = game.s2d.width >> 1;
-		bmp2.y = game.s2d.height >> 1;
-		bmp2.colorAdd = new h3d.Vector(1, 1, 1);
-
-		bmp = new h2d.Bitmap(null, this);
-		bmp.blendMode = Alpha;
-		bmp.smooth = true;
-		bmp.alpha = 0;
-		bmp.x = game.s2d.width >> 1;
-		bmp.y = game.s2d.height >> 1;
-
-		stars.push(hxd.Res.UI.Star0.toTile());
-		stars.push(hxd.Res.UI.Star1.toTile());
-		stars.push(hxd.Res.UI.Star2.toTile());
-		stars.push(hxd.Res.UI.Star3.toTile());
-		stars.push(hxd.Res.UI.Star4.toTile());
-
-		for(i in 0...4) {
-			var s = new h2d.Flow(this);
-			s.horizontalSpacing = -30;
-			for(j in 0...5) {
-				var b = new h2d.Bitmap(stars[game.state.stars[i] > j ? game.players[i].id : 0], s);
-				b.smooth = true;
-				b.setScale(0.5);
-			}
-			scores.push(s);
-		}
+		for(i in 0...game.players.length)
+			scores.push(new PlayerScore(this, game.players[i].id));
 
 		game.event.wait(1, function() start());
 		onResize();
@@ -135,33 +179,14 @@ class Scores extends h2d.Sprite
 						bmp.colorAdd = null;
 
 						//Sounds.play("Winner");
+						s.addStar();
 
-						var t = stars[pl.id].clone();
-						t.dx -= t.width >> 1;
-						t.dy -= t.height >> 1;
-						var star = new h2d.Bitmap(t, this);
-						var sc = 3.;
-						star.setScale(sc);
-						var target = s.getChildAt(game.state.stars[pl.id-1]);
-						Std.instance(target, h2d.Bitmap).tile = stars[pl.id];
-						star.x = target.absX;
-						star.y = target.absY + 25;
-
-						game.event.waitUntil(function(dt) {
-							sc -= 0.25 * dt;
-							star.setScale(sc);
-							if(sc <= 1) {
-								star.remove();
-								game.event.wait(2, function() {
-									bmp.remove();
-									game.state.stars[pl.id - 1]++;
-									if(game.state.stars[pl.id - 1] == 5)
-										game.endGame();
-									else game.restart();
-								});
-								return true;
-							}
-							return false;
+						game.event.wait(2, function() {
+							bmp.remove();
+							game.state.stars[pl.id - 1]++;
+							if(game.state.stars[pl.id - 1] == 5)
+								game.endGame();
+							else game.restart();
 						});
 
 						return true;
@@ -175,11 +200,6 @@ class Scores extends h2d.Sprite
 	}
 
 	public function onResize() {
-		bmp.x = game.s2d.width >> 1;
-		bmp.y = game.s2d.height >> 1;
-		bmp2.x = game.s2d.width >> 1;
-		bmp2.y = game.s2d.height >> 1;
-
 		var d = 25;
 		scores[0].x = d;
 		scores[0].y = d;
@@ -189,56 +209,10 @@ class Scores extends h2d.Sprite
 		scores[2].y = game.s2d.height - scores[1].getSize().height - d;
 		scores[3].x = game.s2d.width - scores[1].getSize().width - d;
 		scores[3].y = game.s2d.height - scores[1].getSize().height - d;
-
-		placeBonus(0);
-		placeBonus(1);
-		placeBonus(2);
-		placeBonus(3);
-	}
-
-	function placeBonus(id : Int) {
-		var d = 50;
-		switch(id) {
-		case 0 :
-			if(bonus[0] != null) {
-				bonus[0].x = d + scores[0].getSize().width;
-				bonus[0].y = scores[0].y;
-			}
-		case 1 :
-			if(bonus[1] != null) {
-				bonus[1].x = scores[1].x - d - bonus[1].tile.width;
-				bonus[1].y = scores[1].y;
-			}
-		case 2 :
-			if(bonus[2] != null) {
-				bonus[2].x = d + scores[2].getSize().width;
-				bonus[2].y = scores[2].y;
-			}
-		case 3 :
-			if(bonus[3] != null) {
-				bonus[3].x = scores[3].x - d - bonus[3].tile.width;
-				bonus[3].y = scores[3].y;
-			}
-		}
 	}
 
 	public function update(dt : Float) {
-		for(p in game.players) {
-			var b = bonus[p.id - 1];
-			if(!p.power.active) {
-				if(b != null) {
-					b.remove();
-					b = null;
-				}
-				continue;
-			}
-
-			if(b == null) {
-				b = new h2d.Bitmap(h2d.Tile.fromColor(0xFF00FF, 50, 50), this);
-				bonus[p.id - 1] = b;
-			}
-			else b.tile = h2d.Tile.fromColor(0xFF00FF, 50, 50);
-			placeBonus(p.id - 1);
-		}
+		for(s in scores)
+			s.update(dt);
 	}
 }

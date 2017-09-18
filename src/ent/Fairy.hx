@@ -45,7 +45,7 @@ private class Power {
 	}
 
 	function set_progress(v : Float) {
-		return progress = hxd.Math.clamp(0, 1);
+		return progress = hxd.Math.clamp(v, 0, 1);
 	}
 
 	public function ready() {
@@ -114,7 +114,6 @@ class Fairy extends Entity
 
 	override function getModel() : hxd.res.Model {
 		return hxd.Res.load("Chars/" + props.modelId + "01/Model.FBX").toModel();
-		//return hxd.Res.load("Elf/Model.FBX").toModel();
 	}
 
 	override function init() {
@@ -125,7 +124,6 @@ class Fairy extends Entity
 			m.material.shadows = false;
 			m.material.allocPass("depth");
 			m.material.allocPass("normal");
-			//m.material.texture = hxd.Res.load("Elf/0" + id + ".jpg").toTexture();
 			m.setScale(1.2);
 		}
 
@@ -140,7 +138,6 @@ class Fairy extends Entity
 		obj.addChild(light);
 		fxParts = new Map();
 		addTrailFx();
-		//addHeadFx();
 	}
 
 	function get_lastWall() {
@@ -173,27 +170,6 @@ class Fairy extends Entity
 						fx.setScale(sc);
 						return sc == 1;
 					});
-				}
-			}
-		}
-	}
-
-	function addHeadFx() {
-		//////
-		return; //fxs emitter is static ? (cf Nico)
-		//////
-
-		for(i in 0...obj.numChildren) {
-			var o = obj.getChildAt(i);
-			if( o.name == null ) continue;
-			var tmp = o.name.split("_");
-			if(tmp[0] == "body") {
-				var name = "ElfHead";
-				var fx = addFx(name);
-				if( fx != null ) {
-					fx.getGroup(name).texture = hxd.Res.load("Fx/Flame0" + id + "[ADD].jpg").toTexture();
-					fx.x += 0.8;
-					o.addChild(fx);
 				}
 			}
 		}

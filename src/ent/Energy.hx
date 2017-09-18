@@ -16,26 +16,32 @@ class Energy extends Entity
 		var ray = game.size >> 1;
 		switch(face) {
 			case 0 : //bottom
+				worldNormal = new h3d.col.Point(0, 0, 1);
 				x = hxd.Math.srand(ray * 0.95);
 				y = hxd.Math.srand(ray * 0.95);
 				z = -ray + w * 0.5;
 			case 1 : //top
+				worldNormal = new h3d.col.Point(0, 0, -1);
 				x = hxd.Math.srand(ray * 0.95);
 				y = hxd.Math.srand(ray * 0.95);
 				z = ray - w * 0.5;
 			case 2 : //left
+				worldNormal = new h3d.col.Point(1, 0, 0);
 				x = -ray + w * 0.5;
 				y = hxd.Math.srand(ray * 0.95);
 				z = hxd.Math.srand(ray * 0.95);
 			case 3 : //right
+				worldNormal = new h3d.col.Point(-1, 0, 0);
 				x = ray - w * 0.5;
 				y = hxd.Math.srand(ray * 0.95);
 				z = hxd.Math.srand(ray * 0.95);
 			case 4 : //front
+				worldNormal = new h3d.col.Point(0, 1, 0);
 				x = hxd.Math.srand(ray * 0.95);
 				y = -ray + w * 0.5;
 				z = hxd.Math.srand(ray * 0.95);
 			case 5 : //back
+				worldNormal = new h3d.col.Point(0, -1, 0);
 				x = hxd.Math.srand(ray * 0.95);
 				y = ray - w * 0.5;
 				z = hxd.Math.srand(ray * 0.95);
