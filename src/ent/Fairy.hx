@@ -71,6 +71,7 @@ class Fairy extends Entity
 	public var enableWalls = true;
 	public var enableCollides = true;
 	public var canMove = false;
+	public var attractRay = 3;
 
 	var props : Props;
 	var color : Int = 0xFFFFFF;

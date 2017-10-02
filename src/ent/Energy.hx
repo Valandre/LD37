@@ -105,11 +105,19 @@ class Energy extends Entity
 		if(lifeTime < 2)
 			blink();
 
-		for(p in game.players)
-			if(obj.getBounds().contains(new h3d.col.Point(p.x, p.y, p.z))) {
+
+		var sp = 0.3;
+		for(p in game.players) {
+			if(hxd.Math.distance(p.x - x, p.y - y, p.z - z) < p.attractRay) {
+				x += (p.x - x) * sp * dt;
+				y += (p.y - y) * sp * dt;
+				z += (p.z - z) * sp * dt;
+			}
+			if(hxd.Math.distance(p.x - x, p.y - y, p.z - z) < 1) {
 				remove();
 				p.hitEnergy();
 				break;
 			}
+		}
 	}
 }
