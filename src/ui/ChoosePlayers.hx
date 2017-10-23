@@ -106,7 +106,6 @@ class ChoosePlayers extends ui.Form
 {
 	var obj : h3d.scene.Object;
 	var pname : Array<h3d.scene.Mesh> = [];
-	var pbutton : Array<h3d.scene.Mesh> = [];
 	var pjoin : Array<h3d.scene.Mesh> = [];
 	var pstate : Array<h3d.scene.Mesh> = [];
 	var ppos : Array<h3d.scene.Object> = [];
@@ -164,7 +163,6 @@ class ChoosePlayers extends ui.Form
 		for(i in 0...4) {
 			pname.push(obj.getObjectByName("NameP" + (i + 1)).toMesh());
 			pjoin.push(obj.getObjectByName("JoinP" + (i + 1)).toMesh());
-			pbutton.push(obj.getObjectByName("ButtonP" + (i + 1)).toMesh());
 			pstate.push(obj.getObjectByName("StateP" + (i + 1)).toMesh());
 			ppos.push(obj.getObjectByName("PosP" + (i + 1)));
 		}
@@ -273,11 +271,14 @@ class ChoosePlayers extends ui.Form
 			}
 			//join.setScale(1 + 0.008 * Math.sin(0.1 * time));
 
+			/*
 			var but = pbutton[i];
-			switch(pl.state) {
-				case 3 : but.material.texture = buttonTex[2];
-				default: but.material.texture = buttonTex[(time % 40) < 20 ? 1 : 0];
-			}
+			if(but != null)
+				switch(pl.state) {
+					case 3 : but.material.texture = buttonTex[2];
+					default: but.material.texture = buttonTex[(time % 40) < 20 ? 1 : 0];
+				}*/
+
 			pstate[i].material.texture = stateTex[c != null && c.active ? i + 1 : 0];
 			pname[i].material.texture = nameTex[pl.selectId - 1];
 			pname[i].visible = @:privateAccess pl.obj.visible = pname[i].material.texture != null;
