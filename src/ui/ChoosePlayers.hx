@@ -21,7 +21,14 @@ class PlayerSlot {
 		game = Game.inst;
 		this.pid = pid;
 		this.follow = follow;
-		selectId = chars[Std.random(chars.length)].selectId;
+
+		while(true) {
+			var id = chars[Std.random(chars.length)].selectId;
+			if(id != Data.chars.get(Random).selectId) {
+				selectId = id;
+				break;
+			}
+		}
 	}
 
 	public function getKind() {

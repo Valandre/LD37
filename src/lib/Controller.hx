@@ -181,8 +181,8 @@ class Controller {
 		else if(K.isDown(K.DOWN) || pad.buttons[padConfig.down] ) down.yAxis = 1;
 		else if(Math.abs(pad.values[padConfig.analogY]) > DEAD ) down.yAxis = pad.values[padConfig.analogY] * (padConfig.analogYInv ? -1 : 1);
 
-		if(K.isDown(K.LEFT) || pad.buttons[padConfig.left] ) down.xAxis = -1;
-		else if(K.isDown(K.RIGHT) || pad.buttons[padConfig.right] ) down.xAxis = 1;
+		if(K.isDown(K.LEFT) || pad.buttons[padConfig.left] || pad.buttons[padConfig.L] ) down.xAxis = -1;
+		else if(K.isDown(K.RIGHT) || pad.buttons[padConfig.right] || pad.buttons[padConfig.R] ) down.xAxis = 1;
 		else if(Math.abs(pad.values[padConfig.analogX]) > DEAD ) down.xAxis = pad.values[padConfig.analogX];
 
 		if( down.xAxis != 0 && down.yAxis  != 0 ) {
