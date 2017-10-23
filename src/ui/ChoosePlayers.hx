@@ -8,10 +8,13 @@ class PlayerSlot {
 	var follow : h3d.scene.Object;
 	var selector : h3d.scene.Object;
 	var chars = Data.chars.all;
+	var res : hxd.res.Model;
+	var charKind : Data.CharsKind;
 
 	public var pid : Int;
 	public var selectId(default, set) : Int;
 	public var state(default, set) : Int;
+	public var visible(default, set) : Bool;
 	public var color = 0;
 
 	public function new(pid, follow) {
@@ -22,10 +25,7 @@ class PlayerSlot {
 	}
 
 	public function getKind() {
-		for(c in chars)
-			if(c.selectId == selectId)
-				return c.id;
-		return null;
+		return charKind;
 	}
 
 	function getModel() {
@@ -43,10 +43,11 @@ class PlayerSlot {
 	}
 
 	function updateModel () {
-		var res = getModel();
+		if(obj != null)
+			obj.remove();
+		res = getModel();
 		if(res == null) return;
 
-		if(obj != null) obj.remove();
 		obj = game.modelCache.loadModel(res);
 		var a = game.modelCache.loadAnimation(getAnimSelection());
 		obj.playAnimation(a);
@@ -56,12 +57,19 @@ class PlayerSlot {
 			m.material.shadows = false;
 		game.s3d.addChild(obj);
 		obj.follow = follow;
+
+		for(c in chars)
+			if(c.selectId == selectId) {
+				charKind =  c.id;
+				break;
+			}
 	}
 
 	function set_selectId(v : Int) {
 		if(selectId == v) return v;
 		selectId = v;
-		updateModel();
+		if(selectId != Data.chars.get(Random).selectId)
+			updateModel();
 		return selectId;
 	}
 
@@ -70,6 +78,13 @@ class PlayerSlot {
 		if(v == 0) removeSelector();
 		else addSelector();
 		return state = v;
+	}
+
+	function set_visible(b : Bool) {
+		if(obj != null)
+			for(m in obj.getMeshes())
+				m.visible = b;
+		return visible = b;
 	}
 
 	function addSelector() {
@@ -97,7 +112,7 @@ class PlayerSlot {
 	}
 
 	public function remove() {
-		obj.remove();
+		if(obj != null) obj.remove();
 		removeSelector();
 	}
 }
@@ -112,13 +127,15 @@ class ChoosePlayers extends ui.Form
 	var mthumbs : Array<h3d.scene.Object> = [];
 	var ready = false;
 
+
+	var mSelect : h3d.scene.Mesh;
+	var mBack : h3d.scene.Mesh;
+
 	var nameTex : Array<h3d.mat.Texture> = [];
-	var joinTex : Array<h3d.mat.Texture> = [];
 	var stateTex : Array<h3d.mat.Texture> = [];
-	var buttonTex : Array<h3d.mat.Texture> = [];
+	var buttonTex : Array<Array<h3d.mat.Texture>> = [];
 
 	var players : Array<PlayerSlot> = [];
-
 	var CharsIds : Array<Int> = [];
 
 	override function init() {
@@ -171,12 +188,13 @@ class ChoosePlayers extends ui.Form
 		for(i in 0...4)
 			stateTex.push(hxd.Res.load("UI/CharacterSelect/StateP" + (i + 1) + ".png").toTexture());
 
-		joinTex.push(hxd.Res.UI.CharacterSelect.Join.toTexture());
-		joinTex.push(hxd.Res.UI.CharacterSelect.ColorSelect.toTexture());
 
-		buttonTex.push(hxd.Res.UI.CharacterSelect.ButtonX01.toTexture());
-		buttonTex.push(hxd.Res.UI.CharacterSelect.ButtonX02.toTexture());
-		buttonTex.push(hxd.Res.UI.CharacterSelect.ButtonOk.toTexture());
+		//
+		mSelect = obj.getObjectByName("ButtonA").toMesh();
+		mBack = obj.getObjectByName("ButtonB").toMesh();
+		buttonTex = [];
+		buttonTex.push([hxd.Res.UI.CharacterSelect.ButtonA01.toTexture(), hxd.Res.UI.CharacterSelect.ButtonA02.toTexture()]);
+		buttonTex.push([hxd.Res.UI.CharacterSelect.ButtonB01.toTexture(), hxd.Res.UI.CharacterSelect.ButtonB02.toTexture()]);
 
 		//iniy player 1
 		addPlayer(0, ppos[0]);
@@ -219,7 +237,7 @@ class ChoosePlayers extends ui.Form
 		if(c != null) {
 			c.active = true;
 			var pl = players[0];
-			if(pl.state == 4)
+			if(pl.state == 3)
 				nextStep();
 		}
 
@@ -229,26 +247,26 @@ class ChoosePlayers extends ui.Form
 			var pl = players[i];
 			if(c != null && c.active) {
 				if(pl.state == 1) {
-					if(c.pressed.xAxis > 0)
+					if(c.pressed.xAxis > 0 || c.pressed.yAxis > 0)
 						pl.selectId = pl.selectId >= mthumbs.length ? 1 : pl.selectId + 1;
-					else if(c.pressed.xAxis < 0)
+					else if(c.pressed.xAxis < 0 || c.pressed.yAxis < 0)
 						pl.selectId = pl.selectId <= 1 ? mthumbs.length : pl.selectId - 1;
-					else if(c.pressed.yAxis < 0) {
-						if(pl.selectId <= 1) pl.selectId = mthumbs.length;
-						else if(pl.selectId == 3 || pl.selectId == 6 || pl.selectId == 9)
-							pl.selectId -= 2;
-						else pl.selectId--;
-					}
-					else if(c.pressed.yAxis > 0) {
-						if(pl.selectId >= mthumbs.length) pl.selectId = 1;
-						else if(pl.selectId == 2 || pl.selectId == 5 || pl.selectId == 8)
-							pl.selectId += 2;
-						else pl.selectId++;
-					}
 				}
 
-				if(c.pressed.A && pname[i].visible)
-					pl.state = hxd.Math.imin(4, pl.state + 1);
+				if(c.pressed.A) {
+					pl.state = hxd.Math.imin(3, pl.state + 1);
+					if(pl.state == 2 && pl.selectId == Data.chars.get(Random).selectId) {
+						var all = Data.chars.all;
+						while(true) {
+							var ch = all[Std.random(all.length - 1)];
+							if(ch.selectId != pl.selectId) {
+								pl.selectId = ch.selectId; //change id to update model kind
+								pl.selectId = Data.chars.get(Random).selectId; //restore selected cursor
+								break;
+							}
+						}
+					}
+				}
 				if(c.pressed.B)
 					pl.state = hxd.Math.imax(0, pl.state - 1);
 				if(ready && pl.state != 0)
@@ -257,31 +275,21 @@ class ChoosePlayers extends ui.Form
 			else pl.state = 0;
 
 			/////
-			// pl.state = 0 -> not a player : show join
-			// pl.state = 1 -> choix player : pas de join
-			// pl.state = 2 -> choix color : join = Colorselect
-			// pl.state = 3 -> ready : join = buttonOk
+			// pl.state = 0 -> show join
+			// pl.state = 1 -> choose player
+			// pl.state = 2 -> ready
 
-			var join = pjoin[i];
-			join.visible = true;
-			switch(pl.state) {
-				case 0 : join.material.texture = joinTex[0];
-				case 2 : join.material.texture = joinTex[1];
-				default: join.visible = false;
-			}
-			//join.setScale(1 + 0.008 * Math.sin(0.1 * time));
-
-			/*
-			var but = pbutton[i];
-			if(but != null)
-				switch(pl.state) {
-					case 3 : but.material.texture = buttonTex[2];
-					default: but.material.texture = buttonTex[(time % 40) < 20 ? 1 : 0];
-				}*/
-
-			pstate[i].material.texture = stateTex[c != null && c.active ? i + 1 : 0];
+			pl.visible = pl.state != 0;
+			pjoin[i].visible = pl.state == 0;
 			pname[i].material.texture = nameTex[pl.selectId - 1];
-			pname[i].visible = @:privateAccess pl.obj.visible = pname[i].material.texture != null;
+			pname[i].visible = pl.visible;
+			if(pl.state == 2)
+				pstate[i].material.texture = hxd.Res.UI.CharacterSelect.ButtonOk.toTexture();
+			else pstate[i].material.texture = stateTex[c != null && c.active ? i + 1 : 0];
+
+			//
+			mSelect.material.texture = buttonTex[0][(time % 40) < 20 ? 1 : 0];
+			mBack.material.texture = buttonTex[1][(time % 40) < 20 ? 0 : 1];
 		}
 
 		/*
