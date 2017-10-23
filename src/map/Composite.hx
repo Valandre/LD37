@@ -27,7 +27,7 @@ class Composite extends h3d.scene.Renderer {
 	var envColorBlur = new h3d.pass.Blur(2, 3, 1.4);
 	var ambient : h3d.pass.ScreenFx<shaders.Composite>;
 
-	public var final : h3d.mat.Texture;
+	public var finalTex : h3d.mat.Texture;
 
 	public var width = 0;
 	public var height = 0;
@@ -135,14 +135,14 @@ class Composite extends h3d.scene.Renderer {
 		ambient.shader.camera = ctx.camera;
 		ambient.shader.time += ctx.elapsedTime;
 
-		final = myAllocTarget("final", 0, true);
-		setTarget(final);
+		finalTex = myAllocTarget("final", 0, true);
+		setTarget(finalTex);
 		ambient.setGlobals(ctx);
 		ambient.render();
 
 	//fxaa
 		resetTarget();
 		//setTarget(null);
-		antiAliasing.apply(final);
+		antiAliasing.apply(finalTex);
 	}
 }
