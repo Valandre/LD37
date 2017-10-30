@@ -4,7 +4,6 @@ import hxd.Key in K;
 
 class ChooseArena extends ui.Form
 {
-	var obj : h3d.scene.Object;
 	var selector : h3d.scene.Object;
 
 	var ready = false;
@@ -44,6 +43,8 @@ class ChooseArena extends ui.Form
 		for(m in obj.getMeshes())
 			m.material.shadows = false;
 
+		addBg();
+
 		game.s3d.addChild(obj);
 		game.s3d.camera.follow = {pos : obj.getObjectByName("CamScreen"), target : obj.getObjectByName("CamScreen.Target")};
 		game.autoCameraKind = Choose;
@@ -75,21 +76,6 @@ class ChooseArena extends ui.Form
 		for(m in selector.getMeshes())
 			m.material.shadows = false;
 		game.s3d.addChild(selector);
-
-
-/*
-		btBack = new NavigateButton(Texts.navigate.back, this);
-		btBack.onClick = function() {
-			new ui.ChoosePlayers();
-			remove();
-		}
-
-		btNext = new NavigateButton(Texts.navigate.next, this);
-		btNext.onClick = function() {
-			remove();
-			game.state.arenaId = selectId;
-			game.restart();
-		}*/
 
 		updateView();
 		onResize();

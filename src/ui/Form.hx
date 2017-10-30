@@ -5,17 +5,39 @@ import hxd.Key in K;
 class Form extends h2d.Sprite
 {
 	var game : Game;
+	var obj : h3d.scene.Object;
+
+	static var bg : h3d.scene.Object;
 
 	public function new(?parent) {
 		game = Game.inst;
 		if(parent == null) parent = game.s2d;
 		super(parent);
 		game.windows.push(this);
-
 		init();
 	}
 
 	function init() {
+	}
+
+	public function addBg() {
+		if(obj == null) return;
+		var root = obj.getObjectByName("Root");
+		if(root == null) return;
+
+		if(bg == null) {
+			var m = hxd.Res.UI.BG01.Model;
+			bg = game.modelCache.loadModel(m);
+			var a = game.modelCache.loadAnimation(m);
+			if(a != null) {
+				a.loop = true;
+				a.speed = 0.3;
+				bg.playAnimation(a);
+			}
+			for(m in bg.getMeshes())
+				m.material.shadows = false;
+		}
+		obj.addChild(bg);
 	}
 
 	override public function onRemove() {

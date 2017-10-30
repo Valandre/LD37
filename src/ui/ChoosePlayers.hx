@@ -103,6 +103,7 @@ class PlayerSlot {
 			m.material.texture = hxd.Res.load("UI/Selector/SelectorP" + (pid + 1) + ".png").toTexture();
 		}
 		game.s3d.addChild(selector);
+		selector.visible = false;
 	}
 
 	function removeSelector(){
@@ -116,6 +117,7 @@ class PlayerSlot {
 		selector.x = pos.tx;
 		selector.y = pos.ty;
 		selector.z = pos.tz;
+		selector.visible = true;
 	}
 
 	public function remove() {
@@ -126,14 +128,12 @@ class PlayerSlot {
 
 class ChoosePlayers extends ui.Form
 {
-	var obj : h3d.scene.Object;
 	var pname : Array<h3d.scene.Mesh> = [];
 	var pjoin : Array<h3d.scene.Mesh> = [];
 	var pstate : Array<h3d.scene.Mesh> = [];
 	var ppos : Array<h3d.scene.Object> = [];
 	var mthumbs : Array<h3d.scene.Object> = [];
 	var ready = false;
-
 
 	var mSelect : h3d.scene.Mesh;
 	var mBack : h3d.scene.Mesh;
@@ -156,6 +156,7 @@ class ChoosePlayers extends ui.Form
 			a.loop = false;
 			obj.playAnimation(a);
 			obj.currentAnimation.onAnimEnd = function() {
+				//for(s in Select
 				ready = true;
 			}
 		}
@@ -163,6 +164,8 @@ class ChoosePlayers extends ui.Form
 
 		for(m in obj.getMeshes())
 			m.material.shadows = false;
+
+		addBg();
 
 		game.s3d.addChild(obj);
 		game.s3d.camera.follow = {pos : obj.getObjectByName("CamScreen"), target : obj.getObjectByName("CamScreen.Target")};
@@ -207,6 +210,7 @@ class ChoosePlayers extends ui.Form
 		addPlayer(0, ppos[0]);
 
 		//game.setAmbient(0);
+
 	}
 
 	function addPlayer(id, o : h3d.scene.Object) {
@@ -260,24 +264,26 @@ class ChoosePlayers extends ui.Form
 						pl.selectId = pl.selectId <= 1 ? mthumbs.length : pl.selectId - 1;
 				}
 
-				if(c.pressed.A) {
-					pl.state = hxd.Math.imin(3, pl.state + 1);
-					if(pl.state == 2 && pl.selectId == Data.chars.get(Random).selectId) {
-						var all = Data.chars.all;
-						while(true) {
-							var ch = all[Std.random(all.length - 1)];
-							if(ch.selectId != pl.selectId) {
-								pl.selectId = ch.selectId; //change id to update model kind
-								pl.selectId = Data.chars.get(Random).selectId; //restore selected cursor
-								break;
+				if(ready) {
+					if(c.pressed.A) {
+						pl.state = hxd.Math.imin(3, pl.state + 1);
+						if(pl.state == 2 && pl.selectId == Data.chars.get(Random).selectId) {
+							var all = Data.chars.all;
+							while(true) {
+								var ch = all[Std.random(all.length - 1)];
+								if(ch.selectId != pl.selectId) {
+									pl.selectId = ch.selectId; //change id to update model kind
+									pl.selectId = Data.chars.get(Random).selectId; //restore selected cursor
+									break;
+								}
 							}
 						}
 					}
+					if(c.pressed.B)
+						pl.state = hxd.Math.imax(0, pl.state - 1);
+					if(pl.state != 0)
+						pl.setPos(mthumbs[pl.selectId - 1]);
 				}
-				if(c.pressed.B)
-					pl.state = hxd.Math.imax(0, pl.state - 1);
-				if(ready && pl.state != 0)
-					pl.setPos(mthumbs[pl.selectId - 1]);
 			}
 			else pl.state = 0;
 
@@ -289,7 +295,7 @@ class ChoosePlayers extends ui.Form
 			pjoin[i].visible = pl.state == 0;
 			pname[i].material.texture = nameTex[pl.selectId - 1];
 			pname[i].visible = pl.visible;
-			if(pl.state == 2)
+			if(pl.state >= 2)
 				pstate[i].material.texture = hxd.Res.UI.CharacterSelect.ButtonOk.toTexture();
 			else pstate[i].material.texture = stateTex[c != null && c.active ? i + 1 : 0];
 
