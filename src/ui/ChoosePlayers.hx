@@ -10,6 +10,7 @@ class PlayerSlot {
 	var chars = Data.chars.all;
 	var res : hxd.res.Model;
 	var charKind : Data.CharsKind;
+	var outlineShader : shaders.Outline;
 
 	public var pid : Int;
 	public var selectId(default, set) : Int;
@@ -36,22 +37,24 @@ class PlayerSlot {
 	}
 
 	function getModel() {
-		for(c in chars)
-			if(c.selectId == selectId)
-				return hxd.Res.load("Chars/" + c.id.toString() + "01/Model.FBX").toModel();
-		return null;
+		return hxd.Res.load("Chars/" + charKind + "01/Model.FBX").toModel();
 	}
 
 	function getAnimSelection() {
-		for(c in chars)
-			if(c.selectId == selectId)
-				return hxd.Res.load("Chars/" + c.id.toString() + "01/Anim_selection.FBX").toModel();
-		return null;
+		return hxd.Res.load("Chars/" + charKind + "01/Anim_selection.FBX").toModel();
 	}
 
 	function updateModel () {
-		if(obj != null)
+		for(c in chars)
+			if(c.selectId == selectId) {
+				charKind =  c.id;
+				break;
+			}
+
+		if(obj != null) {
 			obj.remove();
+			outlineShader = null;
+		}
 		res = getModel();
 		if(res == null) return;
 
@@ -60,16 +63,58 @@ class PlayerSlot {
 		obj.playAnimation(a);
 		obj.currentAnimation.setFrame(Std.random(a.frameCount));
 		obj.currentAnimation.speed *= 1 - hxd.Math.random(0.1);
-		for(m in obj.getMeshes())
-			m.material.shadows = false;
-		game.s3d.addChild(obj);
 		obj.follow = follow;
+		game.s3d.addChild(obj);
 
-		for(c in chars)
-			if(c.selectId == selectId) {
-				charKind =  c.id;
-				break;
+		for(m in obj.getMeshes())
+			m.material.castShadows = false;
+
+		var res = try {hxd.Res.load("Chars/" + charKind + "01/Texture01_normal.png"); } catch(e : Dynamic) {null;}
+		if(res != null) {
+			var tex = res.toTexture();
+			for(m in obj.getMeshes())
+				m.material.mainPass.addShader(new shaders.NormalMap(tex));
+		}
+
+		//
+/*
+		var t = new shaders.CellShader();
+		t.shadowColor.setColor(0xFF0000);
+		for(m in obj.getMaterials())
+			m.mainPass.addShader(t);
+*/
+		//
+
+		setOutline();
+	}
+
+	function setOutline() {
+		if(outlineShader == null) {
+			outlineShader = new shaders.Outline();
+			outlineShader.size = 0.04;
+			outlineShader.distance = 0.001;
+
+			for( m in obj.getMeshes() ) {
+				if( m.material.name != null && StringTools.startsWith(m.material.name, "FX") )
+					continue;
+
+				var p : h3d.prim.HMDModel = Std.instance(m.primitive, h3d.prim.HMDModel);
+				if( p == null )
+					continue;
+
+				if( !p.hasBuffer("logicNormal") )
+					p.recomputeNormals("logicNormal");
+
+				var multi = Std.instance(m, h3d.scene.MultiMaterial);
+				for( m in (multi != null ? multi.materials : [m.material]) ) {
+					var p = m.allocPass("outline");
+					p.culling = None;
+					p.depthWrite = false;
+					p.addShader(outlineShader);
+				}
 			}
+		}
+		outlineShader.color.setColor(0x322838);
 	}
 
 	function set_selectId(v : Int) {

@@ -60,7 +60,7 @@ class Game extends hxd.App {
 	var ui : ui.Scores;
 	var blackScreen : h2d.Bitmap;
 
-	var bonusMaxCount : Int = 10;
+	var bonusMaxCount : Int = 25;
 
 	public var state : {players : Array<ent.Fairy.Props>, arenaId : Int, stars : Array<Int>};
 

@@ -9,7 +9,25 @@ class SAO implements hxd.inspect.Group {
 	public var blur = new h3d.pass.Blur(2, 3, 2);
 	public function new() {
 	}
+}
 
+class ToonAmbientShader extends hxsl.Shader {
+
+	static var SRC = {
+		@param var shadowColor : Vec3;
+
+		var pixelColor : Vec4;
+		var lightPixelColor : Vec3;
+
+		function __init__fragment() {
+			lightPixelColor = vec3(0,0,0);
+		}
+
+		function fragment() {
+			var k = ((lightPixelColor.r - 0.4) * 10000).clamp(0.,1.);
+			pixelColor.rgb = mix(pixelColor.rgb * shadowColor, pixelColor.rgb, k);
+		}
+	}
 }
 
 class Composite extends h3d.scene.Renderer {
@@ -59,12 +77,15 @@ class Composite extends h3d.scene.Renderer {
 		sao.pass.shader.intensity = 1;
 		sao.pass.shader.bias = 0.05;
 
-		var light = new h3d.scene.DirLight(new h3d.Vector(0.3, -0.2, -0.4), game.s3d);
+/*
+
+		var light = new h3d.scene.DirLight(new h3d.Vector(-0.3, -0.2, -0.4), game.s3d);
 		light.enableSpecular = true;
 		light.color.setColor(0x717678);
 		game.s3d.lightSystem.ambientLight.setColor(0xB1BECE);
 		game.s3d.lightSystem.perPixelLighting = true;
 		game.s3d.lightSystem.shadowLight = light;
+		*/
 
 /*
 		var shadow = Std.instance(getPass("shadow"), h3d.pass.ShadowMap);
@@ -103,6 +124,7 @@ class Composite extends h3d.scene.Renderer {
 		setTarget(colorTex);
 
 		draw("default");
+		draw("outline");
 		setTarget(colorTex);
 		draw("alpha");
 
