@@ -285,7 +285,6 @@ class ChoosePlayers extends ui.Form
 			// pl.state = 0 -> show join
 			// pl.state = 1 -> choose player
 			// pl.state = 2 -> ready
-
 			pl.visible = pl.state != 0;
 			pjoin[i].visible = pl.state == 0;
 			pname[i].material.texture = nameTex[pl.selectId - 1];

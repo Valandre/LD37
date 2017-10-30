@@ -12,11 +12,13 @@ class ChooseArena extends ui.Form
 	var mview : h3d.scene.Mesh;
 	var mname : h3d.scene.Mesh;
 	var mthumbs : Array<h3d.scene.Object> = [];
-	var pbutton : h3d.scene.Mesh;
 
 	var viewTex : Array<h3d.mat.Texture> = [];
 	var nameTex : Array<h3d.mat.Texture> = [];
-	var buttonTex : Array<h3d.mat.Texture> = [];
+	var buttonTex : Array<Array<h3d.mat.Texture>> = [];
+
+	var mSelect : h3d.scene.Mesh;
+	var mBack : h3d.scene.Mesh;
 
 	var selectId = 0;
 
@@ -52,7 +54,6 @@ class ChooseArena extends ui.Form
 
 		mname = obj.getObjectByName("Name").toMesh();
 		mview = obj.getObjectByName("View").toMesh();
-		pbutton = obj.getObjectByName("ButtonP1").toMesh();
 
 		viewTex.push(hxd.Res.UI.WorldSelect.View01.toTexture());
 		viewTex.push(hxd.Res.UI.WorldSelect.View02.toTexture());
@@ -60,9 +61,14 @@ class ChooseArena extends ui.Form
 		nameTex.push(hxd.Res.UI.WorldSelect.Name01.toTexture());
 		nameTex.push(hxd.Res.UI.WorldSelect.Name02.toTexture());
 
-		buttonTex.push(hxd.Res.UI.CharacterSelect.ButtonX01.toTexture());
-		buttonTex.push(hxd.Res.UI.CharacterSelect.ButtonX02.toTexture());
+		//
+		mSelect = obj.getObjectByName("ButtonA").toMesh();
+		mBack = obj.getObjectByName("ButtonB").toMesh();
+		buttonTex = [];
+		buttonTex.push([hxd.Res.UI.CharacterSelect.ButtonA01.toTexture(), hxd.Res.UI.CharacterSelect.ButtonA02.toTexture()]);
+		buttonTex.push([hxd.Res.UI.CharacterSelect.ButtonB01.toTexture(), hxd.Res.UI.CharacterSelect.ButtonB02.toTexture()]);
 
+		//
 		var m = hxd.Res.UI.Selector.Model;
 		selector = game.modelCache.loadModel(m);
 		selector.visible = false;
@@ -111,7 +117,8 @@ class ChooseArena extends ui.Form
 		super.update(dt);
 
 		time += dt;
-		pbutton.material.texture = buttonTex[(time % 40) < 20 ? 1 : 0];
+		mSelect.material.texture = buttonTex[0][(time % 40) < 20 ? 1 : 0];
+		mBack.material.texture = buttonTex[1][(time % 40) < 20 ? 0 : 1];
 
 		var c = game.controllers[0];
 		if(c != null) {
@@ -126,13 +133,13 @@ class ChooseArena extends ui.Form
 				game.restart();
 			}
 
-			if(c.pressed.yAxis < 0) {
+			if(c.pressed.xAxis < 0) {
 				selectId--;
 				if(selectId < 0) selectId = viewTex.length - 1;
 				updateView();
 			}
 
-			if(c.pressed.yAxis > 0) {
+			if(c.pressed.xAxis > 0) {
 				selectId++;
 				if(selectId >= viewTex.length) selectId = 0;
 				updateView();
