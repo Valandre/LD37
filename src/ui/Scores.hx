@@ -125,8 +125,11 @@ class Scores extends h2d.Sprite
 			obj.remove();
 		}
 
-		for(m in obj.getMeshes())
+		for(m in obj.getMeshes()) {
 			m.material.shadows = false;
+			if(m.name != "Square")
+				m.material.mainPass.depthWrite = false;
+		}
 		game.s3d.addChild(obj);
 
 		var cam = game.s3d.camera;

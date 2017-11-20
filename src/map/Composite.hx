@@ -128,12 +128,11 @@ class Composite extends h3d.scene.Renderer {
 		setTarget(colorTex);
 		draw("alpha");
 
-		// additive in separate buffer so it doesn't get affected by shadows
+	// additive in separate buffer so it doesn't get affected by shadows
 		var addTex = myAllocTarget("addColor"); // can't subscale because of Z buffer
 		setTarget(addTex);
 		clear(0);
 		draw("additive");
-
 
 	// blur
 		setTarget(colorTex);
@@ -161,6 +160,8 @@ class Composite extends h3d.scene.Renderer {
 		setTarget(finalTex);
 		ambient.setGlobals(ctx);
 		ambient.render();
+
+
 
 	//fxaa
 		resetTarget();

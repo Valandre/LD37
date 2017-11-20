@@ -108,7 +108,7 @@ class Game extends hxd.App {
 		if(PREFS.music)
 			Sounds.play("Loop");*/
 
-		transition(function(){
+		transition(function() {
 			//new ui.Menu();
 			new ui.ChoosePlayers();
 		} ,false);
