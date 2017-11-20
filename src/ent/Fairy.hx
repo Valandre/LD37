@@ -90,6 +90,7 @@ class Fairy extends Entity
 	var shield : h3d.scene.Mesh;
 	var sensor : h3d.col.Ray;
 	var boxCollide : h3d.scene.Box;
+	var outlineShader : shaders.Outline;
 
 	public var power : Power;
 
@@ -128,6 +129,8 @@ class Fairy extends Entity
 			m.setScale(1.2);
 		}
 
+		setOutline();
+
 		meshRotate(obj);
 		play("stand");
 		obj.currentAnimation.setFrame(Math.random() * (obj.currentAnimation.frameCount - 1));
@@ -139,6 +142,34 @@ class Fairy extends Entity
 		obj.addChild(light);
 		fxParts = new Map();
 		addTrailFx();
+	}
+
+	function setOutline() {
+		if(outlineShader == null) {
+			outlineShader = new shaders.Outline();
+			outlineShader.size = 0.15;
+			outlineShader.distance = 0.001;
+
+			for( m in obj.getMeshes() ) {
+				if( m.material.name != null && StringTools.startsWith(m.material.name, "FX") )
+					continue;
+
+				var p : h3d.prim.HMDModel = Std.instance(m.primitive, h3d.prim.HMDModel);
+				if( p == null )
+					continue;
+
+				if( !p.hasBuffer("logicNormal") )
+					p.recomputeNormals("logicNormal");
+
+				var multi = Std.instance(m, h3d.scene.MultiMaterial);
+				for( m in (multi != null ? multi.materials : [m.material]) ) {
+					var p = m.allocPass("outline");
+					p.culling = None;
+					p.addShader(outlineShader);
+				}
+			}
+		}
+		outlineShader.color.setColor(0x322838);
 	}
 
 	function get_lastWall() {
