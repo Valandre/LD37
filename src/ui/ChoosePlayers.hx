@@ -84,7 +84,6 @@ class PlayerSlot {
 			m.mainPass.addShader(t);
 */
 		//
-
 		setOutline();
 	}
 
