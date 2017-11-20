@@ -33,6 +33,7 @@ class CustomScene extends h3d.scene.Scene
 	}
 
 	public function removeView(view : View) {
+		view.target.dispose();
 		views.remove(view);
 	}
 

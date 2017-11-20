@@ -21,11 +21,6 @@ class ChooseArena extends ui.Form
 
 	var selectId = 0;
 
-	public function new(?parent) {
-		super(parent);
-		//game.setAmbient(1);
-	}
-
 	override function init() {
 		super.init();
 

@@ -4,6 +4,7 @@ class Energy extends Entity
 {
 	var w = 2;
 	var lifeTime = 10.; //seconds
+	var disapear = false;
 
 	public function new()	{
 		game = Game.inst;
@@ -87,36 +88,52 @@ class Energy extends Entity
 	}
 
 
-	function blink() {
-		for(m in obj.getMeshes()) {
-			m.material.blendMode = Alpha;
-			m.material.color.w = (Std.int(lifeTime * 10) % 2) == 0 ? 1 : 0.2;
-		}
+	function kill() {
+		var sc = 1.;
+		game.event.waitUntil(function(dt) {
+			sc *= Math.pow(0.8, dt);
+			obj.setScale(sc);
+			var v = 25 * (1 - sc);
+			for(m in obj.getMeshes())
+				m.material.color.set(v, v, v);
+
+			if(sc < 0.1) {
+				remove();
+				return true;
+			}
+			return false;
+		});
 	}
 
 	override public function update(dt:Float) {
 		super.update(dt);
-		lifeTime -= dt / 60;
-		if(lifeTime < 0) {
-			remove();
-			return;
-		}
-
-		if(lifeTime < 2)
-			blink();
 
 
+		var decrement = true;
 		var sp = 0.3;
 		for(p in game.players) {
-			if(hxd.Math.distance(p.x - x, p.y - y, p.z - z) < p.attractRay) {
+			var d = hxd.Math.distance(p.x - x, p.y - y, p.z - z);
+			if(d < 10) decrement = false;
+			if(d < p.attractRay) {
 				x += (p.x - x) * sp * dt;
 				y += (p.y - y) * sp * dt;
 				z += (p.z - z) * sp * dt;
 			}
-			if(hxd.Math.distance(p.x - x, p.y - y, p.z - z) < 1) {
+			if(d < 1) {
 				remove();
 				p.hitEnergy();
 				break;
+			}
+		}
+
+		if(decrement) {
+			lifeTime -= dt / 60;
+			if(lifeTime < 0) {
+				if(!disapear) {
+					kill();
+					disapear = true;
+				}
+				return;
 			}
 		}
 	}

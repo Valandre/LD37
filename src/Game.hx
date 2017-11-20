@@ -98,8 +98,6 @@ class Game extends hxd.App {
 		state = {players : [], arenaId : 0, stars : [0, 0, 0, 0]};
 
 		windows = [];
-		//new ui.Menu();
-		new ui.ChoosePlayers();
 
 		hxd.Pad.wait(function(p) {
 			controllers.push(new lib.Controller(controllers.length, p));
@@ -110,7 +108,10 @@ class Game extends hxd.App {
 		if(PREFS.music)
 			Sounds.play("Loop");*/
 
-		transition(false);
+		transition(function(){
+			//new ui.Menu();
+			new ui.ChoosePlayers();
+		} ,false);
 	}
 
 	public static function savePrefs() {
@@ -186,7 +187,7 @@ class Game extends hxd.App {
 	function reset() {
 		autoCameraKind = null;
 		while(entities.length > 0)
-			entities[0].remove();
+			entities.pop().remove();
 		while(players.length > 0)
 			players.pop().remove();
 		while(bonus.length > 0)
@@ -202,7 +203,7 @@ class Game extends hxd.App {
 
 		if(world != null) {
 			world.reset();
-			s3d.renderer = null;
+			s3d.renderer = new h3d.scene.Renderer();
 		}
 	}
 
@@ -434,7 +435,7 @@ class Game extends hxd.App {
 			ui.update(dt);
 
 		if(!gameOver) {
-			if(bonus.length < bonusMaxCount && Math.random() < 0.01) {
+			if(bonus.length < bonusMaxCount && Math.random() < 0.05) {
 				var b = new ent.Energy();
 				if(world.collideBounds(b.getBounds()))
 					b.remove();
