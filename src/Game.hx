@@ -501,10 +501,11 @@ class Game extends hxd.App {
 
 	public static var inst : Game;
 	static function main() {
-		inst = new Game();
 		hxd.res.Resource.LIVE_UPDATE = true;
 		hxd.Res.initLocal();
 		Data.load(hxd.Res.data.entry.getText());
 		Texts.load(hxd.Res.texts.entry.getText());
+		inst = new Game();
 	}
+
 }

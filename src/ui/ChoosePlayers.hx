@@ -67,7 +67,7 @@ class PlayerSlot {
 		game.s3d.addChild(obj);
 
 		for(m in obj.getMeshes())
-			m.material.castShadows = false;
+			m.material.shadows = false;
 
 		var res = try {hxd.Res.load("Chars/" + charKind + "01/Texture01_normal.png"); } catch(e : Dynamic) {null;}
 		if(res != null) {
