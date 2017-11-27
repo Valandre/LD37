@@ -16,6 +16,22 @@
 					"lighted": true
 				}
 			}
+		},
+		"World": {
+			"World01": {
+				"Floor01": {
+					"kind": "Alpha",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
+				"Bg": {
+					"kind": "Opaque",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				}
+			}
 		}
 	}
 }
