@@ -268,7 +268,7 @@ class ChoosePlayers extends ui.Form
 		game.state.players = [];
 		for(p in players) {
 			var k = p.getKind();
-			var props : ent.Fairy.Props = {kind : p.state <= 1 ? IA : Player, modelId : k, color : 0};
+			var props : ent.Unit.Props = {kind : p.state <= 1 ? IA : Player, modelId : k, color : 0};
 			if(k != null) game.state.players[p.pid] = props;
 		}
 		new ui.ChooseArena();

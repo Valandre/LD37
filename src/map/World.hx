@@ -95,7 +95,7 @@ class World {
 	}
 
 	var pt = new h3d.col.Point();
-	public function collide(e : ent.Fairy) {
+	public function collide(e : ent.Unit) {
 		for(c in collides) {
 			var r = h3d.col.Ray.fromValues(e.x, e.y, e.z, e.dir.x, e.dir.y, e.dir.z);
 			r.transform(c.m);

@@ -1,7 +1,7 @@
 package ent;
 import hxd.Key in K;
 
-class Player extends Fairy
+class Player extends Unit
 {
 	public function new(props, dir, scale = 1., ?id)	{
 		game = Game.inst;

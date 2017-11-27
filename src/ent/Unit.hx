@@ -62,7 +62,7 @@ class Wall extends h3d.scene.Mesh {
 	}
 }
 
-class Fairy extends Entity
+class Unit extends Entity
 {
 	public var dir : h3d.col.Point;
 	public var dead = false;
@@ -79,12 +79,13 @@ class Fairy extends Entity
 	var speed = 0.;
 	var speedAspi = 0.;
 	var speedBonus = 0.;
+	var oldPos : h3d.col.Point;
 
 	var walls : Array<Wall> = [];
 	var lastWall(get, null) : Wall;
 	var light : h3d.scene.PointLight;
 	var w = 1;
-	var wallSize = 0.3;
+	var wallSize = 0.25;
 	var wallTex : h3d.mat.Texture;
 
 	var shield : h3d.scene.Mesh;
@@ -107,6 +108,7 @@ class Fairy extends Entity
 		wallTex = hxd.Res.load("wall0" + this.id + ".png").toTexture();
 		speed = speedRef;
 		sensor = h3d.col.Ray.fromValues(x, y, z, 0, 0, 0);
+		oldPos = new h3d.col.Point();
 	}
 
 	override public function remove() {
@@ -230,11 +232,10 @@ class Fairy extends Entity
 		wall.material.texture = wallTex;
 		wall.material.texture.wrap = Repeat;
 		wall.scaleX = 0;
-		wall.scaleZ = 0.95;
 
-		wall.x = x - dir.x * 0.05;
-		wall.y = y - dir.y * 0.05;
-		wall.z = z - dir.z * 0.05;
+		wall.x = x - dir.x * wallSize * 0.5;
+		wall.y = y - dir.y * wallSize * 0.5;
+		wall.z = z - dir.z * wallSize * 0.5;
 
 		walls.push(wall);
 		game.world.walls.push({w : wall, n : n.clone()});
@@ -263,18 +264,21 @@ class Fairy extends Entity
 	function checkFaceHit() {
 		if(game.world.inBounds(x, y, z)) return false;
 		do {
-			x -= dir.x * speed * 0.01;
-			y -= dir.y * speed * 0.01;
-			z -= dir.z * speed * 0.01;
+			x -= dir.x * speed * 0.05;
+			y -= dir.y * speed * 0.05;
+			z -= dir.z * speed * 0.05;
 		}
 		while(!game.world.inBounds(x, y, z));
 		return true;
 	}
 
 	function faceRotate() {
+		var p = getSizedPos();
+		x = p.x; y = p.y; z = p.z;
+
 		var wall = lastWall;
 		if(wall != null && !isPowerActive(Ghost))
-			wall.scaleX = hxd.Math.distance(x + dir.x * 0.5 - wall.x, y + dir.y * 0.5 - wall.y, z + dir.z * 0.5 - wall.z);
+			wall.scaleX = hxd.Math.distance(x - wall.x + dir.x * wallSize*2, y - wall.y + dir.y * wallSize*2, z - wall.z + dir.z * wallSize*2);
 
 		fadeTrailFx();
 
@@ -311,11 +315,23 @@ class Fairy extends Entity
 		}
 	}
 
+	function getSizedPos() {
+		//replace la position arrondie au multiple de l'epaisseur d'un mur
+		var p = new h3d.col.Point();
+		p.x = Std.int(x) + Std.int((x % 1) / wallSize) * wallSize;
+		p.y = Std.int(y) + Std.int((y % 1) / wallSize) * wallSize;
+		p.z = Std.int(z) + Std.int((z % 1) / wallSize) * wallSize;
+		return p;
+	}
+
 	function changeDir(v : Int) {
 		if(v == 0) return;
+		var p = getSizedPos();
+		x = p.x; y = p.y; z = p.z;
+
 		var wall = lastWall;
 		if(wall != null && !isPowerActive(Ghost))
-			wall.scaleX = hxd.Math.distance(x + dir.x * wallSize * 0.5 - wall.x, y + dir.y * wallSize * 0.5 - wall.y, z + dir.z * wallSize * 0.5 - wall.z);
+			wall.scaleX = hxd.Math.distance(x - wall.x + dir.x * wallSize * 0.5, y - wall.y + dir.y * wallSize * 0.5, z - wall.z + dir.z * wallSize * 0.5);
 		fadeTrailFx();
 		dir = setDir(dir, v);
 		createWall();
@@ -508,50 +524,33 @@ class Fairy extends Entity
 		if(wall == null) return false;
 
 		var n = worldNormal;
+		var cur = getSizedPos();
+		var dist = hxd.Math.distance(cur.x - oldPos.x, cur.y - oldPos.y, cur.z - oldPos.z);
 
-		var b = obj.getBounds();
-		if(boxCollide == null) {
-			boxCollide = new h3d.scene.Box(game.s3d);
-			boxCollide.visible = false;
-		}
-
-		var sc = 0.4;
-		boxCollide.x = x + n.x * sc;
-		boxCollide.y = y + n.y * sc;
-		boxCollide.z = z + n.z * sc;
-
-		var colBounds = boxCollide.getBounds();
-		colBounds.scaleCenter(sc);
-		colBounds.offset( -dir.x * 0.1, -dir.y * 0.1, -dir.z * 0.1);
-		//var bbox = new h3d.scene.Box(0xFF00FF, colBounds, game.s3d);
-
+		var t = new h3d.col.Point();
 		for(w in game.world.walls) {
-			if(w.w == wall) continue;
-			if(w.w == wall.prev) continue;
+			if(w.w == wall || w.w == wall.prev) continue;
 			if(w.n.x != n.x || w.n.y != n.y || w.n.z != n.z) continue;
 			var b = w.w.getBounds();
-			if(b.collide(colBounds)) {
-				//new h3d.scene.Box(b, false, game.s3d);
-				if(shield != null) {
-					useShield(w.w);
-					return false;
+			var d = 0.;
+			while(d < dist) {
+				t.x = oldPos.x + dir.x * d;
+				t.y = oldPos.y + dir.y * d;
+				t.z = oldPos.z + dir.z * d;
+				if(b.contains(t)) {
+					if(shield != null) {
+						useShield(w.w);
+						return false;
+					}
+					x = t.x;
+					y = t.y;
+					z = t.z;
+					return true;
 				}
-				else destroy();
-				return true;
+				d += wallSize;
 			}
 		}
-/*
-		if(game.players[0] == this){
-			if(box != null) box.remove();
-			box = new h3d.scene.Box(colBounds, false, game.s3d);
-			obj.visible = false;
-		}
-*/
-		if(game.world.collide(this)) {
-			destroy();
-			return true;
-		}
-		return false;
+		return game.world.collide(this);
 	}
 
 	function useShield(w : h3d.scene.Object) {
@@ -651,7 +650,11 @@ class Fairy extends Entity
 
 		if(canMove && !dead) {
 			play("run");
-			hitTest();
+			if(hitTest()) {
+				destroy();
+				return;
+			}
+			oldPos = getSizedPos();
 		}
 
 		if(!isPowerActive(Ghost)) {

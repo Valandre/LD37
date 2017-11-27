@@ -7,7 +7,7 @@ enum CollideDir {
 	Front;
 }
 
-class IA extends Fairy
+class IA extends Unit
 {
 	var time = 0.;
 

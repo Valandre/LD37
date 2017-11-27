@@ -35,7 +35,7 @@ class Game extends hxd.App {
 	public var event : hxd.WaitEvent;
 	public var world : map.World;
 	public var entities : Array<ent.Entity>;
-	public var players : Array<ent.Fairy>;
+	public var players : Array<ent.Unit>;
 	public var bonus : Array<ent.Energy>;
 	public var renderer : map.Composite;
 	public var customScene : map.CustomScene;
@@ -62,7 +62,7 @@ class Game extends hxd.App {
 
 	var bonusMaxCount : Int = 25;
 
-	public var state : {players : Array<ent.Fairy.Props>, arenaId : Int, stars : Array<Int>};
+	public var state : {players : Array<ent.Unit.Props>, arenaId : Int, stars : Array<Int>};
 
 	public var controllers : Array<lib.Controller> = [];
 	public var keys : lib.Controller;
@@ -225,7 +225,7 @@ class Game extends hxd.App {
 		}
 
 		var allChars = Data.chars.all;
-		function addPlayer(k : ent.Entity.EntityKind, dir : h3d.col.Point, ?props : ent.Fairy.Props) {
+		function addPlayer(k : ent.Entity.EntityKind, dir : h3d.col.Point, ?props : ent.Unit.Props) {
 			if(props == null)
 				props = {kind : k, modelId : allChars[Std.random(allChars.length)].id, color : 0 };
 			var pl = k == Player ? new ent.Player(props, dir) : new ent.IA(props, dir);
@@ -275,7 +275,7 @@ class Game extends hxd.App {
 		ambientId = id;
 	}
 
-	public function initCamera(pl : ent.Fairy) {
+	public function initCamera(pl : ent.Unit) {
 		setCameraValues(pl);
 		var cam = new h3d.Camera();
 		cam.pos.x = camPos.x;
@@ -302,7 +302,7 @@ class Game extends hxd.App {
 		return cam;
 	}
 
-	function setCameraValues(pl : ent.Fairy) {
+	function setCameraValues(pl : ent.Unit) {
 		var pn = pl.worldNormal;
 		var dir = pl.dir;
 		var decal = camZ * 0.75;
@@ -313,7 +313,7 @@ class Game extends hxd.App {
 		camTarget = new h3d.col.Point(pl.x + camTargetOffset.x, pl.y + camTargetOffset.y, pl.z  + camTargetOffset.z);
 	}
 
-	function updatePlayerCamera(pl : ent.Fairy, dt : Float) {
+	function updatePlayerCamera(pl : ent.Unit, dt : Float) {
 		setCameraValues(pl);
 
 		var pn = pl.worldNormal;

@@ -140,7 +140,7 @@ class Scores extends h2d.Sprite
 		obj.rotate(0, 0, a);
 	}
 
-	public function nextRound(pl : ent.Fairy) {
+	public function nextRound(pl : ent.Unit) {
 		var t = hxd.Res.UI.Winner.toTile();
 		var bmp = new h2d.Bitmap(t, this);
 		bmp.smooth = true;
