@@ -8,38 +8,23 @@ typedef Props = {
 	color : Int,
 }
 
-enum PowerKind {
-	SpeedUp;
-	Shield;
-	Rewind;
-	Ghost;
-}
-
 private class Power {
-	public var kind : PowerKind;
-	public var value : Float;
+	public var kind : Data.PowerKind;
 	public var time : Float;
+	public var value : Float;
 	public var progress(default, set) : Float = 0;
 	public var active : Bool;
 
-	public function new (k : PowerKind) {
+	var data : Data.Power;
+
+	public function new (k : Data.PowerKind) {
 		kind = k;
+		data = Data.power.get(k);
 	}
 
 	public function start() {
-		switch(kind) {
-			case SpeedUp:
-				value = 0.9;
-				time = 0.25;
-			case Shield:
-				time = 5;
-				value = 2;
-			case Rewind:
-				value = 1;
-				time = 1;
-			case Ghost:
-				time = 3;
-		}
+		time = data.time;
+		value = data.value;
 		progress = 0;
 		active = true;
 	}
@@ -77,7 +62,6 @@ class Unit extends Entity
 	var color : Int = 0xFFFFFF;
 	var speedRef = 0.35;
 	var speed = 0.;
-	var speedAspi = 0.;
 	var speedBonus = 0.;
 	var oldPos : h3d.col.Point;
 
@@ -101,7 +85,7 @@ class Unit extends Entity
 		color = game.COLORS[this.id];
 		this.props = props;
 
-		power = new Power(PowerKind.Shield); //TODO : replace by chars power (use database)!
+		power = new Power(Data.chars.get(props.modelId).powerId);
 
 		super(kind, x, y, z, scale);
 
@@ -252,8 +236,7 @@ class Unit extends Entity
 
 	function move(dt : Float) {
 		speed = Math.min(speedRef, speed + 0.01 * dt);
-		speedAspi += (calcAspiration() - speedAspi) * 0.05 * dt;
-		speed += speedAspi + speedBonus;
+		speed += speedBonus;
 		x += dir.x * speed * dt;
 		y += dir.y * speed * dt;
 		z += dir.z * speed * dt;
@@ -357,29 +340,6 @@ class Unit extends Entity
 			d.x = -tmp * v * -n.y;
 		}
 		return d;
-	}
-
-	function calcAspiration() {
-		return 0.;
-
-		var v = 0.;
-		var r = 1.5;
-
-		sensor.px = x + dir.x; sensor.py = y + dir.y; sensor.pz = z + dir.z;
-
-		var d = setDir(dir, -1);
-		sensor.lx = r * d.x; sensor.ly = r * d.y; sensor.lz = r * d.z;
-
-		var d = sensorCollide(r);
-		if(d != -1) v += r - Math.min(r, d);
-
-		var d = setDir(dir, 1);
-		sensor.lx = r * d.x; sensor.ly = r * d.y; sensor.lz = r * d.z;
-
-		var d = sensorCollide(r);
-		if(d != -1) v += r - Math.min(r, d);
-
-		return v * 0.15;
 	}
 
 	function sensorCollide(ray : Float) {
@@ -570,7 +530,7 @@ class Unit extends Entity
 		while(hit());
 	}
 
-	public function isPowerActive(k : PowerKind) {
+	public function isPowerActive(k : Data.PowerKind) {
 		return power.active && power.kind == k;
 	}
 

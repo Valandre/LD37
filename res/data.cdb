@@ -16,6 +16,10 @@
 				{
 					"typeStr": "3",
 					"name": "selectId"
+				},
+				{
+					"typeStr": "6:power",
+					"name": "power"
 				}
 			],
 			"lines": [
@@ -23,67 +27,78 @@
 					"id": "Raijin",
 					"selectId": 1,
 					"index": 0,
-					"name": "Raijin"
+					"name": "Raijin",
+					"power": "Shield"
 				},
 				{
 					"id": "Venus",
 					"selectId": 2,
 					"index": 1,
-					"name": "Venus"
+					"name": "Venus",
+					"power": "Ghost"
 				},
 				{
 					"id": "Ra",
 					"selectId": 3,
 					"index": 2,
-					"name": "Ra"
+					"name": "Ra",
+					"power": "SpeedUp"
 				},
 				{
 					"name": "Ganesha",
 					"id": "Emperor",
 					"index": 3,
-					"selectId": 4
+					"selectId": 4,
+					"power": "Rewind"
 				},
 				{
 					"id": "Kronos",
 					"selectId": 5,
 					"index": 4,
-					"name": "Kronos"
+					"name": "Kronos",
+					"power": "Shield"
 				},
 				{
 					"id": "Random",
 					"selectId": 6,
 					"index": 5,
-					"name": "Random"
+					"name": "Random",
+					"power": "Shield"
 				},
 				{
 					"id": "Odin",
 					"selectId": 7,
 					"index": 6,
-					"name": "Odin"
+					"name": "Odin",
+					"power": "Shield"
 				},
 				{
 					"id": "ChangE",
 					"selectId": 8,
 					"index": 7,
-					"name": "Chang'E"
+					"name": "Chang'E",
+					"power": "Shield"
 				},
 				{
 					"id": "Quetzacoalt",
 					"selectId": 9,
 					"index": 8,
-					"name": "Quetzacoalt"
+					"name": "Quetzacoalt",
+					"power": "Shield"
 				},
 				{
 					"id": "Chtulu",
 					"selectId": 10,
 					"index": 9,
-					"name": "Chtulu"
+					"name": "Chtulu",
+					"power": "Shield"
 				},
 				{
 					"id": "Spaghetti",
 					"selectId": 11,
 					"index": 10,
-					"name": "Spaghetti"
+					"name": "Spaghetti",
+					"power": "Shield"
 				}
 			],
 			"separators": [],
@@ -124,6 +139,79 @@
 			],
 			"separators": [],
 			"props": {}
+		},
+		{
+			"name": "power",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id"
+				},
+				{
+					"typeStr": "1",
+					"name": "name",
+					"display": null
+				},
+				{
+					"typeStr": "4",
+					"name": "time",
+					"display": null
+				},
+				{
+					"typeStr": "4",
+					"name": "value",
+					"display": null
+				}
+			],
+			"lines": [
+				{
+					"id": "Shield",
+					"name": "Shield",
+					"time": 5,
+					"value": 2
+				},
+				{
+					"id": "SpeedUp",
+					"name": "SpeedUp",
+					"time": 0.25,
+					"value": 0.9
+				},
+				{
+					"id": "Rewind",
+					"name": "Rewind",
+					"time": 1,
+					"value": 1
+				},
+				{
+					"id": "Ghost",
+					"name": "Ghost",
+					"time": 3,
+					"value": 0
+				}
+			],
+			"separators": [],
+			"props": {}
+		},
+		{
+			"name": "power@props",
+			"props": {
+				"hide": true,
+				"isProps": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": [
+				{
+					"typeStr": "4",
+					"name": "time",
+					"display": null
+				},
+				{
+					"typeStr": "4",
+					"name": "value",
+					"display": null
+				}
+			]
 		}
 	],
 	"customTypes": [],

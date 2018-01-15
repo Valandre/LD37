@@ -41,7 +41,7 @@ class Form extends h2d.Sprite
 			var t = 0.;
 			game.event.waitUntil(function(dt) {
 				t += 0.015 * dt;
-				bg.z = 0.05 * Math.sin(t);
+				bg.z = 0.03 * Math.sin(t);
 				return bg == null;
 			});
 		}
