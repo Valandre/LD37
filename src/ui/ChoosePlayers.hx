@@ -113,7 +113,15 @@ class PlayerSlot {
 				}
 			}
 		}
-		outlineShader.color.setColor(0x322838);
+
+		var c = switch(pid){
+			case 0: 0x5980C7;
+			case 1: 0xEB4A49;
+			case 2: 0xFFC153;
+			case 3: 0x66AF73;
+			default: 0;
+		}
+		outlineShader.color.setColor(c);
 	}
 
 	function set_selectId(v : Int) {
