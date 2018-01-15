@@ -2,7 +2,7 @@ import hxd.Key in K;
 import hxd.Res;
 import lib.Controller;
 import map.CustomScene;
-import map.Composite;
+import map.WorldComposite;
 import map.World;
 //import Sounds;
 import ui.Menu;
@@ -37,7 +37,8 @@ class Game extends hxd.App {
 	public var entities : Array<ent.Entity>;
 	public var players : Array<ent.Unit>;
 	public var bonus : Array<ent.Energy>;
-	public var renderer : map.Composite;
+	public var worldRenderer : map.WorldComposite;
+	public var uiRenderer : map.UIComposite;
 	public var customScene : map.CustomScene;
 
 	public var size = 60;
@@ -75,7 +76,10 @@ class Game extends hxd.App {
 	override function init() {
 		customScene = new map.CustomScene();
 		setScene(customScene);
-		renderer = new map.Composite();
+		worldRenderer = new map.WorldComposite();
+
+		uiRenderer = new map.UIComposite();
+		s3d.renderer = uiRenderer;
 
 		/*
 		try {
@@ -211,17 +215,17 @@ class Game extends hxd.App {
 		entities = [];
 		if(world != null) world.remove();
 		world = new map.World(size, state.arenaId );
-		s3d.renderer = renderer;
+		s3d.renderer = worldRenderer;
 
 		var nbPlayers = 0;
 		for(p in state.players)
 			if(p.kind == Player) nbPlayers++;
 
 		switch(nbPlayers) {
-			case 1 : renderer.width = 0; renderer.height = 0;
-			case 2 : renderer.width = 1; renderer.height = 0;
-			case 3, 4 : renderer.width = 1; renderer.height = 1;
-			default : renderer.width = 0; renderer.height = 0;
+			case 1 : worldRenderer.width = 0; worldRenderer.height = 0;
+			case 2 : worldRenderer.width = 1; worldRenderer.height = 0;
+			case 3, 4 : worldRenderer.width = 1; worldRenderer.height = 1;
+			default : worldRenderer.width = 0; worldRenderer.height = 0;
 		}
 
 		var allChars = Data.chars.all;
@@ -233,7 +237,7 @@ class Game extends hxd.App {
 			var cam = initCamera(pl);
 
 			if(players.length <= nbPlayers) {
-				var tex = new h3d.mat.Texture(s2d.width >> renderer.width, s2d.height >> renderer.height, [Target]);
+				var tex = new h3d.mat.Texture(s2d.width >> worldRenderer.width, s2d.height >> worldRenderer.height, [Target]);
 				customScene.addView(pl.id, cam, tex);
 				var b = new h2d.Bitmap(h2d.Tile.fromTexture(tex), s2d);
 				b.blendMode = None;
@@ -480,7 +484,7 @@ class Game extends hxd.App {
 		for(i in 0...customScene.views.length) {
 			var v = customScene.views[i];
 			v.target.dispose();
-			v.target = new h3d.mat.Texture(s2d.width >> renderer.width, s2d.height >> renderer.height, [Target]);
+			v.target = new h3d.mat.Texture(s2d.width >> worldRenderer.width, s2d.height >> worldRenderer.height, [Target]);
 			bmpViews[i].tile = h2d.Tile.fromTexture(v.target);
 		}
 
