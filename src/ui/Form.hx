@@ -31,11 +31,19 @@ class Form extends h2d.Sprite
 			var a = game.modelCache.loadAnimation(m);
 			if(a != null) {
 				a.loop = true;
-				a.speed = 0.3;
+				a.speed = 0.15;
 				bg.playAnimation(a);
 			}
 			for(m in bg.getMeshes())
 				m.material.shadows = false;
+
+			bg.setScale(1.1);
+			var t = 0.;
+			game.event.waitUntil(function(dt) {
+				t += 0.015 * dt;
+				bg.z = 0.05 * Math.sin(t);
+				return bg == null;
+			});
 		}
 		obj.addChild(bg);
 	}
