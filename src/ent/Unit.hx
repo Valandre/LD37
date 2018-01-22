@@ -216,7 +216,7 @@ class Unit extends Entity
 
 
 		wall.material.mainPass.culling = None;
-		//wall.material.blendMode = Add;
+		wall.material.blendMode = Alpha;
 		wall.material.texture = wallTex;
 		wall.material.texture.wrap = Repeat;
 		wall.scaleX = 0;
@@ -406,8 +406,16 @@ class Unit extends Entity
 	function destroy() {
 		dead = true;
 		var wall = lastWall;
-		if(wall != null && !isPowerActive(Ghost))
+		if(wall != null && !isPowerActive(Ghost)) {
 			wall.scaleX = hxd.Math.distance(x - wall.x, y - wall.y, z - wall.z);
+			/*
+			if(colWithWall != null) {
+				var b = colWithWall.w.getBounds();
+				while(b.contains(new h3d.col.Point(wall.x + wall.dir.x * wall.scaleX, wall.y + wall.dir.y * wall.scaleX, wall.z + wall.dir.z * wall.scaleX))) {
+					wall.scaleX -= wallSize;
+				}
+			}*/
+		}
 
 		obj.visible = false;
 		fadeTrailFx();
@@ -482,6 +490,7 @@ class Unit extends Entity
 	}
 
 	var box : h3d.scene.Box;
+	var colWithWall = null;
 	function hitTest() {
 		if(!enableCollides) return false;
 		var wall = lastWall;
@@ -509,9 +518,10 @@ class Unit extends Entity
 					x = t.x;
 					y = t.y;
 					z = t.z;
+					colWithWall = w;
 					return true;
 				}
-				d += wallSize;
+				d += wallSize * 0.5;
 			}
 		}
 		return game.world.collide(this);

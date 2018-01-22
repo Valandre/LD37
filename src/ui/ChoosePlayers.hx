@@ -196,6 +196,9 @@ class ChoosePlayers extends ui.Form
 	var mSelect : h3d.scene.Mesh;
 	var mBack : h3d.scene.Mesh;
 
+	var mUp : h3d.scene.Mesh;
+	var mDown : h3d.scene.Mesh;
+
 	var nameTex : Array<h3d.mat.Texture> = [];
 	var stateTex : Array<h3d.mat.Texture> = [];
 	var slotTex : Array<h3d.mat.Texture> = [];
@@ -215,7 +218,6 @@ class ChoosePlayers extends ui.Form
 			a.loop = false;
 			obj.playAnimation(a);
 			obj.currentAnimation.onAnimEnd = function() {
-				//for(s in Select
 				ready = true;
 			}
 		}
@@ -270,9 +272,11 @@ class ChoosePlayers extends ui.Form
 		//
 		mSelect = obj.getObjectByName("ButtonA").toMesh();
 		mBack = obj.getObjectByName("ButtonB").toMesh();
+		mUp = obj.getObjectByName("ButtonUp").toMesh();
 		buttonTex = [];
 		buttonTex.push([hxd.Res.UI.CharacterSelect.ButtonA01.toTexture(), hxd.Res.UI.CharacterSelect.ButtonA02.toTexture()]);
 		buttonTex.push([hxd.Res.UI.CharacterSelect.ButtonB01.toTexture(), hxd.Res.UI.CharacterSelect.ButtonB02.toTexture()]);
+		buttonTex.push([hxd.Res.UI.CharacterSelect.ButtonUp01.toTexture(), hxd.Res.UI.CharacterSelect.ButtonUp02.toTexture()]);
 
 		//iniy player 1
 		addPlayer(0, ppos[0]);
@@ -376,6 +380,7 @@ class ChoosePlayers extends ui.Form
 			//
 			mSelect.material.texture = buttonTex[0][(time % 40) < 20 ? 1 : 0];
 			mBack.material.texture = buttonTex[1][(time % 40) < 20 ? 0 : 1];
+			mUp.material.texture = buttonTex[2][((10 + time) % 40) < 20 ? 0 : 1];
 		}
 
 		/*

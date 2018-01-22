@@ -14,6 +14,7 @@ class View {
 
 class CustomScene extends h3d.scene.Scene
 {
+	var game = Game.inst;
 	public var views : Array<View>;
 
 	public function new() {
@@ -53,14 +54,27 @@ class CustomScene extends h3d.scene.Scene
 		for(v in views) {
 			updatePlayers(v.id);
 			camera = v.camera;
+			updateWalls();
 			engine.pushTarget(v.target);
 			super.render(engine);
 			engine.popTarget();
 		}
 	}
 
+	function updateWalls() {
+		var dir = camera.target.sub(camera.pos);
+		dir.normalize();
+		var d = new h3d.col.Point(dir.x, dir.y, dir.z);
+		for(w in game.world.walls) {
+			var c = d.dot(w.n);
+			var a = 1 - c;
+			w.w.visible = a > 0.3;
+			w.w.material.color.w = a > 0.7 ? 1 : a;
+		}
+	}
+
 	function updatePlayers(id : Int) {
-		var players = Game.inst.players;
+		var players = game.players;
 		for(p in players) {
 			if(p.dead) continue;
 			@:privateAccess p.obj.visible = true;
