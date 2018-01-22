@@ -183,6 +183,7 @@ class ChoosePlayers extends ui.Form
 	var pname : Array<h3d.scene.Mesh> = [];
 	var pjoin : Array<h3d.scene.Mesh> = [];
 	var pstate : Array<h3d.scene.Mesh> = [];
+	var pslot : Array<h3d.scene.Mesh> = [];
 	var ppos : Array<h3d.scene.Object> = [];
 	var mthumbs : Array<h3d.scene.Object> = [];
 	var ready = false;
@@ -192,6 +193,7 @@ class ChoosePlayers extends ui.Form
 
 	var nameTex : Array<h3d.mat.Texture> = [];
 	var stateTex : Array<h3d.mat.Texture> = [];
+	var slotTex : Array<h3d.mat.Texture> = [];
 	var buttonTex : Array<Array<h3d.mat.Texture>> = [];
 
 	var players : Array<PlayerSlot> = [];
@@ -242,6 +244,7 @@ class ChoosePlayers extends ui.Form
 		for(i in 0...4) {
 			pname.push(obj.getObjectByName("NameP" + (i + 1)).toMesh());
 			pjoin.push(obj.getObjectByName("JoinP" + (i + 1)).toMesh());
+			pslot.push(obj.getObjectByName("SlotP" + (i + 1)).toMesh());
 			pstate.push(obj.getObjectByName("StateP" + (i + 1)).toMesh());
 			ppos.push(obj.getObjectByName("PosP" + (i + 1)));
 		}
@@ -249,6 +252,14 @@ class ChoosePlayers extends ui.Form
 		stateTex.push(hxd.Res.UI.CharacterSelect.StateCPU.toTexture());
 		for(i in 0...4)
 			stateTex.push(hxd.Res.load("UI/CharacterSelect/StateP" + (i + 1) + ".png").toTexture());
+
+
+		for(i in 0...9)
+			slotTex.push(hxd.Res.load("UI/CharacterSelect/Slot0" + (i + 1) + ".png").toTexture());
+		pslot[0].material.texture = slotTex[1];
+		pslot[1].material.texture = slotTex[3];
+		pslot[2].material.texture = slotTex[4];
+		pslot[3].material.texture = slotTex[6];
 
 
 		//
