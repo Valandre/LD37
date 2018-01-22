@@ -29,8 +29,6 @@ class Game extends hxd.App {
 		return prefs;
 	}
 
-	public var COLORS = [0xFFFFFF, 0xFF511C, 0x02DAD8, 0xA1F522, 0xF5227A];
-
 	public var modelCache : h3d.prim.ModelCache;
 	public var event : hxd.WaitEvent;
 	public var world : map.World;
@@ -231,7 +229,7 @@ class Game extends hxd.App {
 		var allChars = Data.chars.all;
 		function addPlayer(k : ent.Entity.EntityKind, dir : h3d.col.Point, ?props : ent.Unit.Props) {
 			if(props == null)
-				props = {kind : k, modelId : allChars[Std.random(allChars.length)].id, color : 0 };
+				props = {kind : k, modelId : allChars[Std.random(allChars.length)].id, colorId : 0 };
 			var pl = k == Player ? new ent.Player(props, dir) : new ent.IA(props, dir);
 			players.push(pl);
 			var cam = initCamera(pl);

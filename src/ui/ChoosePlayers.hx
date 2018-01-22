@@ -16,12 +16,19 @@ class PlayerSlot {
 	public var selectId(default, set) : Int;
 	public var state(default, set) : Int;
 	public var visible(default, set) : Bool;
-	public var colorId = 0;
+	public var colorId(default, set) = 0;
 
 	public function new(pid, follow) {
 		game = Game.inst;
 		this.pid = pid;
 		this.follow = follow;
+		this.colorId = switch(pid) {
+			case 0 : 1;
+			case 1 : 3;
+			case 2 : 4;
+			case 3 : 7;
+			default : 0;
+		}
 
 		while(true) {
 			var id = chars[Std.random(chars.length)].selectId;
@@ -30,6 +37,12 @@ class PlayerSlot {
 				break;
 			}
 		}
+	}
+
+	function set_colorId(v : Int) {
+		colorId = v;
+		if(obj != null) setOutline();
+		return colorId;
 	}
 
 	public function getKind() {
@@ -78,21 +91,13 @@ class PlayerSlot {
 			}
 		}
 
-		//
-/*
-		var t = new shaders.CellShader();
-		t.shadowColor.setColor(0xFF0000);
-		for(m in obj.getMaterials())
-			m.mainPass.addShader(t);
-*/
-		//
 		setOutline();
 	}
 
 	function setOutline() {
 		if(outlineShader == null) {
 			outlineShader = new shaders.Outline();
-			outlineShader.size = 0.04;
+			outlineShader.size = 0.06;
 			outlineShader.distance = 0.001;
 
 			for( m in obj.getMeshes() ) {
@@ -119,8 +124,8 @@ class PlayerSlot {
 	}
 
 	function getColor() {
-		var res = hxd.Res.load("wall0" + (colorId + 1) + ".png");
-		var color = 0;
+		var res = try { hxd.Res.load("wall0" + (colorId + 1) + ".png"); } catch(e : hxd.res.NotFound) { null; };
+		var color = res == null ? 0 : res.toBitmap().getPixel(0, 0);
 		return color;
 	}
 
@@ -259,7 +264,7 @@ class ChoosePlayers extends ui.Form
 		pslot[0].material.texture = slotTex[1];
 		pslot[1].material.texture = slotTex[3];
 		pslot[2].material.texture = slotTex[4];
-		pslot[3].material.texture = slotTex[6];
+		pslot[3].material.texture = slotTex[7];
 
 
 		//
@@ -273,7 +278,6 @@ class ChoosePlayers extends ui.Form
 		addPlayer(0, ppos[0]);
 
 		//game.setAmbient(0);
-
 	}
 
 	function addPlayer(id, o : h3d.scene.Object) {
@@ -287,7 +291,7 @@ class ChoosePlayers extends ui.Form
 		game.state.players = [];
 		for(p in players) {
 			var k = p.getKind();
-			var props : ent.Unit.Props = {kind : p.state <= 1 ? IA : Player, modelId : k, color : 0};
+			var props : ent.Unit.Props = {kind : p.state <= 1 ? IA : Player, modelId : k, colorId : p.colorId};
 			if(k != null) game.state.players[p.pid] = props;
 		}
 		new ui.ChooseArena();
@@ -321,10 +325,14 @@ class ChoosePlayers extends ui.Form
 			var pl = players[i];
 			if(c != null && c.active) {
 				if(pl.state == 1) {
-					if(c.pressed.xAxis > 0 || c.pressed.yAxis > 0)
+					if(c.pressed.xAxis > 0 )
 						pl.selectId = pl.selectId >= mthumbs.length ? 1 : pl.selectId + 1;
-					else if(c.pressed.xAxis < 0 || c.pressed.yAxis < 0)
+					else if(c.pressed.xAxis < 0)
 						pl.selectId = pl.selectId <= 1 ? mthumbs.length : pl.selectId - 1;
+					if(c.pressed.yAxis > 0 )
+						pl.colorId = pl.colorId == slotTex.length - 1 ? 0 : pl.colorId + 1;
+					else if(c.pressed.yAxis < 0)
+						pl.colorId = pl.colorId == 0 ? slotTex.length - 1 : pl.colorId - 1;
 				}
 
 				if(ready) {
@@ -352,7 +360,7 @@ class ChoosePlayers extends ui.Form
 
 			/////
 			// pl.state = 0 -> show join
-			// pl.state = 1 -> choose player
+			// pl.state = 1 -> choose player + color
 			// pl.state = 2 -> ready
 			pl.visible = pl.state != 0;
 			pjoin[i].visible = pl.state == 0;
@@ -360,7 +368,10 @@ class ChoosePlayers extends ui.Form
 			pname[i].visible = pl.visible;
 			if(pl.state >= 2)
 				pstate[i].material.texture = hxd.Res.UI.CharacterSelect.ButtonOk.toTexture();
-			else pstate[i].material.texture = stateTex[c != null && c.active ? i + 1 : 0];
+			else {
+				pstate[i].material.texture = stateTex[c != null && c.active ? i + 1 : 0];
+				pslot[i].material.texture = slotTex[pl.colorId];
+			}
 
 			//
 			mSelect.material.texture = buttonTex[0][(time % 40) < 20 ? 1 : 0];

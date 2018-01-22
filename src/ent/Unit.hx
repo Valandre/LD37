@@ -5,7 +5,7 @@ import lib.Controller;
 typedef Props = {
 	kind : Entity.EntityKind,
 	modelId : Data.CharsKind,
-	color : Int,
+	colorId : Int,
 }
 
 private class Power {
@@ -59,7 +59,6 @@ class Unit extends Entity
 	public var attractRay = 3;
 
 	var props : Props;
-	var color : Int = 0xFFFFFF;
 	var speedRef = 0.35;
 	var speed = 0.;
 	var speedBonus = 0.;
@@ -82,17 +81,22 @@ class Unit extends Entity
 	public function new(kind, props, x = 0., y = 0., z = 0., scale = 1., ?id) {
 		if(id == null) this.id = game.players.length + 1;
 		else this.id = id;
-		color = game.COLORS[this.id];
 		this.props = props;
 
 		power = new Power(Data.chars.get(props.modelId).powerId);
 
 		super(kind, x, y, z, scale);
 
-		wallTex = hxd.Res.load("wall0" + this.id + ".png").toTexture();
+		wallTex = hxd.Res.load("wall0" + (props.colorId + 1) + ".png").toTexture();
 		speed = speedRef;
 		sensor = h3d.col.Ray.fromValues(x, y, z, 0, 0, 0);
 		oldPos = new h3d.col.Point();
+	}
+
+	function getColor() {
+		var res = try { hxd.Res.load("wall0" + (props.colorId + 1) + ".png"); } catch(e : hxd.res.NotFound) { null; };
+		var color = res == null ? 0 : res.toBitmap().getPixel(0, 0);
+		return color;
 	}
 
 	override public function remove() {
@@ -122,7 +126,7 @@ class Unit extends Entity
 		obj.currentAnimation.setFrame(Math.random() * (obj.currentAnimation.frameCount - 1));
 
 		light = new h3d.scene.PointLight();
-		light.color.setColor(color);
+		light.color.setColor(getColor());
 		light.params = new h3d.Vector(0.5, 0.1, 0.02);
 		light.y += 1;
 		obj.addChild(light);
@@ -133,7 +137,7 @@ class Unit extends Entity
 	function setOutline() {
 		if(outlineShader == null) {
 			outlineShader = new shaders.Outline();
-			outlineShader.size = 0.15;
+			outlineShader.size = 0.3;
 			outlineShader.distance = 0.001;
 
 			for( m in obj.getMeshes() ) {
@@ -155,7 +159,7 @@ class Unit extends Entity
 				}
 			}
 		}
-		outlineShader.color.setColor(0x322838);
+		outlineShader.color.setColor(getColor());
 	}
 
 	function get_lastWall() {
