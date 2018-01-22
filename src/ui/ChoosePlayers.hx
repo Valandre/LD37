@@ -169,12 +169,28 @@ class PlayerSlot {
 		selector = null;
 	}
 
+	var posInitialized = false;
 	public function setPos(o : h3d.scene.Object) {
 		var pos = o.getAbsPos();
-		selector.x = pos.tx;
-		selector.y = pos.ty;
-		selector.z = pos.tz;
+		var curId = selectId;
+
 		selector.visible = true;
+		if(!posInitialized) {
+			posInitialized = true;
+			selector.x = pos.tx;
+			selector.y = pos.ty;
+			selector.z = pos.tz;
+			return;
+		}
+
+		game.event.waitUntil(function(dt) {
+			if(curId != selectId) return true;
+			selector.x += (pos.tx - selector.x) * 0.5 * dt;
+			selector.y += (pos.ty - selector.y) * 0.5 * dt;
+			selector.z += (pos.tz - selector.z) * 0.5 * dt;
+
+			return(pos.tx - selector.x < 0.01 && pos.ty - selector.y < 0.01 && pos.tz - selector.z < 0.01);
+		});
 	}
 
 	public function remove() {
