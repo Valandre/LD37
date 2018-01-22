@@ -16,7 +16,7 @@ class PlayerSlot {
 	public var selectId(default, set) : Int;
 	public var state(default, set) : Int;
 	public var visible(default, set) : Bool;
-	public var color = 0;
+	public var colorId = 0;
 
 	public function new(pid, follow) {
 		game = Game.inst;
@@ -72,8 +72,10 @@ class PlayerSlot {
 		var res = try {hxd.Res.load("Chars/" + charKind + "01/Texture01_normal.png"); } catch(e : Dynamic) {null;}
 		if(res != null) {
 			var tex = res.toTexture();
-			for(m in obj.getMeshes())
+			for(m in obj.getMeshes()) {
+
 				m.material.mainPass.addShader(new shaders.NormalMap(tex));
+			}
 		}
 
 		//
@@ -113,15 +115,13 @@ class PlayerSlot {
 				}
 			}
 		}
+		outlineShader.color.setColor(getColor());
+	}
 
-		var c = switch(pid){
-			case 0: 0x5980C7;
-			case 1: 0xEB4A49;
-			case 2: 0xFFC153;
-			case 3: 0x66AF73;
-			default: 0;
-		}
-		outlineShader.color.setColor(c);
+	function getColor() {
+		var res = hxd.Res.load("wall0" + (colorId + 1) + ".png");
+		var color = 0;
+		return color;
 	}
 
 	function set_selectId(v : Int) {
