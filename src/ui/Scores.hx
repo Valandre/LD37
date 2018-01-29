@@ -94,13 +94,11 @@ private class PlayerScore extends h2d.Flow {
 class Scores extends h2d.Sprite
 {
 	var game : Game;
-	var onReady : Void -> Void;
 	var scores : Array<PlayerScore> = [];
 
-	public function new(?parent, ?onReady) {
+	public function new(?parent) {
 		super(parent);
 		game = Game.inst;
-		this.onReady = onReady;
 
 		game.setAmbient(1);
 		init();
@@ -110,34 +108,8 @@ class Scores extends h2d.Sprite
 		for(i in 0...game.players.length)
 			scores.push(new PlayerScore(this, game.players[i].id));
 
-		game.event.wait(1, function() start());
+		game.event.wait(1, function() game.startRace());
 		onResize();
-	}
-
-	function start() {
-		var m = hxd.Res.UI.Countdown.Model;
-		var obj = game.modelCache.loadModel(m);
-		var a = game.modelCache.loadAnimation(m);
-		a.loop = false;
-		obj.playAnimation(a);
-		obj.currentAnimation.onAnimEnd = function() {
-			if(onReady != null) onReady();
-			obj.remove();
-		}
-
-		for(m in obj.getMeshes()) {
-			m.material.shadows = false;
-			if(m.name != "Square")
-				m.material.mainPass.depthWrite = false;
-		}
-		game.s3d.addChild(obj);
-
-		var cam = game.s3d.camera;
-		var a = hxd.Math.atan2(cam.pos.y - cam.target.y, cam.pos.x - cam.target.x);
-		obj.x = cam.target.x;
-		obj.y = cam.target.y;
-		obj.z = cam.target.z;
-		obj.rotate(0, 0, a);
 	}
 
 	public function nextRound(pl : ent.Unit) {

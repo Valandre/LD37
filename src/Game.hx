@@ -39,6 +39,8 @@ class Game extends hxd.App {
 	public var uiRenderer : map.UIComposite;
 	public var customScene : map.CustomScene;
 
+	var countDown : h3d.scene.Object;
+
 	public var size = 60;
 	var camPos : h3d.col.Point;
 	var camTarget : h3d.col.Point;
@@ -219,6 +221,8 @@ class Game extends hxd.App {
 		for(p in state.players)
 			if(p.kind == Player) nbPlayers++;
 
+//nbPlayers = 4;
+
 		switch(nbPlayers) {
 			case 1 : worldRenderer.width = 0; worldRenderer.height = 0;
 			case 2 : worldRenderer.width = 1; worldRenderer.height = 0;
@@ -263,12 +267,54 @@ class Game extends hxd.App {
 		}
 
 		if(ui != null) ui.remove();
-		ui = new ui.Scores(s2d, function() {
+		ui = new ui.Scores(s2d);
+		onResize();
+	}
+
+	public function startRace() {
+		var m = hxd.Res.UI.Countdown.Model;
+		countDown = modelCache.loadModel(m);
+		s3d.addChild(countDown);
+
+		var a = modelCache.loadAnimation(m);
+		a.loop = false;
+		countDown.playAnimation(a);
+		countDown.currentAnimation.onAnimEnd = function() {
 			gameOver = false;
 			for(p in players)
 				p.canMove = true;
-		});
-		onResize();
+			countDown.remove();
+		}
+
+		for(m in countDown.getMeshes()) {
+			m.material.shadows = false;
+			if(m.name != "Square")
+				m.material.mainPass.depthWrite = false;
+		}
+
+
+		var cam = s3d.camera;
+	/*	var cam = new h3d.Camera();
+		cam.pos.set(0, 7.68, 0);
+		cam.target.set(0, 0, 0);
+		cam.fovY = 80;
+		cam.up.set(0, 0, 1);
+
+		countDown.name = "ui";
+
+		var tex = new h3d.mat.Texture(s2d.width, s2d.height, [Target]);
+		tex.clear(0, 0);
+		customScene.addView(-1, cam, tex);
+		var b = new h2d.Bitmap(h2d.Tile.fromTexture(tex), s2d);
+		b.blendMode = Alpha;
+		bmpViews.push(b);*/
+
+
+		var a = hxd.Math.atan2(cam.pos.y - cam.target.y, cam.pos.x - cam.target.x);
+		countDown.x = cam.target.x;
+		countDown.y = cam.target.y;
+		countDown.z = cam.target.z;
+		countDown.rotate(0, 0, a);
 	}
 
 	public function setAmbient(id) {
@@ -479,12 +525,22 @@ class Game extends hxd.App {
 		if(ui != null) ui.onResize();
 
 		//
+		/*
 		for(i in 0...customScene.views.length) {
 			var v = customScene.views[i];
 			v.target.dispose();
-			v.target = new h3d.mat.Texture(s2d.width >> worldRenderer.width, s2d.height >> worldRenderer.height, [Target]);
+
+			if(v.id == -1) {
+				//ui
+				v.target = new h3d.mat.Texture(s2d.width, s2d.height, [Target]);
+				v.target.clear(0, 0);
+			}
+			else {
+				//player
+				v.target = new h3d.mat.Texture(s2d.width >> worldRenderer.width, s2d.height >> worldRenderer.height, [Target]);
+			}
 			bmpViews[i].tile = h2d.Tile.fromTexture(v.target);
-		}
+		}*/
 
 		for(i in 0...bmpViews.length) {
 			var b = bmpViews[i];
