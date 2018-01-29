@@ -525,7 +525,7 @@ class Game extends hxd.App {
 		if(ui != null) ui.onResize();
 
 		//
-		/*
+
 		for(i in 0...customScene.views.length) {
 			var v = customScene.views[i];
 			v.target.dispose();
@@ -540,7 +540,7 @@ class Game extends hxd.App {
 				v.target = new h3d.mat.Texture(s2d.width >> worldRenderer.width, s2d.height >> worldRenderer.height, [Target]);
 			}
 			bmpViews[i].tile = h2d.Tile.fromTexture(v.target);
-		}*/
+		}
 
 		for(i in 0...bmpViews.length) {
 			var b = bmpViews[i];

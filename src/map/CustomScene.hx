@@ -54,17 +54,19 @@ class CustomScene extends h3d.scene.Scene
 		for(v in views) {
 			if(v.id == -1) {
 				//ui
+				/*
 				for(i in 0...game.s3d.numChildren) {
 					var o = game.s3d.getChildAt(i);
 					o.visible = o.name == "ui";
-				}
+				}*/
 				camera = v.camera;
 			}
 			else {
+				/*
 				for(i in 0...game.s3d.numChildren) {
 					var o = game.s3d.getChildAt(i);
 					o.visible = o.name != "ui";
-				}
+				}*/
 				//player view
 				updatePlayers(v.id);
 				camera = v.camera;
