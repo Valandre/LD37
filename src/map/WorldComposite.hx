@@ -44,6 +44,7 @@ class WorldComposite extends h3d.scene.DefaultRenderer {
 	var colorBlur = new h3d.pass.Blur(2, 1, 2);
 	var envColorBlur = new h3d.pass.Blur(2, 3, 1.4);
 	var ambient : h3d.pass.ScreenFx<shaders.Composite>;
+	var uiAmbient : h3d.pass.ScreenFx<shaders.CompositeUI>;
 
 	public var finalTex : h3d.mat.Texture;
 
@@ -77,6 +78,8 @@ class WorldComposite extends h3d.scene.DefaultRenderer {
 		sao.pass.shader.intensity = 1;
 		sao.pass.shader.bias = 0.05;
 
+		uiAmbient = new h3d.pass.ScreenFx(new shaders.CompositeUI());
+
 /*
 
 		var light = new h3d.scene.DirLight(new h3d.Vector(-0.3, -0.2, -0.4), game.s3d);
@@ -100,6 +103,39 @@ class WorldComposite extends h3d.scene.DefaultRenderer {
 	}
 
 	override function render() {
+
+		switch(game.s3d.name) {
+			case "uiAlpha":
+				clear(0);
+				super.render();
+				//uiRender();
+			default:
+				defaultRender();
+		}
+	}
+
+	function uiRender() {
+		var colorTex = allocTarget("color");
+		setTarget(colorTex);
+		clear(0, 1);
+
+		draw("default");
+		def.draw(getSort("alpha"));
+
+	// ambient
+		uiAmbient.shader.color = colorTex;
+		finalTex = allocTarget("final", 0, true);
+		setTarget(finalTex);
+		uiAmbient.setGlobals(ctx);
+		uiAmbient.render();
+
+	//fxaa
+		resetTarget();
+		antiAliasing.apply(finalTex);
+	}
+
+
+	function defaultRender() {
 		shadow.draw(get("shadow"));
 
 		var colorTex, depthTex;

@@ -91,30 +91,106 @@ private class PlayerScore extends h2d.Flow {
 }
 
 
-class Scores extends h2d.Sprite
+class GameUI
 {
 	var game : Game;
-	var scores : Array<PlayerScore> = [];
+	//var scores : Array<PlayerScore> = [];
 
-	public function new(?parent) {
-		super(parent);
+	var root : h3d.scene.Object;
+	var countDown : h3d.scene.Object;
+
+	public function new() {
 		game = Game.inst;
-
 		game.setAmbient(1);
 		init();
 	}
 
 	function init() {
+		var m = hxd.Res.UI.LifeBar.Model;
+		root = game.modelCache.loadModel(m);
+		game.s3d.addChild(root);
+		root.name = "ui";
+
+		game.s3d.camera.follow = {pos : root.getObjectByName("CamScreen"), target : root.getObjectByName("CamScreen.Target")};
+		game.autoCameraKind = Choose;
+
+		var tex = new h3d.mat.Texture(game.s2d.width, game.s2d.height, [Target]);
+		game.customScene.addView(-1, game.s3d.camera, tex);
+		var b = new h2d.Bitmap(h2d.Tile.fromTexture(tex), game.s2d);
+		b.blendMode = Alpha;
+		game.bmpViews.push(b);
+
+		/*
+		//OLD
 		for(i in 0...game.players.length)
 			scores.push(new PlayerScore(this, game.players[i].id));
+		*/
 
-		game.event.wait(1, function() game.startRace());
-		onResize();
+		game.event.wait(1, function() startRace());
+	}
+
+	public function remove() {
+		root.remove();
+	}
+
+
+	function cameraFollow() {
+		//NON !!!
+		var cam = game.s3d.camera;
+		var a = hxd.Math.atan2(cam.pos.y - cam.target.y, cam.pos.x - cam.target.x);
+		root.x = cam.target.x;
+		root.y = cam.target.y;
+		root.z = cam.target.z;
+		root.setRotate(0, 0, a);
+	}
+
+	function startRace() {
+		var m = hxd.Res.UI.Countdown.Model;
+		countDown = game.modelCache.loadModel(m);
+		game.s3d.addChild(countDown);
+
+		var a = game.modelCache.loadAnimation(m);
+		a.loop = false;
+		countDown.playAnimation(a);
+		countDown.name = "ui";
+
+		var cam = game.s3d.camera;
+		var a = hxd.Math.atan2(cam.pos.y - cam.target.y, cam.pos.x - cam.target.x);
+		countDown.x = cam.target.x;
+		countDown.y = cam.target.y;
+		countDown.z = cam.target.z;
+		countDown.rotate(0, 0, a);
+		countDown.setScale(0.5);
+
+		for(m in countDown.getMeshes()) {
+			m.material.shadows = false;
+			if(m.name != "Square")
+				m.material.mainPass.depthWrite = false;
+		}
+
+		game.event.waitUntil(function(dt) {
+			if(countDown.currentAnimation.frame >= countDown.currentAnimation.frameCount - 1) {
+				game.gameOver = false;
+				for(p in game.players)
+					p.canMove = true;
+				countDown.remove();
+				return true;
+			}
+			return false;
+		});
 	}
 
 	public function nextRound(pl : ent.Unit) {
+
+		game.event.wait(2, function() {
+			game.state.stars[pl.id - 1]++;
+			if(game.state.stars[pl.id - 1] == 5)
+				game.endGame();
+			else game.restart();
+		});
+/*
 		var t = hxd.Res.UI.Winner.toTile();
-		var bmp = new h2d.Bitmap(t, this);
+		var bmp = new h2d.Bitmap(t, game.s2d);
 		bmp.smooth = true;
 		var sc = 1;
 		bmp.setScale(sc);
@@ -171,23 +247,14 @@ class Scores extends h2d.Sprite
 				return true;
 			}
 			return false;
-		});
-	}
-
-	public function onResize() {
-		var d = 25;
-		scores[0].x = d;
-		scores[0].y = d;
-		scores[1].x = game.s2d.width - scores[1].getSize().width - d;
-		scores[1].y = d;
-		scores[2].x = d;
-		scores[2].y = game.s2d.height - scores[1].getSize().height - d;
-		scores[3].x = game.s2d.width - scores[1].getSize().width - d;
-		scores[3].y = game.s2d.height - scores[1].getSize().height - d;
+		});*/
 	}
 
 	public function update(dt : Float) {
+		//cameraFollow();
+		/*
 		for(s in scores)
 			s.update(dt);
+		*/
 	}
 }

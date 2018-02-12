@@ -6,7 +6,7 @@ import map.WorldComposite;
 import map.World;
 //import Sounds;
 import ui.Menu;
-import ui.Scores;
+import ui.GameUI;
 import ui.Win;
 import Const;
 
@@ -39,8 +39,6 @@ class Game extends hxd.App {
 	public var uiRenderer : map.UIComposite;
 	public var customScene : map.CustomScene;
 
-	var countDown : h3d.scene.Object;
-
 	public var size = 60;
 	var camPos : h3d.col.Point;
 	var camTarget : h3d.col.Point;
@@ -51,14 +49,14 @@ class Game extends hxd.App {
 	var camDist = 4;
 	var camZ = 5.5;
 
-	var bmpViews : Array<h2d.Bitmap>;
+	public var bmpViews : Array<h2d.Bitmap>;
 
 	var pause = false;
-	var gameOver = true;
+	public var gameOver = true;
 	var IAOnly = false;
 
 	public var windows : Array<ui.Form>;
-	var ui : ui.Scores;
+	var ui : ui.GameUI;
 	var blackScreen : h2d.Bitmap;
 
 	var bonusMaxCount : Int = 25;
@@ -267,60 +265,8 @@ class Game extends hxd.App {
 		}
 
 		if(ui != null) ui.remove();
-		ui = new ui.Scores(s2d);
+		ui = new ui.GameUI();
 		onResize();
-	}
-
-	public function startRace() {
-		var m = hxd.Res.UI.Countdown.Model;
-		countDown = modelCache.loadModel(m);
-		s3d.addChild(countDown);
-
-		var a = modelCache.loadAnimation(m);
-		a.loop = false;
-		countDown.playAnimation(a);
-
-		event.waitUntil(function(dt) {
-			if(countDown.currentAnimation.frame >= countDown.currentAnimation.frameCount - 1) {
-				gameOver = false;
-				for(p in players)
-					p.canMove = true;
-				countDown.remove();
-				var view = customScene.getView( -1);
-				if(view != null) customScene.removeView(view);
-				return true;
-			}
-			return false;
-		});
-
-		for(m in countDown.getMeshes()) {
-			m.material.shadows = false;
-			if(m.name != "Square")
-				m.material.mainPass.depthWrite = false;
-		}
-
-		var cam = s3d.camera;
-		/*
-		var cam = new h3d.Camera();
-		cam.pos.set(0, 7.68, 0);
-		cam.target.set(0, 0, 0);
-		cam.fovY = 80;
-		cam.up.set(0, 0, 1);
-
-		countDown.name = "ui";
-
-		var tex = new h3d.mat.Texture(s2d.width, s2d.height, [Target]);
-		customScene.addView(-1, cam, tex);
-		var b = new h2d.Bitmap(h2d.Tile.fromTexture(tex), s2d);
-		b.blendMode = Alpha;
-		bmpViews.push(b);
-		*/
-
-		var a = hxd.Math.atan2(cam.pos.y - cam.target.y, cam.pos.x - cam.target.x);
-		countDown.x = cam.target.x;
-		countDown.y = cam.target.y;
-		countDown.z = cam.target.z;
-		countDown.rotate(0, 0, a);
 	}
 
 	public function setAmbient(id) {
@@ -527,8 +473,6 @@ class Game extends hxd.App {
 
 		for( w in windows)
 			w.onResize();
-
-		if(ui != null) ui.onResize();
 
 		//
 		var hasUIOver = false;

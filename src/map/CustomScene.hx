@@ -51,9 +51,9 @@ class CustomScene extends h3d.scene.Scene
 
 		ctx.elapsedTime /= views.length;
 
+		//player views
 		for(v in views) {
 			if(v.id == -1) continue;
-			//player view
 			for(i in 0...game.s3d.numChildren) {
 				var o = game.s3d.getChildAt(i);
 				o.visible = o.name != "ui";
@@ -62,19 +62,20 @@ class CustomScene extends h3d.scene.Scene
 			camera = v.camera;
 			updateWalls();
 
-			v.target.name = "ui";
+			name = "playerView";
 			engine.pushTarget(v.target);
 			super.render(engine);
 			engine.popTarget();
 		}
 
+		//ui
 		for(v in views) {
 			if(v.id != -1) continue;
-			//ui
 			for(i in 0...game.s3d.numChildren) {
 				var o = game.s3d.getChildAt(i);
 				o.visible = o.name == "ui";
 			}
+			name = "uiAlpha";
 			camera = v.camera;
 			engine.pushTarget(v.target);
 			super.render(engine);
