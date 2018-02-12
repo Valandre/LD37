@@ -124,7 +124,7 @@ class PlayerSlot {
 	}
 
 	function getColor() {
-		var res = try { hxd.Res.load("wall0" + (colorId + 1) + ".png"); } catch(e : hxd.res.NotFound) { null; };
+		var res = try { hxd.Res.load("wall0" + (colorId + 1) + ".png").toImage(); } catch(e : hxd.res.NotFound) { null; };
 		var color = res == null ? 0 : res.toBitmap().getPixel(0, 0);
 		return color;
 	}

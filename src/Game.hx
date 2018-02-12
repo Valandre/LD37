@@ -279,12 +279,19 @@ class Game extends hxd.App {
 		var a = modelCache.loadAnimation(m);
 		a.loop = false;
 		countDown.playAnimation(a);
-		countDown.currentAnimation.onAnimEnd = function() {
-			gameOver = false;
-			for(p in players)
-				p.canMove = true;
-			countDown.remove();
-		}
+
+		event.waitUntil(function(dt) {
+			if(countDown.currentAnimation.frame >= countDown.currentAnimation.frameCount - 1) {
+				gameOver = false;
+				for(p in players)
+					p.canMove = true;
+				countDown.remove();
+				var view = customScene.getView( -1);
+				if(view != null) customScene.removeView(view);
+				return true;
+			}
+			return false;
+		});
 
 		for(m in countDown.getMeshes()) {
 			m.material.shadows = false;
@@ -292,9 +299,9 @@ class Game extends hxd.App {
 				m.material.mainPass.depthWrite = false;
 		}
 
-
 		var cam = s3d.camera;
-	/*	var cam = new h3d.Camera();
+		/*
+		var cam = new h3d.Camera();
 		cam.pos.set(0, 7.68, 0);
 		cam.target.set(0, 0, 0);
 		cam.fovY = 80;
@@ -303,12 +310,11 @@ class Game extends hxd.App {
 		countDown.name = "ui";
 
 		var tex = new h3d.mat.Texture(s2d.width, s2d.height, [Target]);
-		tex.clear(0, 0);
 		customScene.addView(-1, cam, tex);
 		var b = new h2d.Bitmap(h2d.Tile.fromTexture(tex), s2d);
 		b.blendMode = Alpha;
-		bmpViews.push(b);*/
-
+		bmpViews.push(b);
+		*/
 
 		var a = hxd.Math.atan2(cam.pos.y - cam.target.y, cam.pos.x - cam.target.x);
 		countDown.x = cam.target.x;
@@ -525,7 +531,7 @@ class Game extends hxd.App {
 		if(ui != null) ui.onResize();
 
 		//
-
+		var hasUIOver = false;
 		for(i in 0...customScene.views.length) {
 			var v = customScene.views[i];
 			v.target.dispose();
@@ -534,6 +540,7 @@ class Game extends hxd.App {
 				//ui
 				v.target = new h3d.mat.Texture(s2d.width, s2d.height, [Target]);
 				v.target.clear(0, 0);
+				hasUIOver = true;
 			}
 			else {
 				//player
@@ -542,7 +549,7 @@ class Game extends hxd.App {
 			bmpViews[i].tile = h2d.Tile.fromTexture(v.target);
 		}
 
-		for(i in 0...bmpViews.length) {
+		for(i in 0...bmpViews.length - (hasUIOver ? 1 : 0)) {
 			var b = bmpViews[i];
 			switch(i){
 				case 1 :

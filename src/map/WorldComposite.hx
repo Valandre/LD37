@@ -99,34 +99,29 @@ class WorldComposite extends h3d.scene.DefaultRenderer {
 		}*/
 	}
 
-	function myAllocTarget( name : String, ?size = 0, depth = true ) {
-		return tcache.allocTarget(name, ctx, ctx.engine.width >> width + size, ctx.engine.height >> width + size, depth);
-	}
-
 	override function render() {
 		shadow.draw(get("shadow"));
 
 		var colorTex, depthTex;
 		depth.draw(get("depth"));
 		normal.draw(get("normal"));
-		colorTex = myAllocTarget("color");
-		depthTex = depth.getTexture();
+		colorTex = allocTarget("color");
+		depthTex = ctx.textures.getNamed("depthMap");
 
 	//color
 		setTarget(colorTex);
 		clear(0, 1);
 
-		var envColor = myAllocTarget("envColor", envColorScale, false);
+		var envColor = allocTarget("envColor", envColorScale, false);
 		h3d.pass.Copy.run(colorTex, envColor);
-		envColorBlur.apply(envColor, myAllocTarget("envColorBlur", envColorScale, false));
+		envColorBlur.apply(envColor, allocTarget("envColorBlur", envColorScale, false));
 		setTarget(colorTex);
 
 		draw("default");
 		draw("outline");
 		def.draw(getSort("alpha"));
 
-	// additive in separate buffer so it doesn't get affected by shadows
-		var addTex = myAllocTarget("addColor"); // can't subscale because of Z buffer
+		var addTex = allocTarget("addColor");
 		setTarget(addTex);
 		clear(0);
 		draw("additive");
@@ -135,10 +130,10 @@ class WorldComposite extends h3d.scene.DefaultRenderer {
 		setTarget(colorTex);
 		draw("env");
 
-		var colorBlurTex = myAllocTarget("colorBlur", colorBlurScale, false);
+		var colorBlurTex = allocTarget("colorBlur", colorBlurScale, false);
 		h3d.pass.Copy.run(colorTex, colorBlurTex);
 		h3d.pass.Copy.run(addTex, colorBlurTex, Add);
-		colorBlur.apply(colorBlurTex, myAllocTarget("colorBlurTmp", colorBlurScale, false));
+		colorBlur.apply(colorBlurTex, allocTarget("colorBlurTmp", colorBlurScale, false));
 
 
 	// ambient
@@ -153,11 +148,10 @@ class WorldComposite extends h3d.scene.DefaultRenderer {
 		ambient.shader.camera = ctx.camera;
 		ambient.shader.time += ctx.elapsedTime;
 
-		finalTex = myAllocTarget("final", 0, true);
+		finalTex = allocTarget("final", 0, true);
 		setTarget(finalTex);
 		ambient.setGlobals(ctx);
 		ambient.render();
-
 
 
 	//fxaa
