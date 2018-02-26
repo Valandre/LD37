@@ -129,7 +129,7 @@ class Unit extends Entity
 		light.color.setColor(getColor());
 		light.params = new h3d.Vector(0.5, 0.1, 0.02);
 		light.y += 1;
-		obj.addChild(light);
+		//obj.addChild(light);
 		fxParts = new Map();
 		addTrailFx();
 	}
@@ -417,7 +417,7 @@ class Unit extends Entity
 			}*/
 		}
 
-		obj.visible = false;
+		obj.remove();
 		fadeTrailFx();
 
 		//
