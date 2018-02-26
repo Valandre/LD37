@@ -8,6 +8,9 @@ private class PlayerScore {
 	var game : Game;
 	var pid : Int;
 	var me : ent.Unit;
+	var flames = [];
+	var powerReadyText : h3d.scene.Object;
+	var energyMesh : h3d.scene.Object;
 
 	public function new(parent : GameUI, pid) {
 		this.game = Game.inst;
@@ -29,12 +32,25 @@ private class PlayerScore {
 		};
 
 		var portrait = root.getObjectByName("ThumbP" + pid);
-		trace(pid, portrait, res);
 		if(portrait != null)
 			portrait.toMesh().material.texture = res.toTexture();
+
+		flames = [root.getObjectByName("FlameAP" + pid), root.getObjectByName("FlameBP" + pid)];
+		powerReadyText = root.getObjectByName("ReadyP" + pid);
+
+		energyMesh = root.getObjectByName("Energy" + pid);
+		var tex = hxd.Res.load("wall" + (me.props.colorId < 10 ? "0" : "") + me.props.colorId + ".png").toTexture();
+		energyMesh.toMesh().material.texture = tex;
+		energyMesh.toMesh().material.blendMode = Alpha;
+		energyMesh.scaleY = me.power.progress;
+		update(0);
 	}
 
 	public function update(dt : Float) {
+		powerReadyText.visible = me.power.progress == 1;
+		for(f in flames)
+			f.visible = me.power.progress == 1;
+		energyMesh.scaleY += (me.power.progress - energyMesh.scaleY) * 0.1 * dt;
 	}
 }
 
@@ -56,11 +72,11 @@ class GameUI
 	function init() {
 		var m = hxd.Res.UI.LifeBar.Model;
 		root = game.modelCache.loadModel(m);
-		/*for(m in root.getMeshes()) {
-			m.material.props.
-		}*/
 		game.s3d.addChild(root);
 		root.name = "ui";
+
+		var a = game.modelCache.loadAnimation(m);
+		root.playAnimation(a);
 
 		game.s3d.camera.follow = {pos : root.getObjectByName("CamScreen"), target : root.getObjectByName("CamScreen.Target")};
 		game.autoCameraKind = Choose;
@@ -71,26 +87,14 @@ class GameUI
 		b.blendMode = Alpha;
 		game.bmpViews.push(b);
 
-/*
 		for(i in 0...game.players.length)
 			scores.push(new PlayerScore(this, game.players[i].id));
-*/
+
 		game.event.wait(1, function() startRace());
 	}
 
 	public function remove() {
 		root.remove();
-	}
-
-
-	function cameraFollow() {
-		//NON !!!
-		var cam = game.s3d.camera;
-		var a = hxd.Math.atan2(cam.pos.y - cam.target.y, cam.pos.x - cam.target.x);
-		root.x = cam.target.x;
-		root.y = cam.target.y;
-		root.z = cam.target.z;
-		root.setRotate(0, 0, a);
 	}
 
 	function startRace() {
@@ -200,10 +204,7 @@ class GameUI
 	}
 
 	public function update(dt : Float) {
-		//cameraFollow();
-		/*
 		for(s in scores)
 			s.update(dt);
-		*/
 	}
 }
