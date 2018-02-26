@@ -58,7 +58,7 @@ class Unit extends Entity
 	public var canMove = false;
 	public var attractRay = 3;
 
-	var props : Props;
+	public var props : Props;
 	var speedRef = 0.35;
 	var speed = 0.;
 	var speedBonus = 0.;

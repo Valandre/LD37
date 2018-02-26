@@ -1,92 +1,40 @@
 package ui;
 //import Sounds;
 
-private class EnergyGauge extends h2d.Flow {
 
-	var bg : h2d.Tile;
-	var fg : h2d.Tile;
-	var bar : h2d.Bitmap;
 
-	public var value(default, set) : Float;
-
-	public function new(parent) {
-		super(parent);
-		var t = hxd.Res.UI.gauge.toTile();
-		bg = t.sub(0, 0, t.width, t.height >> 1);
-		fg = t.sub(0, t.height >> 1, t.width, t.height >> 1);
-
-		var bmp = new h2d.Bitmap(bg, this);
-
-		bar = new h2d.Bitmap(fg, this);
-		getProperties(bar).isAbsolute = true;
-		value = 0;
-	}
-
-	function set_value(v : Float) {
-		bar.tile = fg.sub(0, 0, Math.ceil(fg.width * v), fg.height);
-		return value = v;
-	}
-}
-
-private class PlayerScore extends h2d.Flow {
+private class PlayerScore {
 
 	var game : Game;
 	var pid : Int;
+	var me : ent.Unit;
 
-	var portrait : h2d.Bitmap;
-	var stars : Array<h2d.Bitmap> = [];
-	var starTileBg : h2d.Tile;
-	public var starTile : h2d.Tile;
-
-	var gauge : EnergyGauge;
-
-	public function new(parent, pid) {
-		super(parent);
+	public function new(parent : GameUI, pid) {
 		this.game = Game.inst;
 		this.pid = pid;
 
-		isVertical = false;
-		verticalAlign = Top;
+		for( pl in game.players )
+			if(pl.id == pid) {
+				me = pl;
+				break;
+			}
 
-		/*
-		var modelId = Data.chars.get(game.state.players[pid - 1].modelId).selectId;
-		var res = hxd.Res.load("UI/CharacterSelect/Thumb" + (modelId < 10 ? "0" : "") + modelId + ".png");
-		*/
-		var res = hxd.Res.UI.portrait;
-		portrait = new h2d.Bitmap(res.toTile(), this);
-		portrait.smooth = true;
-
-		//
-		var right = new h2d.Flow(this);
-		right.isVertical = true;
-		right.verticalSpacing = 15;
-
-		var sub = new h2d.Flow(right);
-		starTileBg = hxd.Res.UI.pointSlotEmpty.toTile();
-		starTile = hxd.Res.UI.pointSlot.toTile();
-		sub.horizontalSpacing = 1;
-		for(j in 0...5) {
-			var b = new h2d.Bitmap(game.state.stars[pid - 1] > j ? starTile : starTileBg, sub);
-			b.smooth = true;
-			stars.push(b);
+		var root = @:privateAccess parent.root;
+		var modelId = Data.chars.get(me.props.modelId).selectId;
+		var res = try {
+			hxd.Res.load("UI/CharacterSelect/Thumb" + (modelId < 10 ? "0" : "") + modelId + ".png");
 		}
+		catch(e : hxd.res.NotFound) {
+			hxd.Res.load("UI/CharacterSelect/Thumb00.png");
+		};
 
-		gauge = new EnergyGauge(right);
-	}
-
-	public function addStar() {
-		stars[game.state.stars[pid - 1]].tile = starTile;
+		var portrait = root.getObjectByName("ThumbP" + pid);
+		trace(pid, portrait, res);
+		if(portrait != null)
+			portrait.toMesh().material.texture = res.toTexture();
 	}
 
 	public function update(dt : Float) {
-		var p = null;
-		for( pl in game.players )
-			if(pl.id == pid) {
-				p = pl;
-				break;
-			}
-		if(p != null)
-			gauge.value = p.power.progress;
 	}
 }
 
@@ -94,7 +42,7 @@ private class PlayerScore extends h2d.Flow {
 class GameUI
 {
 	var game : Game;
-	//var scores : Array<PlayerScore> = [];
+	var scores : Array<PlayerScore> = [];
 
 	var root : h3d.scene.Object;
 	var countDown : h3d.scene.Object;
@@ -108,6 +56,9 @@ class GameUI
 	function init() {
 		var m = hxd.Res.UI.LifeBar.Model;
 		root = game.modelCache.loadModel(m);
+		/*for(m in root.getMeshes()) {
+			m.material.props.
+		}*/
 		game.s3d.addChild(root);
 		root.name = "ui";
 
@@ -120,12 +71,10 @@ class GameUI
 		b.blendMode = Alpha;
 		game.bmpViews.push(b);
 
-		/*
-		//OLD
+/*
 		for(i in 0...game.players.length)
 			scores.push(new PlayerScore(this, game.players[i].id));
-		*/
-
+*/
 		game.event.wait(1, function() startRace());
 	}
 

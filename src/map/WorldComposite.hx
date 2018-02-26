@@ -107,21 +107,16 @@ class WorldComposite extends h3d.scene.DefaultRenderer {
 		switch(game.s3d.name) {
 			case "uiAlpha":
 				clear(0);
-				super.render();
-				//uiRender();
+				uiRender();
 			default:
 				defaultRender();
 		}
 	}
 
 	function uiRender() {
-		var colorTex = allocTarget("color");
-		setTarget(colorTex);
-		clear(0, 1);
+		super.render();
 
-		draw("default");
-		def.draw(getSort("alpha"));
-
+		/*
 	// ambient
 		uiAmbient.shader.color = colorTex;
 		finalTex = allocTarget("final", 0, true);
@@ -132,6 +127,7 @@ class WorldComposite extends h3d.scene.DefaultRenderer {
 	//fxaa
 		resetTarget();
 		antiAliasing.apply(finalTex);
+		*/
 	}
 
 
