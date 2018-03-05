@@ -7,12 +7,12 @@ FBXHeaderExtension:  {
 	CreationTimeStamp:  {
 		Version: 1000
 		Year: 2018
-		Month: 1
-		Day: 25
-		Hour: 16
-		Minute: 57
-		Second: 5
-		Millisecond: 900
+		Month: 3
+		Day: 1
+		Hour: 19
+		Minute: 9
+		Second: 54
+		Millisecond: 422
 	}
 	Creator: "FBX SDK/FBX Plugins version 2018.1"
 	SceneInfo: "SceneInfo::GlobalInfo", "UserData" {
@@ -34,15 +34,15 @@ FBXHeaderExtension:  {
 			P: "Original|ApplicationVendor", "KString", "", "", "Autodesk"
 			P: "Original|ApplicationName", "KString", "", "", "3ds Max"
 			P: "Original|ApplicationVersion", "KString", "", "", "2018"
-			P: "Original|DateTime_GMT", "DateTime", "", "", "25/01/2018 15:57:05.899"
+			P: "Original|DateTime_GMT", "DateTime", "", "", "01/03/2018 18:09:54.421"
 			P: "Original|FileName", "KString", "", "", "D:\Projects\LD37\trunk\res\Chars\Tamago01\Model.FBX"
 			P: "LastSaved", "Compound", "", ""
 			P: "LastSaved|ApplicationVendor", "KString", "", "", "Autodesk"
 			P: "LastSaved|ApplicationName", "KString", "", "", "3ds Max"
 			P: "LastSaved|ApplicationVersion", "KString", "", "", "2018"
-			P: "LastSaved|DateTime_GMT", "DateTime", "", "", "25/01/2018 15:57:05.899"
+			P: "LastSaved|DateTime_GMT", "DateTime", "", "", "01/03/2018 18:09:54.421"
 			P: "Original|ApplicationActiveProject", "KString", "", "", "C:\Users\Emak\Documents\3dsMax"
-			P: "Original|ApplicationNativeFile", "KString", "", "", "D:\Projects\LD37\trunk\gfx\EMAK\chars\Maguro\Model.max"
+			P: "Original|ApplicationNativeFile", "KString", "", "", "D:\Projects\LD37\trunk\gfx\EMAK\chars\Tamago\Model.max"
 		}
 	}
 }
@@ -77,7 +77,7 @@ GlobalSettings:  {
 
 Documents:  {
 	Count: 1
-	Document: 2037767430768, "", "Scene" {
+	Document: 2626685657488, "", "Scene" {
 		Properties70:  {
 			P: "SourceObject", "object", "", ""
 			P: "ActiveAnimStackName", "KString", "", "", ""
@@ -313,10 +313,10 @@ Definitions:  {
 ;------------------------------------------------------------------
 
 Objects:  {
-	NodeAttribute: 2037477041456, "NodeAttribute::", "Null" {
+	NodeAttribute: 2626842116384, "NodeAttribute::", "Null" {
 		TypeFlags: "Null"
 	}
-	Geometry: 2037015594400, "Geometry::", "Mesh" {
+	Geometry: 2627296366992, "Geometry::", "Mesh" {
 		Properties70:  {
 			P: "Color", "ColorRGB", "Color", "",0.87843137254902,0.337254901960784,0.337254901960784
 		}
@@ -515,37 +515,37 @@ Objects:  {
 			}
 		}
 	}
-	NodeAttribute: 2037770518752, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 2626588508880, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",1.87989366054535
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 2037770517984, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 2626588513680, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",1.87989366054535
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 2037770511840, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 2626588512912, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",2.08975160121918
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 2037770517024, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 2626588509072, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",3.26519906520844
 		}
 		TypeFlags: "Skeleton"
 	}
-	NodeAttribute: 2037770518368, "NodeAttribute::", "LimbNode" {
+	NodeAttribute: 2626588515600, "NodeAttribute::", "LimbNode" {
 		Properties70:  {
 			P: "Size", "double", "Number", "",3.39036694169045
 		}
 		TypeFlags: "Skeleton"
 	}
-	Model: 2037894553712, "Model::Root", "Null" {
+	Model: 2627445394112, "Model::Root", "Null" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -563,7 +563,7 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 2037894555904, "Model::Sushi", "Mesh" {
+	Model: 2627445398496, "Model::Sushi", "Mesh" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -576,7 +576,7 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 2037764347376, "Model::Bone001", "LimbNode" {
+	Model: 2627445409456, "Model::Bone001", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -590,7 +590,7 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 2037764356144, "Model::Bone002", "LimbNode" {
+	Model: 2627445411648, "Model::Bone002", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -604,7 +604,7 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 2037764364912, "Model::Bone003", "LimbNode" {
+	Model: 2627445391920, "Model::Bone003", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -618,7 +618,7 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 2037764345184, "Model::Bone004", "LimbNode" {
+	Model: 2627445402880, "Model::Bone004", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -632,7 +632,7 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 2037764338608, "Model::Bone005", "LimbNode" {
+	Model: 2627445407264, "Model::Bone005", "LimbNode" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -646,7 +646,7 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Material: 2037764683792, "Material::Sushi", "" {
+	Material: 2627300753040, "Material::Sushi", "" {
 		Version: 102
 		ShadingModel: "phong"
 		MultiLayer: 0
@@ -668,7 +668,7 @@ Objects:  {
 			P: "Reflectivity", "double", "Number", "",0
 		}
 	}
-	Material: 2037764686192, "Material::Face", "" {
+	Material: 2627300769360, "Material::Face", "" {
 		Version: 102
 		ShadingModel: "phong"
 		MultiLayer: 0
@@ -690,11 +690,11 @@ Objects:  {
 			P: "Reflectivity", "double", "Number", "",0
 		}
 	}
-	Deformer: 2037770518560, "Deformer::", "Skin" {
+	Deformer: 2626588509456, "Deformer::", "Skin" {
 		Version: 101
 		Link_DeformAcuracy: 50
 	}
-	Deformer: 2037119672128, "SubDeformer::", "Cluster" {
+	Deformer: 2627446901952, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *111 {
@@ -710,7 +710,7 @@ Objects:  {
 			a: 0.0699058026075363,3.00003165421003e-07,2.67223307674064e-19,0,-7.55240694546745e-13,1.75983799963583e-07,0.0369064807891846,0,1.58385436520418e-07,-0.0369064807891846,1.75983799966824e-07,0,0.233364209532738,-1.17176046643408e-08,0.424410849809647,1
 		} 
 	}
-	Deformer: 2037768020144, "SubDeformer::", "Cluster" {
+	Deformer: 2627446898192, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *111 {
@@ -726,7 +726,7 @@ Objects:  {
 			a: 0.0616534501314163,3.66797451079037e-07,1.4210854715202e-14,0,-2.43546978837727e-12,4.06056642525896e-07,0.0854680240154266,0,5.08478492126356e-07,-0.0854680240143236,4.06056642535145e-07,0,0.233364194631577,-7.89668952450029e-09,0.186185017228127,1
 		} 
 	}
-	Deformer: 2037768034432, "SubDeformer::", "Cluster" {
+	Deformer: 2627446905712, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *304 {
@@ -742,7 +742,7 @@ Objects:  {
 			a: 1.39245104411556e-08,0,0.0854680314660072,0,-0.0854680314660072,4.72070027538721e-08,1.39245104411556e-08,0,-4.72069986386529e-08,-0.0854680240154266,7.69099667050339e-15,0,0,9.30655552622284e-12,0,1
 		} 
 	}
-	Deformer: 2037768024656, "SubDeformer::", "Cluster" {
+	Deformer: 2627123007024, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *184 {
@@ -758,7 +758,7 @@ Objects:  {
 			a: -0.0937539339065552,-3.64721017802838e-07,-3.28691564281974e-19,0,-1.5563558624442e-12,4.00071576994153e-07,-0.0854680314660072,0,3.32487218505124e-07,-0.0854680240154266,-4.00071542124413e-07,0,-0.193539708852768,-7.71358976692227e-09,0.186184957623482,1
 		} 
 	}
-	Deformer: 2037768025408, "SubDeformer::", "Cluster" {
+	Deformer: 2627304148864, "SubDeformer::", "Cluster" {
 		Version: 100
 		UserData: "", ""
 		Indexes: *135 {
@@ -774,7 +774,7 @@ Objects:  {
 			a: -0.107636012136936,-4.18725022657026e-07,-3.77360700175486e-19,0,-7.16991659039344e-13,1.84307441869391e-07,-0.039373941719532,0,1.53172277116328e-07,-0.0393739379942417,-1.84307424434283e-07,0,-0.193539634346962,-1.02609778451779e-08,0.424410820007324,1
 		} 
 	}
-	Video: 2037764683312, "Video::Map Sushi", "Clip" {
+	Video: 2627300750160, "Video::Map Sushi", "Clip" {
 		Type: "Clip"
 		Properties70:  {
 			P: "Path", "KString", "XRefUrl", "", "D:\Projects\LD37\trunk\res\Chars\Tamago01\Sushi.png"
@@ -784,17 +784,17 @@ Objects:  {
 		Filename: "D:\Projects\LD37\trunk\res\Chars\Tamago01\Sushi.png"
 		RelativeFilename: "Sushi.png"
 	}
-	Video: 2037764684752, "Video::Map #1", "Clip" {
+	Video: 2627300763600, "Video::Map #1", "Clip" {
 		Type: "Clip"
 		Properties70:  {
-			P: "Path", "KString", "XRefUrl", "", "D:\Projects\LD37\trunk\res\Chars\Maguro01\Face01.png"
-			P: "RelPath", "KString", "XRefUrl", "", "..\Maguro01\Face01.png"
+			P: "Path", "KString", "XRefUrl", "", "D:\Projects\LD37\trunk\res\Chars\Tamago01\Face01.png"
+			P: "RelPath", "KString", "XRefUrl", "", "Face01.png"
 		}
 		UseMipMap: 0
-		Filename: "D:\Projects\LD37\trunk\res\Chars\Maguro01\Face01.png"
-		RelativeFilename: "..\Maguro01\Face01.png"
+		Filename: "D:\Projects\LD37\trunk\res\Chars\Tamago01\Face01.png"
+		RelativeFilename: "Face01.png"
 	}
-	Texture: 2037764684272, "Texture::Map Sushi", "" {
+	Texture: 2627300757360, "Texture::Map Sushi", "" {
 		Type: "TextureVideoClip"
 		Version: 202
 		TextureName: "Texture::Map Sushi"
@@ -810,7 +810,7 @@ Objects:  {
 		Texture_Alpha_Source: "None"
 		Cropping: 0,0,0,0
 	}
-	Texture: 2037764686672, "Texture::Map #1", "" {
+	Texture: 2627300768400, "Texture::Map #1", "" {
 		Type: "TextureVideoClip"
 		Version: 202
 		TextureName: "Texture::Map #1"
@@ -819,20 +819,20 @@ Objects:  {
 			P: "UseMaterial", "bool", "", "",1
 		}
 		Media: "Video::Map #1"
-		FileName: "D:\Projects\LD37\trunk\res\Chars\Maguro01\Face01.png"
-		RelativeFilename: "..\Maguro01\Face01.png"
+		FileName: "D:\Projects\LD37\trunk\res\Chars\Tamago01\Face01.png"
+		RelativeFilename: "Face01.png"
 		ModelUVTranslation: 0,0
 		ModelUVScaling: 1,1
 		Texture_Alpha_Source: "Alpha_Black"
 		Cropping: 0,0,0,0
 	}
-	AnimationStack: 2037464782640, "AnimStack::Take 001", "" {
+	AnimationStack: 2627136151840, "AnimStack::Take 001", "" {
 		Properties70:  {
 			P: "LocalStop", "KTime", "Time", "",61581544000
 			P: "ReferenceStop", "KTime", "Time", "",61581544000
 		}
 	}
-	CollectionExclusive: 2037770519136, "DisplayLayer::Character", "DisplayLayer" {
+	CollectionExclusive: 2626588509264, "DisplayLayer::Character", "DisplayLayer" {
 		Properties70:  {
 			P: "Color", "ColorRGB", "Color", "",0.549019607843137,0.345098039215686,0.882352941176471
 		}
@@ -845,119 +845,119 @@ Objects:  {
 Connections:  {
 	
 	;Model::Root, Model::RootNode
-	C: "OO",2037894553712,0
+	C: "OO",2627445394112,0
 	
 	;Model::Sushi, Model::Root
-	C: "OO",2037894555904,2037894553712
+	C: "OO",2627445398496,2627445394112
 	
 	;Model::Bone001, Model::Root
-	C: "OO",2037764347376,2037894553712
+	C: "OO",2627445409456,2627445394112
 	
 	;NodeAttribute::, Model::Root
-	C: "OO",2037477041456,2037894553712
+	C: "OO",2626842116384,2627445394112
 	
 	;Geometry::, Model::Sushi
-	C: "OO",2037015594400,2037894555904
+	C: "OO",2627296366992,2627445398496
 	
 	;Material::Sushi, Model::Sushi
-	C: "OO",2037764683792,2037894555904
+	C: "OO",2627300753040,2627445398496
 	
 	;Material::Face, Model::Sushi
-	C: "OO",2037764686192,2037894555904
+	C: "OO",2627300769360,2627445398496
 	
 	;Model::Bone002, Model::Bone001
-	C: "OO",2037764356144,2037764347376
+	C: "OO",2627445411648,2627445409456
 	
 	;Model::Bone003, Model::Bone001
-	C: "OO",2037764364912,2037764347376
+	C: "OO",2627445391920,2627445409456
 	
 	;Model::Bone004, Model::Bone001
-	C: "OO",2037764345184,2037764347376
+	C: "OO",2627445402880,2627445409456
 	
 	;Model::Bone005, Model::Bone001
-	C: "OO",2037764338608,2037764347376
+	C: "OO",2627445407264,2627445409456
 	
 	;NodeAttribute::, Model::Bone001
-	C: "OO",2037770518752,2037764347376
+	C: "OO",2626588508880,2627445409456
 	
 	;NodeAttribute::, Model::Bone002
-	C: "OO",2037770517984,2037764356144
+	C: "OO",2626588513680,2627445411648
 	
 	;NodeAttribute::, Model::Bone003
-	C: "OO",2037770511840,2037764364912
+	C: "OO",2626588512912,2627445391920
 	
 	;NodeAttribute::, Model::Bone004
-	C: "OO",2037770517024,2037764345184
+	C: "OO",2626588509072,2627445402880
 	
 	;NodeAttribute::, Model::Bone005
-	C: "OO",2037770518368,2037764338608
+	C: "OO",2626588515600,2627445407264
 	
 	;Deformer::, Geometry::
-	C: "OO",2037770518560,2037015594400
+	C: "OO",2626588509456,2627296366992
 	
 	;Texture::Map Sushi, Material::Sushi
-	C: "OP",2037764684272,2037764683792, "DiffuseColor"
+	C: "OP",2627300757360,2627300753040, "DiffuseColor"
 	
 	;Video::Map Sushi, Texture::Map Sushi
-	C: "OO",2037764683312,2037764684272
+	C: "OO",2627300750160,2627300757360
 	
 	;Texture::Map #1, Material::Face
-	C: "OP",2037764686672,2037764686192, "DiffuseColor"
+	C: "OP",2627300768400,2627300769360, "DiffuseColor"
 	
 	;Texture::Map #1, Material::Face
-	C: "OP",2037764686672,2037764686192, "TransparentColor"
+	C: "OP",2627300768400,2627300769360, "TransparentColor"
 	
 	;Video::Map #1, Texture::Map #1
-	C: "OO",2037764684752,2037764686672
+	C: "OO",2627300763600,2627300768400
 	
 	;Model::Bone005, DisplayLayer::Character
-	C: "OO",2037764338608,2037770519136
+	C: "OO",2627445407264,2626588509264
 	
 	;Model::Bone004, DisplayLayer::Character
-	C: "OO",2037764345184,2037770519136
+	C: "OO",2627445402880,2626588509264
 	
 	;Model::Bone003, DisplayLayer::Character
-	C: "OO",2037764364912,2037770519136
+	C: "OO",2627445391920,2626588509264
 	
 	;Model::Bone002, DisplayLayer::Character
-	C: "OO",2037764356144,2037770519136
+	C: "OO",2627445411648,2626588509264
 	
 	;Model::Bone001, DisplayLayer::Character
-	C: "OO",2037764347376,2037770519136
+	C: "OO",2627445409456,2626588509264
 	
 	;Model::Sushi, DisplayLayer::Character
-	C: "OO",2037894555904,2037770519136
+	C: "OO",2627445398496,2626588509264
 	
 	;Model::Root, DisplayLayer::Character
-	C: "OO",2037894553712,2037770519136
+	C: "OO",2627445394112,2626588509264
 	
 	;SubDeformer::, Deformer::
-	C: "OO",2037119672128,2037770518560
+	C: "OO",2627446901952,2626588509456
 	
 	;SubDeformer::, Deformer::
-	C: "OO",2037768020144,2037770518560
+	C: "OO",2627446898192,2626588509456
 	
 	;SubDeformer::, Deformer::
-	C: "OO",2037768034432,2037770518560
+	C: "OO",2627446905712,2626588509456
 	
 	;SubDeformer::, Deformer::
-	C: "OO",2037768024656,2037770518560
+	C: "OO",2627123007024,2626588509456
 	
 	;SubDeformer::, Deformer::
-	C: "OO",2037768025408,2037770518560
+	C: "OO",2627304148864,2626588509456
 	
 	;Model::Bone005, SubDeformer::
-	C: "OO",2037764338608,2037119672128
+	C: "OO",2627445407264,2627446901952
 	
 	;Model::Bone003, SubDeformer::
-	C: "OO",2037764364912,2037768020144
+	C: "OO",2627445391920,2627446898192
 	
 	;Model::Bone001, SubDeformer::
-	C: "OO",2037764347376,2037768034432
+	C: "OO",2627445409456,2627446905712
 	
 	;Model::Bone002, SubDeformer::
-	C: "OO",2037764356144,2037768024656
+	C: "OO",2627445411648,2627123007024
 	
 	;Model::Bone004, SubDeformer::
-	C: "OO",2037764345184,2037768025408
+	C: "OO",2627445402880,2627304148864
 }
