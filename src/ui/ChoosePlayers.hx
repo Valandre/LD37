@@ -32,10 +32,10 @@ class PlayerSlot {
 
 		while(true) {
 			var id = chars[Std.random(chars.length)].selectId;
-			if(id != Data.chars.get(Random).selectId) {
+			//if(id != Data.chars.get(Random).selectId) {
 				selectId = id;
 				break;
-			}
+			//}
 		}
 	}
 
@@ -132,7 +132,7 @@ class PlayerSlot {
 	function set_selectId(v : Int) {
 		if(selectId == v) return v;
 		selectId = v;
-		if(selectId != Data.chars.get(Random).selectId)
+		//if(selectId != Data.chars.get(Random).selectId)
 			updateModel();
 		return selectId;
 	}
@@ -326,6 +326,14 @@ class ChoosePlayers extends ui.Form
 		ready = false;
 	}
 
+
+	var allChars = Data.chars.all;
+	function isValidId(id : Int) {
+		for(c in allChars)
+			if(c.selectId == id) return true;
+		return false;
+	}
+
 	var time = 0.;
 	override function update(dt : Float) {
 		super.update(dt);
@@ -346,9 +354,9 @@ class ChoosePlayers extends ui.Form
 			if(c != null && c.active) {
 				if(pl.state == 1) {
 					if(c.pressed.xAxis > 0 )
-						pl.selectId = pl.selectId >= mthumbs.length ? 1 : pl.selectId + 1;
+						do pl.selectId = pl.selectId >= mthumbs.length ? 1 : pl.selectId + 1 while(!isValidId(pl.selectId));
 					else if(c.pressed.xAxis < 0)
-						pl.selectId = pl.selectId <= 1 ? mthumbs.length : pl.selectId - 1;
+						do pl.selectId = pl.selectId <= 1 ? mthumbs.length : pl.selectId - 1 while(!isValidId(pl.selectId));
 					if(c.pressed.yAxis > 0 )
 						pl.colorId = pl.colorId == slotTex.length - 1 ? 0 : pl.colorId + 1;
 					else if(c.pressed.yAxis < 0)
@@ -358,6 +366,7 @@ class ChoosePlayers extends ui.Form
 				if(ready) {
 					if(c.pressed.A) {
 						pl.state = hxd.Math.imin(3, pl.state + 1);
+						/*
 						if(pl.state == 2 && pl.selectId == Data.chars.get(Random).selectId) {
 							var all = Data.chars.all;
 							while(true) {
@@ -368,7 +377,7 @@ class ChoosePlayers extends ui.Form
 									break;
 								}
 							}
-						}
+						}*/
 					}
 					if(c.pressed.B)
 						pl.state = hxd.Math.imax(0, pl.state - 1);
