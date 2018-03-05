@@ -1,12 +1,6 @@
 package ent;
 
 
-enum CollideDir {
-	Left;
-	Right;
-	Front;
-}
-
 class IA extends Unit
 {
 	var time = 0.;
@@ -45,13 +39,8 @@ class IA extends Unit
 			checkSensors(false);
 	}
 
-	function setSensor(x, y, z, dir) {
-		sensor.px = x; sensor.py = y; sensor.pz = z;
-		sensor.lx = dir.x; sensor.ly = dir.y; sensor.lz = dir.z;
-	}
-
 	//bonus collide
-	function bonuscollide(b : ent.Energy, kdir : CollideDir, ray : Float) {
+	function bonuscollide(b : ent.Energy, kdir : ent.Unit.CollideDir, ray : Float) {
 		var d = switch(kdir) {
 			case Left :	setDir(dir, -1);
 			case Right : setDir(dir, 1);
@@ -70,20 +59,6 @@ class IA extends Unit
 		}
 
 		return false;
-	}
-
-	//default collide
-	function scollide(kdir : CollideDir, ray : Float) {
-		var d = switch(kdir) {
-			case Left :	setDir(dir, -1);
-			case Right : setDir(dir, 1);
-			case Front : dir.clone();
-		}
-		d.normalize();
-		d.x *= ray; d.y *= ray; d.z *= ray;
-		setSensor(x, y, z, d);
-
-		return sensorCollide(ray) != -1;
 	}
 
 	function checkSensors(testFront = true ) {

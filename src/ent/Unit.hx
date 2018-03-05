@@ -8,6 +8,12 @@ typedef Props = {
 	colorId : Int,
 }
 
+enum CollideDir {
+	Left;
+	Right;
+	Front;
+}
+
 private class Power {
 	public var kind : Data.PowerKind;
 	public var time : Float;
@@ -346,20 +352,37 @@ class Unit extends Entity
 		return d;
 	}
 
+	//default collide
+	function scollide(kdir : CollideDir, ray : Float) {
+		var d = switch(kdir) {
+			case Left :	setDir(dir, -1);
+			case Right : setDir(dir, 1);
+			case Front : dir.clone();
+		}
+		d.normalize();
+		d.x *= ray; d.y *= ray; d.z *= ray;
+		setSensor(x, y, z, d);
+
+		return sensorCollide(ray) != -1;
+	}
+
+	function setSensor(x, y, z, dir) {
+		sensor.px = x; sensor.py = y; sensor.pz = z;
+		sensor.lx = dir.x; sensor.ly = dir.y; sensor.lz = dir.z;
+	}
+
+
 	function sensorCollide(ray : Float) {
 		var d = -1.;
-		var wall = lastWall;
-		if(wall == null) return d;
+		if(lastWall == null) return d;
 
 		for(w in game.world.walls) {
-			if(w.w == wall) continue;
-			if(w.w == wall.prev) continue;
+			if(w.w == lastWall) continue;
+			if(w.w == lastWall.prev) continue;
 			if(w.n.x != worldNormal.x || w.n.y != worldNormal.y || w.n.z != worldNormal.z) continue;
 			d = w.w.getBounds().rayIntersection(sensor, false);
-			if(d != -1) {
-				if(d > ray) continue;
+			if(d > 0 && d < 1)
 				return d;
-			}
 		}
 
 		for(c in game.world.collides) {
@@ -548,7 +571,23 @@ class Unit extends Entity
 		return power.active && power.kind == k;
 	}
 
+
+	var gDebug : h3d.scene.Graphics;
 	function updatePower(dt : Float) {
+/*
+		//////////// debug
+		if(id == 1) {
+			var ray = 6;
+			var col = scollide(Front, ray);
+			if(gDebug == null) gDebug = new h3d.scene.Graphics(game.s3d);
+			gDebug.clear();
+			gDebug.lineStyle(3, col ? 0xFF0000 : 0x00FF00);
+			gDebug.moveTo(sensor.px, sensor.py, sensor.pz);
+			gDebug.lineTo(sensor.px + sensor.lx, sensor.py + sensor.ly, sensor.pz + sensor.lz);
+		}
+		///////////
+*/
+
 		if(speedBonus > 0 && !isPowerActive(SpeedUp)) {
 			if(speedBonus > 0) speedBonus *= Math.pow(0.95, dt);
 			if(speedBonus < 0.01)  speedBonus = 0;
@@ -561,6 +600,15 @@ class Unit extends Entity
 				if(power.time <= 0)
 					power.active = false;
 				else speedBonus += (power.value - speedBonus) * 0.25 * dt;
+
+				if(scollide(Front, 2)) {
+					var ray = 5;
+					var l = scollide(Left, ray);
+					var r = scollide(Right, ray);
+					if(l && !r) changeDir(1);
+					else if(r && !l) changeDir(-1);
+					else changeDir(Math.random() < 0.5 ? -1 : 1);
+				}
 
 			case Shield:
 				power.active = false;
