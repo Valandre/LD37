@@ -105,12 +105,11 @@ class Energy extends Entity
 		});
 	}
 
+	var sp = 0.;
 	override public function update(dt:Float) {
 		super.update(dt);
 
-
 		var decrement = true;
-		var sp = 0.3;
 		for(p in game.players) {
 			var d = hxd.Math.distance(p.x - x, p.y - y, p.z - z);
 			if(d < 10) decrement = false;
@@ -118,6 +117,7 @@ class Energy extends Entity
 				x += (p.x - x) * sp * dt;
 				y += (p.y - y) * sp * dt;
 				z += (p.z - z) * sp * dt;
+				sp += 0.03 * dt;
 			}
 			if(d < 1) {
 				remove();
@@ -127,6 +127,7 @@ class Energy extends Entity
 		}
 
 		if(decrement) {
+			sp = 0.; //restore speed
 			lifeTime -= dt / 60;
 			if(lifeTime < 0) {
 				if(!disapear) {
