@@ -12,6 +12,9 @@ class PlayerSlot {
 	var charKind : Data.CharsKind;
 	var outlineShader : shaders.Outline;
 
+	var faceTextures : Array<h3d.mat.Texture> = [];
+	var faceBlinking = false;
+
 	public var pid : Int;
 	public var selectId(default, set) : Int;
 	public var state(default, set) : Int;
@@ -86,8 +89,20 @@ class PlayerSlot {
 		if(res != null) {
 			var tex = res.toTexture();
 			for(m in obj.getMeshes()) {
-
 				m.material.mainPass.addShader(new shaders.NormalMap(tex));
+			}
+		}
+
+		faceTextures = [];
+		for(m in obj.getMaterials()) {
+			if(StringTools.startsWith(m.name, "Face")) {
+				var i = 0;
+				while(true) {
+					var res = try {hxd.Res.load("Chars/" + charKind + "01/FaceA_0" + i + ".png"); } catch(e : Dynamic) {null; }
+					if(res == null) break;
+					faceTextures.push(res.toTexture());
+					i++;
+				}
 			}
 		}
 
@@ -193,9 +208,42 @@ class PlayerSlot {
 		});
 	}
 
+	function faceBlink() {
+		var mat = null;
+		for(m in obj.getMaterials())
+			if(StringTools.startsWith(m.name, "Face")) {
+				mat = m;
+				break;
+			}
+		if(mat == null) return;
+
+		faceBlinking = true;
+		var t = 0.;
+		var id = 0;
+		var sp = 1 + Math.random();
+		game.event.waitUntil(function(dt) {
+			t += dt;
+			if(t > sp) {
+				if(id == faceTextures.length) {
+					mat.texture = faceTextures[0];
+					faceBlinking = false;
+					return true;
+				}
+				mat.texture = faceTextures[id++];
+				t -= sp;
+			}
+			return false;
+		});
+	}
+
 	public function remove() {
 		if(obj != null) obj.remove();
 		removeSelector();
+	}
+
+	public function update(dt : Float) {
+		if(!faceBlinking && Math.random() < 0.008)
+			faceBlink();
 	}
 }
 
@@ -407,6 +455,9 @@ class ChoosePlayers extends ui.Form
 			mBack.material.texture = buttonTex[1][(time % 40) < 20 ? 0 : 1];
 			mUp.material.texture = buttonTex[2][((10 + time) % 40) < 20 ? 0 : 1];
 		}
+
+		for(p in players)
+			p.update(dt);
 
 		/*
 		for(i in 0...game.controllers.length) {
