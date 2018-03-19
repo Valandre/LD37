@@ -208,6 +208,8 @@ class PlayerSlot {
 		});
 	}
 
+
+	var blinkRnd = 0.;
 	function faceBlink() {
 		var mat = null;
 		for(m in obj.getMaterials())
@@ -220,7 +222,7 @@ class PlayerSlot {
 		faceBlinking = true;
 		var t = 0.;
 		var id = 0;
-		var sp = 1 + Math.random();
+		var sp = 2 + Math.random();
 		game.event.waitUntil(function(dt) {
 			t += dt;
 			if(t > sp) {
@@ -242,8 +244,11 @@ class PlayerSlot {
 	}
 
 	public function update(dt : Float) {
-		if(!faceBlinking && Math.random() < 0.008)
+		blinkRnd += 0.00004 * dt;
+		if(!faceBlinking && Math.random() < blinkRnd) {
 			faceBlink();
+			blinkRnd = 0;
+		}
 	}
 }
 
