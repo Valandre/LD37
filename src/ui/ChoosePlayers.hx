@@ -78,10 +78,10 @@ class PlayerSlot {
 		obj.currentAnimation.speed *= 1 - hxd.Math.random(0.1);
 		obj.follow = follow;
 		game.s3d.addChild(obj);
-
+/*
 		for(m in obj.getMeshes())
 			m.material.shadows = false;
-
+*/
 		var res = try {hxd.Res.load("Chars/" + charKind + "01/Texture01_normal.png"); } catch(e : Dynamic) {null;}
 		if(res != null) {
 			var tex = res.toTexture();
@@ -238,10 +238,10 @@ class ChoosePlayers extends ui.Form
 			}
 		}
 		else ready = true;
-
+/*
 		for(m in obj.getMeshes())
 			m.material.shadows = false;
-
+*/
 		addBg();
 
 		game.s3d.addChild(obj);

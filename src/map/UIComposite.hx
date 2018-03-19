@@ -1,8 +1,6 @@
 package map;
 import hxd.Res;
 
-
-
 class UIComposite extends h3d.scene.DefaultRenderer {
 
 	var game : Game;

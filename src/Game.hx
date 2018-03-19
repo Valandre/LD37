@@ -79,6 +79,17 @@ class Game extends hxd.App {
 		uiRenderer = new map.UIComposite();
 		s3d.renderer = uiRenderer;
 
+		s3d.lightSystem = new h3d.pass.LightSystem();
+		var t = new shaders.CellShader();
+		t.shadowColor.setColor(0xD0BFDE);
+		@:privateAccess {
+			s3d.lightSystem.ambientShader = t;
+			s3d.lightSystem.perPixelLighting = true;
+		}
+
+		var dir = new h3d.Vector(-9.7, -1.25, -1.6);
+		new h3d.scene.DirLight(dir, s3d);
+
 		/*
 		try {
 			ambient.push(haxe.Json.parse(hxd.Res.load("title.js").entry.getText()));
@@ -90,6 +101,20 @@ class Game extends hxd.App {
 
 		modelCache = new h3d.prim.ModelCache();
 		event = new hxd.WaitEvent();
+
+		event.waitUntil(function(dt) {
+			if(hxd.Key.isDown(K.NUMPAD_1)) { dir.x -= 0.02 * dt;	trace(dir); };
+			if(hxd.Key.isDown(K.NUMPAD_2)) { dir.x += 0.02 * dt;	trace(dir); };
+			if(hxd.Key.isDown(K.NUMPAD_4)) { dir.y -= 0.02 * dt;	trace(dir); };
+			if(hxd.Key.isDown(K.NUMPAD_5)) { dir.y += 0.02 * dt;	trace(dir); };
+			if(hxd.Key.isDown(K.NUMPAD_7)) { dir.z -= 0.02 * dt;	trace(dir); };
+			if(hxd.Key.isDown(K.NUMPAD_8)) { dir.z += 0.02 * dt;	trace(dir); };
+			//if(hxd.Key.isDown(K.NUMPAD_ADD)) { t.alpha = hxd.Math.clamp(t.alpha + 0.01 * dt); trace(t.alpha); };
+			//if(hxd.Key.isDown(K.NUMPAD_SUB)) { t.alpha = hxd.Math.clamp(t.alpha - 0.01 * dt); trace(t.alpha); };
+			return false;
+		});
+
+
 
 		//world = new map.World(size, 0);
 		entities = [];

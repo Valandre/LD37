@@ -32,6 +32,24 @@
 					"lighted": false
 				}
 			}
+		},
+		"UI": {
+			"LifeBar": {
+				"BG": {
+					"kind": "Alpha",
+					"shadows": false,
+					"culled": true,
+					"lighted": true
+				}
+			},
+			"CharacterSelect": {
+				"Title": {
+					"kind": "Alpha",
+					"shadows": false,
+					"culled": true,
+					"lighted": true
+				}
+			}
 		}
 	}
 }

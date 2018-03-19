@@ -13,9 +13,9 @@ class CellShader extends hxsl.Shader {
 		}
 
 		function fragment() {
-			var k = ((lightPixelColor.r - 0.4) * 10000).clamp(0.,1.);
+			var k = ((lightPixelColor.r - 0.4) * 10000).clamp(0., 1.);
 			pixelColor.rgb = mix(pixelColor.rgb * shadowColor, pixelColor.rgb, k);
-			//pixelColor.rgb = vec3(k, k, k);
+
 			//pixelColor.rgb = pixelColor.rgb * float(k > 0.8);
 		}
 	}
