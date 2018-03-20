@@ -19,13 +19,13 @@
 		},
 		"World": {
 			"World01": {
-				"Floor01": {
-					"kind": "Alpha",
+				"Bg": {
+					"kind": "Opaque",
 					"shadows": false,
 					"culled": true,
 					"lighted": false
 				},
-				"Bg": {
+				"Floor01": {
 					"kind": "Opaque",
 					"shadows": false,
 					"culled": true,
@@ -35,11 +35,29 @@
 		},
 		"UI": {
 			"LifeBar": {
+				"Ok": {
+					"kind": "AlphaKill",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
+				"Flame01": {
+					"kind": "AlphaKill",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
 				"BG": {
 					"kind": "Alpha",
 					"shadows": false,
 					"culled": true,
-					"lighted": true
+					"lighted": false
+				},
+				"Thumb01": {
+					"kind": "Alpha",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
 				}
 			},
 			"CharacterSelect": {
@@ -48,6 +66,140 @@
 					"shadows": false,
 					"culled": true,
 					"lighted": true
+				},
+				"Thumb01": {
+					"kind": "AlphaKill",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
+				"Thumb07": {
+					"kind": "AlphaKill",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
+				"Thumb00": {
+					"kind": "AlphaKill",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
+				"Thumb02": {
+					"kind": "AlphaKill",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
+				"Thumb05": {
+					"kind": "AlphaKill",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
+				"Thumb08": {
+					"kind": "AlphaKill",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
+				"Thumb03": {
+					"kind": "AlphaKill",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
+				"Thumb06": {
+					"kind": "AlphaKill",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
+				"Thumb09": {
+					"kind": "AlphaKill",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
+				"ButtonA01": {
+					"kind": "AlphaKill",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
+				"Name01": {
+					"kind": "AlphaKill",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
+				"StateP1": {
+					"kind": "AlphaKill",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
+				"StateP2": {
+					"kind": "AlphaKill",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
+				"StateP3": {
+					"kind": "AlphaKill",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
+				"StateP4": {
+					"kind": "AlphaKill",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
+				"ButtonB01": {
+					"kind": "AlphaKill",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
+				"Thumb11": {
+					"kind": "AlphaKill",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
+				"ButtonUp01": {
+					"kind": "AlphaKill",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
+				"Thumb10": {
+					"kind": "AlphaKill",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				}
+			}
+		},
+		"D:": {
+			"Projects": {
+				"LD37": {
+					"trunk": {
+						"res": {
+							"UI": {
+								"Selector": {
+									"Selector": {
+										"kind": "AlphaKill",
+										"shadows": false,
+										"culled": true,
+										"lighted": false
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		}
