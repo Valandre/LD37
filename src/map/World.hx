@@ -9,7 +9,6 @@ class World {
 	var size : Int;
 	var arenaId : Int;
 
-
 	public var bounds : h3d.col.Bounds;
 	public var walls : Array<{w : h3d.scene.Mesh, n : h3d.col.Point}>;
 	public var lights : Array<h3d.scene.PointLight>;
@@ -34,6 +33,10 @@ class World {
 		room.inheritCulled = true;
 		room.setScale(size / 100);
 		game.s3d.addChild(room);
+
+		for(m in room.getMaterials()) {
+			m.texture.filter = Nearest;
+		}
 
 		for(m in room.getMeshes()) {
 			m.material.mainPass.enableLights = true;
