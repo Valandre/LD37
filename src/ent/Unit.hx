@@ -20,6 +20,7 @@ private class Power {
 	public var value : Float;
 	public var progress(default, set) : Float = 0;
 	public var active : Bool;
+	public var isReady(get, never) : Bool;
 
 	var data : Data.Power;
 
@@ -39,7 +40,7 @@ private class Power {
 		return progress = hxd.Math.clamp(v, 0, 1);
 	}
 
-	public function ready() {
+	public function get_isReady() {
 		return !active && progress == 1;
 	}
 }
@@ -71,6 +72,7 @@ class Unit extends Entity
 	var oldPos : h3d.col.Point;
 
 	var walls : Array<Wall> = [];
+	var ignoreWalls : Array<h3d.scene.Object> = [];
 	var lastWall(get, null) : Wall;
 	var light : h3d.scene.PointLight;
 	var w = 1;
@@ -271,7 +273,7 @@ class Unit extends Entity
 
 		var wall = lastWall;
 		if(wall != null && !isPowerActive(Ghost))
-			wall.scaleX = hxd.Math.distance(x - wall.x + dir.x * wallSize*2, y - wall.y + dir.y * wallSize*2, z - wall.z + dir.z * wallSize*2);
+			wall.scaleX = hxd.Math.distance(x - wall.x + dir.x * wallSize * 2, y - wall.y + dir.y * wallSize * 2, z - wall.z + dir.z * wallSize * 2);
 
 		fadeTrailFx();
 
@@ -526,7 +528,7 @@ class Unit extends Entity
 
 		var t = new h3d.col.Point();
 		for(w in game.world.walls) {
-			if(w.w == wall || w.w == wall.prev) continue;
+			if(w.w == wall || w.w == wall.prev || ignoreWalls.indexOf(w.w) != -1) continue;
 			if(w.n.x != n.x || w.n.y != n.y || w.n.z != n.z) continue;
 			var b = w.w.getBounds();
 			var d = 0.;
@@ -548,24 +550,26 @@ class Unit extends Entity
 				d += wallSize * 0.5;
 			}
 		}
+
 		return game.world.collide(this);
 	}
 
-	function useShield(w : h3d.scene.Object) {
+	function useShield(w) {
 		shield.remove();
 		shield = null;
+		ignoreWalls.push(w);
 
-		var colBounds = obj.getBounds();
-		colBounds.scaleCenter(0.1);
-		colBounds.offset( -dir.x * 0.75, -dir.y * 0.75 , -dir.z * 0.75);
-
-		inline function hit() {
-			var b = w.getBounds();
-			return b.collide(colBounds);
-		}
-
-		do move(0.1)
-		while(hit());
+		var ox = x;
+		var oy = y;
+		var oz = z;
+		game.event.waitUntil(function(dt) {
+			var d = hxd.Math.distance(ox - x, oy - y, oz - z);
+			if(d > wallSize * 2) {
+				ignoreWalls.remove(w);
+				return true;
+			}
+			return false;
+		});
 	}
 
 	public function isPowerActive(k : Data.PowerKind) {
@@ -589,8 +593,22 @@ class Unit extends Entity
 		///////////
 */
 
+		inline function autoPilot() {
+			if(scollide(Front, 2)) {
+				var ray = 5;
+				var l = scollide(Left, ray);
+				var r = scollide(Right, ray);
+				if(l && !r) changeDir(1);
+				else if(r && !l) changeDir(-1);
+				else changeDir(Math.random() < 0.5 ? -1 : 1);
+			}
+		}
+
 		if(speedBonus > 0 && !isPowerActive(SpeedUp)) {
-			if(speedBonus > 0) speedBonus *= Math.pow(0.95, dt);
+			if(speedBonus > 0) {
+				speedBonus *= Math.pow(0.92, dt);
+				autoPilot();
+			}
 			if(speedBonus < 0.01)  speedBonus = 0;
 		}
 
@@ -601,15 +619,7 @@ class Unit extends Entity
 				if(power.time <= 0)
 					power.active = false;
 				else speedBonus += (power.value - speedBonus) * 0.25 * dt;
-
-				if(scollide(Front, 2)) {
-					var ray = 5;
-					var l = scollide(Left, ray);
-					var r = scollide(Right, ray);
-					if(l && !r) changeDir(1);
-					else if(r && !l) changeDir(-1);
-					else changeDir(Math.random() < 0.5 ? -1 : 1);
-				}
+				autoPilot();
 
 			case Shield:
 				power.active = false;
@@ -638,16 +648,17 @@ class Unit extends Entity
 				}
 
 				canMove = false;
-				x -= dir.x * power.value * dt;
-				y -= dir.y * power.value * dt;
-				z -= dir.z * power.value * dt;
+				x -= dir.x * wallSize * power.value * dt;
+				y -= dir.y * wallSize * power.value * dt;
+				z -= dir.z * wallSize * power.value * dt;
 
 				var old = wall.scaleX;
 				wall.scaleX = hxd.Math.distance(x - wall.x, y - wall.y, z - wall.z);
 				if(wall.scaleX >= old) {
-					x = wall.x;
-					y = wall.y;
-					z = wall.z;
+					x = wall.x + dir.x * wallSize * 0.5;
+					y = wall.y + dir.y * wallSize * 0.5;
+					z = wall.z + dir.z * wallSize * 0.5;
+
 					if(wall.prev == null) {
 						power.active = false;
 						canMove = true;
@@ -655,6 +666,7 @@ class Unit extends Entity
 					}
 					else removeWall(wall);
 				}
+
 			case Ghost:
 				power.time -= dt / 60;
 				if(power.time <= 0) {

@@ -103,7 +103,7 @@ class IA extends Unit
 				updateKeys();
 		}
 
-		if(power.ready() && Math.random() < 0.01)
+		if(power.isReady && Math.random() < 0.01)
 			power.start();
 	}
 }
