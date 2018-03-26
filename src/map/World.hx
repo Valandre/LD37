@@ -34,10 +34,6 @@ class World {
 		room.setScale(size / 100);
 		game.s3d.addChild(room);
 
-		for(m in room.getMaterials()) {
-			m.texture.filter = Nearest;
-		}
-
 		for(m in room.getMeshes()) {
 			m.material.mainPass.enableLights = true;
 			m.material.shadows = false;
