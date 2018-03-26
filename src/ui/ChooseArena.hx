@@ -51,18 +51,18 @@ class ChooseArena extends ui.Form
 		mname = obj.getObjectByName("Name").toMesh();
 		mview = obj.getObjectByName("View").toMesh();
 
-		viewTex.push(hxd.Res.UI.WorldSelect.View01.toTexture());
-		viewTex.push(hxd.Res.UI.WorldSelect.View02.toTexture());
+		viewTex.push(game.getTexFromPath("UI/WorldSelect/View01.png"));
+		viewTex.push(game.getTexFromPath("UI/WorldSelect/View02.png"));
 
-		nameTex.push(hxd.Res.UI.WorldSelect.Name01.toTexture());
-		nameTex.push(hxd.Res.UI.WorldSelect.Name02.toTexture());
+		nameTex.push(game.getTexFromPath("UI/WorldSelect/Name01.png"));
+		nameTex.push(game.getTexFromPath("UI/WorldSelect/Name02.png"));
 
 		//
 		mSelect = obj.getObjectByName("ButtonA").toMesh();
 		mBack = obj.getObjectByName("ButtonB").toMesh();
 		buttonTex = [];
-		buttonTex.push([hxd.Res.UI.CharacterSelect.ButtonA01.toTexture(), hxd.Res.UI.CharacterSelect.ButtonA02.toTexture()]);
-		buttonTex.push([hxd.Res.UI.CharacterSelect.ButtonB01.toTexture(), hxd.Res.UI.CharacterSelect.ButtonB02.toTexture()]);
+		buttonTex.push([game.getTexFromPath("UI/CharacterSelect/ButtonA01.png"), game.getTexFromPath("UI/CharacterSelect/ButtonA02.png")]);
+		buttonTex.push([game.getTexFromPath("UI/CharacterSelect/ButtonB01.png"), game.getTexFromPath("UI/CharacterSelect/ButtonB02.png")]);
 
 		//
 		var m = hxd.Res.UI.Selector.Model;

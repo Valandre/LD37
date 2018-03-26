@@ -93,7 +93,7 @@ class Unit extends Entity
 
 		super(kind, x, y, z, scale);
 
-		wallTex = hxd.Res.load("wall0" + (props.colorId + 1) + ".png").toTexture();
+		wallTex = game.getTexFromPath("wall0" + (props.colorId + 1) + ".png");
 		speed = speedRef;
 		sensor = h3d.col.Ray.fromValues(x, y, z, 0, 0, 0);
 		oldPos = new h3d.col.Point();
@@ -185,7 +185,7 @@ class Unit extends Entity
 				var name = "TrailStart";
 				var fx = addFx(name);
 				if( fx != null ) {
-					fx.getGroup(name).texture = hxd.Res.load("Fx/Drop0" + id + "[ADD].jpg").toTexture();
+					fx.getGroup(name).texture = game.getTexFromPath("Fx/Drop0" + id + "[ADD].jpg");
 					fx.visible = canMove;
 					o.addChild(fx);
 
@@ -452,7 +452,7 @@ class Unit extends Entity
 		parts.x = x;
 		parts.y = y;
 		parts.z = z;
-		parts.material.texture = hxd.Res.load("Fx/Drop0" + id + "[ADD].jpg").toTexture();
+		parts.material.texture = game.getTexFromPath("Fx/Drop0" + id + "[ADD].jpg");
 		parts.material.blendMode = Add;
 		game.s3d.addChild(parts);
 

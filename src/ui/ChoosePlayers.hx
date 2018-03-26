@@ -85,22 +85,19 @@ class PlayerSlot {
 		for(m in obj.getMeshes())
 			m.material.shadows = false;
 */
-		var res = try {hxd.Res.load("Chars/" + charKind + "01/Texture01_normal.png"); } catch(e : Dynamic) {null;}
-		if(res != null) {
-			var tex = res.toTexture();
-			for(m in obj.getMeshes()) {
+		var tex = game.getTexFromPath("Chars/" + charKind + "01/Texture01_normal.png");
+		if(tex != null)
+			for(m in obj.getMeshes())
 				m.material.mainPass.addShader(new shaders.NormalMap(tex));
-			}
-		}
 
 		faceTextures = [];
 		for(m in obj.getMaterials()) {
 			if(StringTools.startsWith(m.name, "Face")) {
 				var i = 0;
 				while(true) {
-					var res = try {hxd.Res.load("Chars/" + charKind + "01/FaceA_0" + i + ".png"); } catch(e : Dynamic) {null; }
-					if(res == null) break;
-					faceTextures.push(res.toTexture());
+					var tex = game.getTexFromPath("Chars/" + charKind + "01/FaceA_0" + i + ".png");
+					if(tex == null) break;
+					faceTextures.push(tex);
 					i++;
 				}
 			}
@@ -172,7 +169,7 @@ class PlayerSlot {
 		selector = game.modelCache.loadModel(m);
 		for(m in selector.getMeshes()) {
 			m.material.shadows = false;
-			m.material.texture = hxd.Res.load("UI/Selector/SelectorP" + (pid + 1) + ".png").toTexture();
+			m.material.texture = game.getTexFromPath("UI/Selector/SelectorP" + (pid + 1) + ".png");
 		}
 		game.s3d.addChild(selector);
 		selector.visible = false;
@@ -308,11 +305,7 @@ class ChoosePlayers extends ui.Form
 			if(o == null) break;
 			mthumbs.push(o);
 
-			var name = null;
-			try {
-				name = hxd.Res.load("UI/CharacterSelect/Name" + ((i < 9 ? "0" : "") + (i + 1)) + ".png").toTexture();
-			}
-			catch(e:hxd.res.NotFound) {};
+			var name = game.getTexFromPath("UI/CharacterSelect/Name" + ((i < 9 ? "0" : "") + (i + 1)) + ".png");
 			nameTex.push(name);
 			i++;
 		}
@@ -325,13 +318,13 @@ class ChoosePlayers extends ui.Form
 			ppos.push(obj.getObjectByName("PosP" + (i + 1)));
 		}
 
-		stateTex.push(hxd.Res.UI.CharacterSelect.StateCPU.toTexture());
+		stateTex.push(game.getTexFromPath("UI/CharacterSelect/StateCPU.png"));
 		for(i in 0...4)
-			stateTex.push(hxd.Res.load("UI/CharacterSelect/StateP" + (i + 1) + ".png").toTexture());
+			stateTex.push(game.getTexFromPath("UI/CharacterSelect/StateP" + (i + 1) + ".png"));
 
 
 		for(i in 0...9)
-			slotTex.push(hxd.Res.load("UI/CharacterSelect/Slot0" + (i + 1) + ".png").toTexture());
+			slotTex.push(game.getTexFromPath("UI/CharacterSelect/Slot0" + (i + 1) + ".png"));
 		pslot[0].material.texture = slotTex[1];
 		pslot[1].material.texture = slotTex[3];
 		pslot[2].material.texture = slotTex[4];
@@ -343,9 +336,10 @@ class ChoosePlayers extends ui.Form
 		mBack = obj.getObjectByName("ButtonB").toMesh();
 		mUp = obj.getObjectByName("ButtonUp").toMesh();
 		buttonTex = [];
-		buttonTex.push([hxd.Res.UI.CharacterSelect.ButtonA01.toTexture(), hxd.Res.UI.CharacterSelect.ButtonA02.toTexture()]);
-		buttonTex.push([hxd.Res.UI.CharacterSelect.ButtonB01.toTexture(), hxd.Res.UI.CharacterSelect.ButtonB02.toTexture()]);
-		buttonTex.push([hxd.Res.UI.CharacterSelect.ButtonUp01.toTexture(), hxd.Res.UI.CharacterSelect.ButtonUp02.toTexture()]);
+
+		buttonTex.push([game.getTexFromPath("UI/CharacterSelect/ButtonA01.png"), game.getTexFromPath("UI/CharacterSelect/ButtonA02.png")]);
+		buttonTex.push([game.getTexFromPath("UI/CharacterSelect/ButtonB01.png"),game.getTexFromPath("UI/CharacterSelect/ButtonB02.png")]);
+		buttonTex.push([game.getTexFromPath("UI/CharacterSelect/ButtonUp01.png"), game.getTexFromPath("UI/CharacterSelect/ButtonUp02.png")]);
 
 		//iniy player 1
 		addPlayer(0, ppos[0]);
@@ -449,7 +443,7 @@ class ChoosePlayers extends ui.Form
 			pname[i].material.texture = nameTex[pl.selectId - 1];
 			pname[i].visible = pl.visible;
 			if(pl.state >= 2)
-				pstate[i].material.texture = hxd.Res.UI.CharacterSelect.ButtonOk.toTexture();
+				pstate[i].material.texture = game.getTexFromPath("UI/CharacterSelect/ButtonOk.png");
 			else {
 				pstate[i].material.texture = stateTex[c != null && c.active ? i + 1 : 0];
 				pslot[i].material.texture = slotTex[pl.colorId];

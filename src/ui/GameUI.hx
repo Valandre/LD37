@@ -24,22 +24,24 @@ private class PlayerScore {
 
 		var root = @:privateAccess parent.root;
 		var modelId = Data.chars.get(me.props.modelId).selectId;
-		var res = try {
-			hxd.Res.load("UI/CharacterSelect/Thumb" + (modelId < 10 ? "0" : "") + modelId + ".png");
+		var tex = try {
+			game.getTexFromPath("UI/CharacterSelect/Thumb" + (modelId < 10 ? "0" : "") + modelId + ".png");
 		}
 		catch(e : hxd.res.NotFound) {
-			hxd.Res.load("UI/CharacterSelect/Thumb00.png");
+			game.getTexFromPath("UI/CharacterSelect/Thumb00.png");
 		};
+
+
 
 		var portrait = root.getObjectByName("ThumbP" + pid);
 		if(portrait != null)
-			portrait.toMesh().material.texture = res.toTexture();
+			portrait.toMesh().material.texture = tex;
 
 		flames = [root.getObjectByName("FlameAP" + pid), root.getObjectByName("FlameBP" + pid)];
 		powerReadyText = root.getObjectByName("ReadyP" + pid);
 
 		energyMesh = root.getObjectByName("Energy" + pid);
-		var tex = hxd.Res.load("wall" + (me.props.colorId < 10 ? "0" : "") + me.props.colorId + ".png").toTexture();
+		var tex = game.getTexFromPath("wall" + (me.props.colorId < 10 ? "0" : "") + (me.props.colorId + 1) + ".png");
 		energyMesh.toMesh().material.texture = tex;
 		energyMesh.toMesh().material.blendMode = Alpha;
 		energyMesh.scaleY = me.power.progress;

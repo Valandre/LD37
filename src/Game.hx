@@ -20,6 +20,22 @@ enum FontKind {
 	Corner;
 }
 
+class MyModelCache extends h3d.prim.ModelCache {
+
+	override public function loadModel(res:hxd.res.Model):h3d.scene.Object {
+		var m = super.loadModel(res);
+		for( mat in m.getMaterials() )
+			mat.texture.filter = Nearest;
+		return m;
+	}
+
+	override public function loadTexture(model:hxd.res.Model, texturePath):h3d.mat.Texture {
+		var tex = super.loadTexture(model, texturePath);
+		if(tex != null)	tex.filter = Nearest;
+		return tex;
+	}
+}
+
 class Game extends hxd.App {
 
 	static public var PREFS = initPrefs();
@@ -29,7 +45,7 @@ class Game extends hxd.App {
 		return prefs;
 	}
 
-	public var modelCache : h3d.prim.ModelCache;
+	public var modelCache : MyModelCache;
 	public var event : hxd.WaitEvent;
 	public var world : map.World;
 	public var entities : Array<ent.Entity>;
@@ -99,7 +115,7 @@ class Game extends hxd.App {
 		catch(e : hxd.res.NotFound) {};
 		*/
 
-		modelCache = new h3d.prim.ModelCache();
+		modelCache = new MyModelCache();
 		event = new hxd.WaitEvent();
 
 		event.waitUntil(function(dt) {
@@ -186,6 +202,14 @@ class Game extends hxd.App {
 			}
 			return false;
 		});
+	}
+
+	public function getTexFromPath(path : String){
+		var res = try hxd.Res.load(path) catch(e : hxd.res.NotFound) null;
+		if(res == null) return null;
+		var tex = res.toTexture();
+		tex.filter = Nearest;
+		return tex;
 	}
 
 	public function endGame() {
