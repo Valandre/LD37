@@ -452,8 +452,9 @@ class Unit extends Entity
 		parts.x = x;
 		parts.y = y;
 		parts.z = z;
-		parts.material.texture = game.getTexFromPath("Fx/Drop0" + id + "[ADD].jpg");
-		parts.material.blendMode = Add;
+
+		parts.material.texture = game.getTexFromPath("wall0" + (props.colorId + 1) + ".png");
+		//parts.material.blendMode = Add;
 		game.s3d.addChild(parts);
 
 		for(i in 0...200) {
