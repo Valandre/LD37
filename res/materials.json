@@ -36,13 +36,7 @@
 		"UI": {
 			"LifeBar": {
 				"Ok": {
-					"kind": "AlphaKill",
-					"shadows": false,
-					"culled": true,
-					"lighted": false
-				},
-				"Flame01": {
-					"kind": "AlphaKill",
+					"kind": "Alpha",
 					"shadows": false,
 					"culled": true,
 					"lighted": false
@@ -54,6 +48,24 @@
 					"lighted": false
 				},
 				"Thumb01": {
+					"kind": "Alpha",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
+				"Point": {
+					"kind": "Alpha",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
+				"Flame01": {
+					"kind": "Alpha",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
+				"Energy": {
 					"kind": "Alpha",
 					"shadows": false,
 					"culled": true,
@@ -194,6 +206,44 @@
 										"kind": "AlphaKill",
 										"shadows": false,
 										"culled": true,
+										"lighted": false
+									}
+								},
+								"LifeBar": {
+									"BG": {
+										"kind": "AlphaKill",
+										"shadows": false,
+										"culled": false,
+										"lighted": false
+									},
+									"Flame01": {
+										"kind": "AlphaKill",
+										"shadows": false,
+										"culled": false,
+										"lighted": false
+									},
+									"Energy": {
+										"kind": "AlphaKill",
+										"shadows": false,
+										"culled": false,
+										"lighted": false
+									},
+									"Ok": {
+										"kind": "AlphaKill",
+										"shadows": false,
+										"culled": false,
+										"lighted": false
+									},
+									"Point": {
+										"kind": "AlphaKill",
+										"shadows": false,
+										"culled": false,
+										"lighted": false
+									},
+									"Thumb01": {
+										"kind": "AlphaKill",
+										"shadows": false,
+										"culled": false,
 										"lighted": false
 									}
 								}
