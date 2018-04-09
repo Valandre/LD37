@@ -133,12 +133,6 @@
 					"culled": true,
 					"lighted": false
 				},
-				"ButtonA01": {
-					"kind": "AlphaKill",
-					"shadows": false,
-					"culled": true,
-					"lighted": false
-				},
 				"Name01": {
 					"kind": "AlphaKill",
 					"shadows": false,
@@ -191,6 +185,12 @@
 					"kind": "AlphaKill",
 					"shadows": false,
 					"culled": true,
+					"lighted": false
+				},
+				"ButtonA01": {
+					"kind": "Alpha",
+					"shadows": false,
+					"culled": false,
 					"lighted": false
 				}
 			}
