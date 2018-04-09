@@ -9,10 +9,10 @@ FBXHeaderExtension:  {
 		Year: 2018
 		Month: 4
 		Day: 9
-		Hour: 13
-		Minute: 46
-		Second: 15
-		Millisecond: 462
+		Hour: 19
+		Minute: 11
+		Second: 4
+		Millisecond: 797
 	}
 	Creator: "FBX SDK/FBX Plugins version 2018.1"
 	SceneInfo: "SceneInfo::GlobalInfo", "UserData" {
@@ -34,13 +34,13 @@ FBXHeaderExtension:  {
 			P: "Original|ApplicationVendor", "KString", "", "", "Autodesk"
 			P: "Original|ApplicationName", "KString", "", "", "3ds Max"
 			P: "Original|ApplicationVersion", "KString", "", "", "2018"
-			P: "Original|DateTime_GMT", "DateTime", "", "", "09/04/2018 11:46:15.461"
+			P: "Original|DateTime_GMT", "DateTime", "", "", "09/04/2018 17:11:04.796"
 			P: "Original|FileName", "KString", "", "", "D:\Projects\LD37\trunk\res\Fx\Wave01\Model.FBX"
 			P: "LastSaved", "Compound", "", ""
 			P: "LastSaved|ApplicationVendor", "KString", "", "", "Autodesk"
 			P: "LastSaved|ApplicationName", "KString", "", "", "3ds Max"
 			P: "LastSaved|ApplicationVersion", "KString", "", "", "2018"
-			P: "LastSaved|DateTime_GMT", "DateTime", "", "", "09/04/2018 11:46:15.461"
+			P: "LastSaved|DateTime_GMT", "DateTime", "", "", "09/04/2018 17:11:04.796"
 			P: "Original|ApplicationActiveProject", "KString", "", "", "C:\Users\Emak\Documents\3dsMax"
 			P: "Original|ApplicationNativeFile", "KString", "", "", "D:\Projects\LD37\trunk\gfx\EMAK\Fx\Wave01\Model.max"
 		}
@@ -77,7 +77,7 @@ GlobalSettings:  {
 
 Documents:  {
 	Count: 1
-	Document: 2333470828528, "", "Scene" {
+	Document: 2543434974208, "", "Scene" {
 		Properties70:  {
 			P: "SourceObject", "object", "", ""
 			P: "ActiveAnimStackName", "KString", "", "", ""
@@ -326,10 +326,10 @@ Definitions:  {
 ;------------------------------------------------------------------
 
 Objects:  {
-	NodeAttribute: 2333468770656, "NodeAttribute::", "Null" {
+	NodeAttribute: 2542881223360, "NodeAttribute::", "Null" {
 		TypeFlags: "Null"
 	}
-	Geometry: 2333468800688, "Geometry::", "Mesh" {
+	Geometry: 2543339620256, "Geometry::", "Mesh" {
 		Properties70:  {
 			P: "Color", "ColorRGB", "Color", "",0.105882352941176,0.694117647058824,0.580392156862745
 		}
@@ -406,7 +406,7 @@ Objects:  {
 			}
 		}
 	}
-	Geometry: 2333468796336, "Geometry::", "Mesh" {
+	Geometry: 2543339638208, "Geometry::", "Mesh" {
 		Properties70:  {
 			P: "Color", "ColorRGB", "Color", "",0.105882352941176,0.694117647058824,0.580392156862745
 		}
@@ -484,7 +484,7 @@ Objects:  {
 			}
 		}
 	}
-	Model: 2333470003264, "Model::Root", "Null" {
+	Model: 2543555241024, "Model::Root", "Null" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -502,31 +502,33 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 2333469385344, "Model::Wave02", "Mesh" {
+	Model: 2543555234448, "Model::Wave02", "Mesh" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
 			P: "Lcl Translation", "Lcl Translation", "", "A",0.498046875,-1.57962184998972e-10,0
+			P: "UDP3DSMAX", "KString", "", "U", "UV=<uv><f>0 0.0 0.0</f><f>160 0.125 0.0</f><f>320 0.25 0.0</f><f>480 0.375 0.0</f><f>640 0.5 0.0</f><f>800 0.625 0.0</f><f>960 0.75 0.0</f><f>1120 0.875 0.0</f><f>1280 1.0 0.0</f></uv>&cr;&lf;"
 			P: "MaxHandle", "int", "Integer", "UH",5134
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 2333469383152, "Model::Wave01", "Mesh" {
+	Model: 2543555227872, "Model::Wave01", "Mesh" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
 			P: "Lcl Translation", "Lcl Translation", "", "A",0.498046875,-1.57962184998972e-10,0
+			P: "UDP3DSMAX", "KString", "", "U", "UV=<uv><f>0 0.0 0.0</f><f>160 0.125 0.0</f><f>320 0.25 0.0</f><f>480 0.375 0.0</f><f>640 0.5 0.0</f><f>800 0.625 0.0</f><f>960 0.75 0.0</f><f>1120 0.875 0.0</f><f>1280 1.0 0.0</f></uv>&cr;&lf;"
 			P: "MaxHandle", "int", "Integer", "UH",5128
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Material: 2332602250432, "Material::Wave01", "" {
+	Material: 2544532615328, "Material::Wave01", "" {
 		Version: 102
 		ShadingModel: "phong"
 		MultiLayer: 0
@@ -548,7 +550,7 @@ Objects:  {
 			P: "Reflectivity", "double", "Number", "",0
 		}
 	}
-	Video: 2332602251392, "Video::Map Wave01", "Clip" {
+	Video: 2543005836144, "Video::Map Wave01", "Clip" {
 		Type: "Clip"
 		Properties70:  {
 			P: "Path", "KString", "XRefUrl", "", "D:\Projects\LD37\trunk\res\Fx\Wave01\texture01.png"
@@ -558,13 +560,12 @@ Objects:  {
 		Filename: "D:\Projects\LD37\trunk\res\Fx\Wave01\texture01.png"
 		RelativeFilename: "texture01.png"
 	}
-	Texture: 2332602249472, "Texture::Map Wave01", "" {
+	Texture: 2544532616768, "Texture::Map Wave01", "" {
 		Type: "TextureVideoClip"
 		Version: 202
 		TextureName: "Texture::Map Wave01"
 		Properties70:  {
 			P: "PremultiplyAlpha", "bool", "", "",0
-			P: "Translation", "Vector", "", "A",-1,0,0
 			P: "UVSet", "KString", "", "", "UVChannel_1"
 			P: "UseMaterial", "bool", "", "",1
 		}
@@ -576,15 +577,15 @@ Objects:  {
 		Texture_Alpha_Source: "Alpha_Black"
 		Cropping: 0,0,0,0
 	}
-	AnimationStack: 2332999671168, "AnimStack::Take 001", "" {
+	AnimationStack: 2543024546816, "AnimStack::Take 001", "" {
 		Properties70:  {
 			P: "LocalStop", "KTime", "Time", "",12316308800
 			P: "ReferenceStop", "KTime", "Time", "",12316308800
 		}
 	}
-	AnimationLayer: 2333260180336, "AnimLayer::BaseLayer", "" {
+	AnimationLayer: 2542870720640, "AnimLayer::BaseLayer", "" {
 	}
-	CollectionExclusive: 2332999676000, "DisplayLayer::Character", "DisplayLayer" {
+	CollectionExclusive: 2543434975760, "DisplayLayer::Character", "DisplayLayer" {
 		Properties70:  {
 			P: "Color", "ColorRGB", "Color", "",0.549019607843137,0.345098039215686,0.882352941176471
 		}
@@ -597,49 +598,49 @@ Objects:  {
 Connections:  {
 	
 	;Model::Root, Model::RootNode
-	C: "OO",2333470003264,0
+	C: "OO",2543555241024,0
 	
 	;AnimLayer::BaseLayer, AnimStack::Take 001
-	C: "OO",2333260180336,2332999671168
+	C: "OO",2542870720640,2543024546816
 	
 	;Model::Wave02, Model::Root
-	C: "OO",2333469385344,2333470003264
+	C: "OO",2543555234448,2543555241024
 	
 	;Model::Wave01, Model::Root
-	C: "OO",2333469383152,2333470003264
+	C: "OO",2543555227872,2543555241024
 	
 	;NodeAttribute::, Model::Root
-	C: "OO",2333468770656,2333470003264
+	C: "OO",2542881223360,2543555241024
 	
 	;Geometry::, Model::Wave02
-	C: "OO",2333468800688,2333469385344
+	C: "OO",2543339620256,2543555234448
 	
 	;Material::Wave01, Model::Wave02
-	C: "OO",2332602250432,2333469385344
+	C: "OO",2544532615328,2543555234448
 	
 	;Geometry::, Model::Wave01
-	C: "OO",2333468796336,2333469383152
+	C: "OO",2543339638208,2543555227872
 	
 	;Material::Wave01, Model::Wave01
-	C: "OO",2332602250432,2333469383152
+	C: "OO",2544532615328,2543555227872
 	
 	;Texture::Map Wave01, Material::Wave01
-	C: "OP",2332602249472,2332602250432, "DiffuseColor"
+	C: "OP",2544532616768,2544532615328, "DiffuseColor"
 	
 	;Texture::Map Wave01, Material::Wave01
-	C: "OP",2332602249472,2332602250432, "TransparentColor"
+	C: "OP",2544532616768,2544532615328, "TransparentColor"
 	
 	;Video::Map Wave01, Texture::Map Wave01
-	C: "OO",2332602251392,2332602249472
-	
-	;Model::Wave02, DisplayLayer::Character
-	C: "OO",2333469385344,2332999676000
+	C: "OO",2543005836144,2544532616768
 	
 	;Model::Wave01, DisplayLayer::Character
-	C: "OO",2333469383152,2332999676000
+	C: "OO",2543555227872,2543434975760
+	
+	;Model::Wave02, DisplayLayer::Character
+	C: "OO",2543555234448,2543434975760
 	
 	;Model::Root, DisplayLayer::Character
-	C: "OO",2333470003264,2332999676000
+	C: "OO",2543555241024,2543434975760
 }
 ;Takes section
 ;----------------------------------------------------
