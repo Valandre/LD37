@@ -186,6 +186,9 @@ class WorldComposite extends h3d.scene.DefaultRenderer {
 		ambient.render();
 
 
-		h3d.pass.Copy.run(finalTex, null);
+		//h3d.pass.Copy.run(finalTex, null);
+		resetTarget();
+		//setTarget(null);
+		antiAliasing.apply(finalTex);
 	}
 }
