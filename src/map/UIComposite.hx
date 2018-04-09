@@ -90,10 +90,6 @@ class UIComposite extends h3d.scene.DefaultRenderer {
 		ambient.setGlobals(ctx);
 		ambient.render();
 
-
-	//fxaa
-		resetTarget();
-		//setTarget(null);
-		antiAliasing.apply(finalTex);
+		h3d.pass.Copy.run(finalTex, null);
 	}
 }
