@@ -10,9 +10,6 @@ class IA extends Unit
 		this.dir = dir;
 		var size = game.size >> 1;
 		super(IA, props, -size * 0.65 * dir.x, -size * 0.65 * dir.y, -size, scale, id);
-		this.x += Std.random(5) - 2;
-		this.y += Std.random(5) - 2;
-		this.z += w * 0.5;
 	}
 
 	function updateKeys() {
@@ -20,7 +17,6 @@ class IA extends Unit
 		var dist = 20;
 		for(b in game.bonus) {
 			if(hxd.Math.distance(x - b.x, y - b.y, z - b.z) > dist) continue;
-			//if(Math.random() < 0.1) continue;
 
 			if(bonuscollide(b, Front, dist) && !scollide(Front, dist))
 				return;

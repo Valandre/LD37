@@ -48,6 +48,47 @@ class World {
 
 		//
 		switch(arenaId) {
+			case 0 :
+				/*
+				var scaledBounds = bounds.clone();
+				scaledBounds.scaleCenter(1.2);
+				for(i in 0...4) {
+					var parts = new h3d.parts.Particles();
+
+					parts.material.texture = game.getTexFromPath("Fx/Sakura01/tex0" + (i + 1) + ".png");
+					parts.material.blendMode = Alpha;
+					game.s3d.addChild(parts);
+
+					inline function addPart() {
+						var p = parts.alloc();
+						p.size = 0.5;
+
+						var n = new h3d.Vector(hxd.Math.srand(), hxd.Math.srand(), hxd.Math.srand());
+						p.dx = n.x;
+						p.dy = n.y;
+						p.dz = n.z;
+						p.fx = 0.05 + Math.random() * 0.1; //speed
+					}
+
+					var pt = new h3d.col.Point();
+					var wsize = game.size >> 1;
+					game.event.waitUntil(function(dt) {
+						if(bounds == null) return true;
+						if(parts.count < 30) addPart();
+						for(p in parts.getParticles()) {
+							p.x += p.dx * p.fx;
+							p.y += p.dy * p.fx;
+							p.z += p.dz * p.fx;
+
+							pt.x = p.x;
+							pt.y = p.y;
+							pt.z = p.z;
+							if(!scaledBounds.contains(pt)) p.remove();
+						}
+						return false;
+					});
+				}*/
+
 			case 1:
 				var res = hxd.Res.load("World/World0" + (arenaId + 1) + "/Window01.FBX").toModel();
 				if( res == null ) return;

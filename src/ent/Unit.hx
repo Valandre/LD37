@@ -99,6 +99,10 @@ class Unit extends Entity
 		speed = speedRef;
 		sensor = h3d.col.Ray.fromValues(x, y, z, 0, 0, 0);
 		oldPos = new h3d.col.Point();
+
+		this.x += Std.random(5) - 2;
+		this.y += Std.random(5) - 2;
+		this.z += w * 0.5;
 	}
 
 	function getColor() {
@@ -122,8 +126,6 @@ class Unit extends Entity
 		for(m in obj.getMeshes()) {
 			m.material.mainPass.enableLights = true;
 			m.material.shadows = false;
-			m.material.allocPass("depth");
-			m.material.allocPass("normal");
 			m.setScale(1.2);
 		}
 
@@ -257,8 +259,6 @@ class Unit extends Entity
 		if(wall != null && !isPowerActive(Ghost))
 			wall.scaleX = hxd.Math.distance(x - wall.x + dir.x * wallSize * 2, y - wall.y + dir.y * wallSize * 2, z - wall.z + dir.z * wallSize * 2);
 
-		fadeTrailFx();
-
 		var tmp = dir.clone();
 		dir = worldNormal.clone();
 		tmp.scale(-1);
@@ -309,7 +309,6 @@ class Unit extends Entity
 		var wall = lastWall;
 		if(wall != null && !isPowerActive(Ghost))
 			wall.scaleX = hxd.Math.distance(x - wall.x + dir.x * wallSize * 0.5, y - wall.y + dir.y * wallSize * 0.5, z - wall.z + dir.z * wallSize * 0.5);
-		fadeTrailFx();
 		dir = setDir(dir, v);
 		createWall();
 		meshRotate(obj);
@@ -382,30 +381,6 @@ class Unit extends Entity
 		return d;
 	}
 
-	function fadeTrailFx() {
-		if(fxParts == null) return;
-		var fx = fxParts.get("TrailStart");
-		if(fx == null) return;
-		fxParts.set("TrailStart", null);
-
-		//
-		fx.remove();
-		return;
-		//
-
-		game.s3d.addChild(fx);
-		fxs.push(fx);
-		fx.follow = null;
-		if(obj == null) {
-			fx.remove();
-			return;
-		}
-		fx.x = x;
-		fx.y = y;
-		fx.z = z;
-		meshRotate(fx);
-	}
-
 	public function hitEnergy() {
 		power.progress += 0.2;
 	}
@@ -425,7 +400,6 @@ class Unit extends Entity
 		}
 
 		obj.remove();
-		fadeTrailFx();
 
 		//
 		//Sounds.play("Crash");
