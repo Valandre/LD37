@@ -174,42 +174,25 @@ class Unit extends Entity
 		return walls.length == 0 ? null : walls[walls.length - 1];
 	}
 
+	var wave : h3d.scene.Object;
 	function addTrailFx() {
-		//////
-		return; //fxs emitter is static ? (cf Nico)
-		//////
+		if(wave != null) return;
 
-		for(i in 0...obj.numChildren) {
-			var o = obj.getChildAt(i);
-			if( o.name == null ) continue;
-			var tmp = o.name.split("_");
-			if(tmp[0] == "body") {
-				var name = "TrailStart";
-				var fx = addFx(name);
-				if( fx != null ) {
-					fx.getGroup(name).texture = game.getTexFromPath("Fx/Drop0" + id + "[ADD].jpg");
-					fx.visible = canMove;
-					o.addChild(fx);
+		var m = hxd.Res.load("Fx/Wave01/Model.FBX").toModel();
+		wave = game.modelCache.loadModel(m);
+		obj.addChild(wave);
 
-					var g = fx.getGroup(name);
-					var sc = 0.;
-					fx.setScale(0);
-					game.event.waitUntil(function(dt) {
-						if(fx == null) return true;
-						sc = Math.min(1, sc + 0.01 * dt);
-						fx.setScale(sc);
-						return sc == 1;
-					});
-				}
-			}
-		}
+		var a = game.modelCache.loadAnimation(m);
+		a.loop = true;
+		wave.playAnimation(a);
+		wave.visible = false;
+
+		var tex =  game.getTexFromPath("Fx/Wave01/texture0" + (props.colorId + 1) + ".png");
+		for(m in wave.getMeshes())
+			m.material.texture = tex;
 	}
 
 	public function createWall() {
-		if(!enableWalls) {
-			addTrailFx();
-			return;
-		}
 
 		var n = worldNormal;
 		var c = new h3d.prim.Cube(1, wallSize, 1);
@@ -237,7 +220,6 @@ class Unit extends Entity
 		game.world.walls.push({w : wall, n : n.clone()});
 
 		meshRotate(wall);
-		addTrailFx();
 	}
 
 	function removeWall(w : Wall) {
@@ -690,7 +672,9 @@ class Unit extends Entity
 				return;
 			}
 			oldPos = getSizedPos();
+			wave.visible = true;
 		}
+		else wave.visible = false;
 
 		if(!isPowerActive(Ghost)) {
 			var wall = lastWall;
