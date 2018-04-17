@@ -8,7 +8,7 @@ private class PlayerScore {
 	var game : Game;
 	var pid : Int;
 	var me : ent.Unit;
-	var flames = [];
+	//var flames = [];
 	var powerReadyText : h3d.scene.Object;
 	var energyMesh : h3d.scene.Object;
 
@@ -37,7 +37,7 @@ private class PlayerScore {
 		if(portrait != null)
 			portrait.toMesh().material.texture = tex;
 
-		flames = [root.getObjectByName("FlameAP" + pid), root.getObjectByName("FlameBP" + pid)];
+		//flames = [root.getObjectByName("FlameAP" + pid), root.getObjectByName("FlameBP" + pid)];
 		powerReadyText = root.getObjectByName("ReadyP" + pid);
 
 		energyMesh = root.getObjectByName("Energy" + pid);
@@ -50,8 +50,8 @@ private class PlayerScore {
 
 	public function update(dt : Float) {
 		powerReadyText.visible = me.power.progress == 1;
-		for(f in flames)
-			f.visible = me.power.progress == 1;
+		//for(f in flames)
+		//	f.visible = me.power.progress == 1;
 		energyMesh.scaleY += (me.power.progress - energyMesh.scaleY) * 0.1 * dt;
 	}
 }
