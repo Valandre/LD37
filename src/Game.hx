@@ -5,10 +5,8 @@ import map.CustomScene;
 import map.WorldComposite;
 import map.World;
 //import Sounds;
-import ui.Menu;
 import ui.GameUI;
 import ui.Win;
-import Const;
 
 enum CameraKind {
 	Menu;
@@ -260,6 +258,7 @@ class Game extends hxd.App {
 
 	function start(){
 		entities = [];
+		autoCameraKind = null;
 		if(world != null) world.remove();
 		world = new map.World(size, state.arenaId );
 		s3d.renderer = worldRenderer;
@@ -366,7 +365,6 @@ class Game extends hxd.App {
 		setCameraValues(pl);
 
 		var pn = pl.worldNormal;
-		var dir = pl.dir;
 		var decal = camZ * 0.75;
 
 		var sp = 0.15 * dt;

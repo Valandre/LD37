@@ -36,30 +36,42 @@ class Player extends Unit
 		return count;
 	}
 
+	var forceNext = false;
+	override function destroy() {
+		super.destroy();
+		
+		game.event.wait(5, function() {
+			if(currFollow != null) return;
+			forceNext = true;
+			//setCam();
+		});
+	}
+
+	inline function setCam() {
+		var pl = game.players[0];
+		var v = game.customScene.views[0];
+		v.id = pl.id;
+		v.camera = game.initCamera(pl);
+		game.s3d.camera = v.camera;
+		currFollow = pl;
+	}
+
 	var currFollow = null;
 	override public function update(dt:Float) {
 		if(dead) {
 			var nb = getNonIAPlayersCount();
 			if(nb == 1 && game.players.length > 0 && game.players.indexOf(this) == -1) {
-				inline function setCam() {
-					var pl = game.players[0];
-					var v = game.customScene.views[0];
-					v.id = pl.id;
-					v.camera = game.initCamera(pl);
-					game.s3d.camera = v.camera;
-					currFollow = pl;
-				}
-
-				if(currFollow != null && currFollow.dead && game.players.indexOf(currFollow) == -1) {
-					game.players.unshift(game.players.pop());
-					setCam();
+				if(forceNext || game.players.length == 1 || (currFollow != null && currFollow.dead && game.players.indexOf(currFollow) == -1)) {
+					if(currFollow != game.players[0])
+						setCam();
+					forceNext = false;
 					return;
 				}
-				if((nb == 1 && K.isPressed(K.LEFT)) || (controller != null && controller.pressed.xAxis < 0)) {
+				if(K.isPressed(K.LEFT) || (controller != null && controller.pressed.xAxis < 0)) {
 					game.players.unshift(game.players.pop());
 					setCam();
 				}
-				if((nb == 1 && K.isPressed(K.RIGHT)) || (controller != null && controller.pressed.xAxis > 0)) {
+				if(K.isPressed(K.RIGHT) || (controller != null && controller.pressed.xAxis > 0)) {
 					game.players.push(game.players.shift());
 					setCam();
 				}

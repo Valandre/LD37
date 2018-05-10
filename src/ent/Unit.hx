@@ -387,6 +387,8 @@ class Unit extends Entity
 
 	function destroy() {
 		dead = true;
+		power.progress = 0;
+
 		var wall = lastWall;
 		if(wall != null && !isPowerActive(Ghost)) {
 			wall.scaleX = hxd.Math.distance(x - wall.x, y - wall.y, z - wall.z);

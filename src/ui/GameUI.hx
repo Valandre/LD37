@@ -7,10 +7,13 @@ private class PlayerScore {
 
 	var game : Game;
 	var pid : Int;
+	var modelId : Int;
 	var me : ent.Unit;
-	//var flames = [];
+	var portrait : h3d.scene.Object;
+	var counter : h3d.scene.Object;
 	var powerReadyText : h3d.scene.Object;
 	var energyMesh : h3d.scene.Object;
+	var iconState = 0; //0 = alive, 1 = burst, 2 = dead 
 
 	public function new(parent : GameUI, pid) {
 		this.game = Game.inst;
@@ -23,19 +26,10 @@ private class PlayerScore {
 			}
 
 		var root = @:privateAccess parent.root;
-		var modelId = Data.chars.get(me.props.modelId).selectId;
-		var tex = try {
-			game.getTexFromPath("UI/CharacterSelect/Thumb" + (modelId < 10 ? "0" : "") + modelId + ".png");
-		}
-		catch(e : hxd.res.NotFound) {
-			game.getTexFromPath("UI/CharacterSelect/Thumb00.png");
-		};
+		modelId = Data.chars.get(me.props.modelId).selectId;
 
-
-
-		var portrait = root.getObjectByName("ThumbP" + pid);
-		if(portrait != null)
-			portrait.toMesh().material.texture = tex;
+		portrait = root.getObjectByName("ThumbP" + pid);
+		getPortrait();
 
 		//flames = [root.getObjectByName("FlameAP" + pid), root.getObjectByName("FlameBP" + pid)];
 		powerReadyText = root.getObjectByName("ReadyP" + pid);
@@ -46,13 +40,59 @@ private class PlayerScore {
 		energyMesh.toMesh().material.blendMode = Alpha;
 		energyMesh.scaleY = me.power.progress;
 		update(0);
+
+		counter = root.getObjectByName("P" + pid + "Counter");
+		counterUpdate();
+	}
+
+	function getPortrait(state = 0) {
+		var suf = "";
+		if(state == 1) suf = "_burst";
+		else if(state == 2) suf = "_dead";
+
+		var tex = try {
+			game.getTexFromPath("UI/LifeBar/Thumb" + (modelId < 10 ? "0" : "") + modelId + suf + ".png");
+		}
+		catch(e : hxd.res.NotFound) {
+			game.getTexFromPath("UI/CharacterSelect/Thumb00.png");
+		};
+
+		portrait.toMesh().material.texture = tex;
+	}
+
+	public function counterUpdate() {
+		if(counter != null) {
+			var stars = game.state.stars[pid - 1];
+			var tex = game.getTexFromPath("UI/LifeBar/Counter0" + stars + ".png");
+			counter.toMesh().material.texture = tex;
+		}
+	}
+
+	function iconUpdate() {
+		if(me.dead) {
+			if(iconState != 2) {
+				iconState = 2;
+				getPortrait(iconState);
+			}
+			return;
+		}
+		if(me.power.progress == 1) {
+			if(iconState != 1) {
+				iconState = 1;
+				getPortrait(iconState);
+			}
+			return;
+		}
+		if(iconState != 0) {
+			iconState = 0;
+			getPortrait(iconState);
+		}		
 	}
 
 	public function update(dt : Float) {
 		powerReadyText.visible = me.power.progress == 1;
-		//for(f in flames)
-		//	f.visible = me.power.progress == 1;
 		energyMesh.scaleY += (me.power.progress - energyMesh.scaleY) * 0.1 * dt;
+		iconUpdate();
 	}
 }
 
@@ -136,14 +176,14 @@ class GameUI
 	}
 
 	public function nextRound(pl : ent.Unit) {
-
+/*
 		game.event.wait(2, function() {
 			game.state.stars[pl.id - 1]++;
 			if(game.state.stars[pl.id - 1] == 5)
 				game.endGame();
 			else game.restart();
-		});
-/*
+		});*/
+
 		var t = hxd.Res.UI.Winner.toTile();
 		var bmp = new h2d.Bitmap(t, game.s2d);
 		bmp.smooth = true;
@@ -151,24 +191,23 @@ class GameUI
 		bmp.setScale(sc);
 
 		var d = 25;
-		var s = scores[pl.id - 1];
 		var to = 0.;
 		switch(pl.id) {
 			case 1 :
 				bmp.x = -t.width * sc - 100;
-				bmp.y = s.y + s.getSize().height + d;
+				bmp.y = 100 + d;
 				to = d;
 			case 2 :
 				bmp.x = game.s2d.width + 100;
-				bmp.y = s.y + s.getSize().height + d;
+				bmp.y = 100 + d;
 				to = game.s2d.width - t.width * sc - d;
 			case 3 :
 				bmp.x = -t.width * sc - 100;
-				bmp.y = s.y - t.height * sc - d;
+				bmp.y = game.s2d.height - 100 - t.height * sc - d;
 				to = d;
 			case 4 :
 				bmp.x = game.s2d.width + 100;
-				bmp.y = s.y - t.height * sc - d;
+				bmp.y = game.s2d.height - 100 - t.height * sc - d;
 				to = game.s2d.width - t.width * sc - d;
 			default :
 		}
@@ -185,16 +224,16 @@ class GameUI
 						bmp.colorAdd = null;
 
 						//Sounds.play("Winner");
-						s.addStar();
+						game.state.stars[pl.id - 1]++;
+						var s = scores[pl.id - 1];
+						s.counterUpdate();
 
 						game.event.wait(2, function() {
 							bmp.remove();
-							game.state.stars[pl.id - 1]++;
 							if(game.state.stars[pl.id - 1] == 5)
 								game.endGame();
 							else game.restart();
 						});
-
 						return true;
 					}
 					return false;
@@ -202,7 +241,7 @@ class GameUI
 				return true;
 			}
 			return false;
-		});*/
+		});
 	}
 
 	public function update(dt : Float) {
