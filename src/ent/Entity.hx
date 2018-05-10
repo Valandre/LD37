@@ -1,5 +1,4 @@
 package ent;
-import lib.Controller;
 //import Sounds;
 
 enum EntityKind {

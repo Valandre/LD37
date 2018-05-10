@@ -176,13 +176,14 @@ class GameUI
 	}
 
 	public function nextRound(pl : ent.Unit) {
-/*
-		game.event.wait(2, function() {
-			game.state.stars[pl.id - 1]++;
-			if(game.state.stars[pl.id - 1] == 5)
-				game.endGame();
-			else game.restart();
-		});*/
+
+		if(pl == null) {
+			//mort simultanée : pas de gagnant
+			game.event.wait(2, function() {
+				game.restart();
+			});
+			return;
+		}
 
 		var t = hxd.Res.UI.Winner.toTile();
 		var bmp = new h2d.Bitmap(t, game.s2d);

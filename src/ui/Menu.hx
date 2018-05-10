@@ -1,5 +1,4 @@
 package ui;
-import hxd.Key in K;
 //import Sounds;
 
 class Menu extends ui.Form
@@ -84,12 +83,13 @@ class Menu extends ui.Form
 	}
 
 	function createFairies() {
+		/*
 		var dirs = [
 		new h3d.col.Point(1, 0, 0),
 		new h3d.col.Point( -1, 0, 0),
 		new h3d.col.Point(0, 1, 0),
 		new h3d.col.Point(0, -1, 0)
-		];
+		];*/
 
 		game.players = [];
 		/*

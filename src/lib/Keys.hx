@@ -147,7 +147,7 @@ class Keys {
 	}
 
 	public static var defaultPadConfig = {
-		var c = hxd.Pad.CONFIG_XBOX;
+		var c = hxd.Pad.DEFAULT_CONFIG;
 		{
 			A : c.A,
 			B : c.B,

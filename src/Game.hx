@@ -252,7 +252,7 @@ class Game extends hxd.App {
 
 		if(world != null) {
 			world.reset();
-			s3d.renderer = new h3d.scene.Renderer();
+			s3d.renderer = uiRenderer;
 		}
 	}
 
@@ -487,7 +487,7 @@ class Game extends hxd.App {
 				if(world.collideBounds(b.getBounds()))
 					b.remove();
 			}
-			if(players.length == 1) {
+			if(players.length <= 1) {
 				gameOver = true;
 				ui.nextRound(players[0]);
 			}

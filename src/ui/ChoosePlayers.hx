@@ -1,5 +1,4 @@
 package ui;
-import hxd.Key in K;
 //import Sounds;
 
 class PlayerSlot {
@@ -181,12 +180,16 @@ class PlayerSlot {
 		selector = null;
 	}
 
-	var posInitialized = false;
+	//var posInitialized = false;
 	public function setPos(o : h3d.scene.Object) {
+		if(selector == null) return;
 		var pos = o.getAbsPos();
-		var curId = selectId;
-
 		selector.visible = true;
+		selector.x = pos.tx;
+		selector.y = pos.ty;
+		selector.z = pos.tz;
+
+/*
 		if(!posInitialized) {
 			posInitialized = true;
 			selector.x = pos.tx;
@@ -196,13 +199,13 @@ class PlayerSlot {
 		}
 
 		game.event.waitUntil(function(dt) {
-			if(curId != selectId) return true;
+			if(curId != selectId || selector == null) return true;
 			selector.x += (pos.tx - selector.x) * 0.5 * dt;
 			selector.y += (pos.ty - selector.y) * 0.5 * dt;
 			selector.z += (pos.tz - selector.z) * 0.5 * dt;
 
 			return(pos.tx - selector.x < 0.01 && pos.ty - selector.y < 0.01 && pos.tz - selector.z < 0.01);
-		});
+		});*/
 	}
 
 
@@ -387,12 +390,8 @@ class ChoosePlayers extends ui.Form
 		time += dt;
 
 		var c = game.controllers[0];
-		if(c != null) {
+		if(c != null) 
 			c.active = true;
-			var pl = players[0];
-			if(pl.state == 3)
-				nextStep();
-		}
 
 		for(i in 0...4) {
 			var c = game.controllers[i];
@@ -413,6 +412,17 @@ class ChoosePlayers extends ui.Form
 				if(ready) {
 					if(c.pressed.A) {
 						pl.state = hxd.Math.imin(3, pl.state + 1);
+
+						if(pl.state == 3) {
+							var allReady = true;
+							for(i in 0...game.controllers.length)
+								if(game.controllers[i].active && players[i] != null) {
+									if(players[i].state < 2)
+										allReady = false;
+								}
+							if(allReady)
+								nextStep();	
+						}
 						/*
 						if(pl.state == 2 && pl.selectId == Data.chars.get(Random).selectId) {
 							var all = Data.chars.all;
@@ -458,24 +468,26 @@ class ChoosePlayers extends ui.Form
 		for(p in players)
 			p.update(dt);
 
-		/*
+		
 		for(i in 0...game.controllers.length) {
 			if(i == 0) {
 				game.controllers[0].active = true;
 				continue;
 			}
+			var pl = players[i];
 			var c = game.controllers[i];
-
-			if(c.pressed.start) {
+			if(c.pressed.start || (c.pressed.A && pl.state == 0)) {
 				//Sounds.play("Select");
-				c.active = !c.active;
-				//sticks[i].tile = c.active ? ptiles[i] : ptiles[4];
+				if(!c.active) {
+					c.active = true;
+					pl.state = 1;
+				}
 			}
-			if(c.pressed.B) {
+			if(c.pressed.back || (c.pressed.B && pl.state <= 1)) {
 				//Sounds.play("Select");
 				c.active = false;
-				//sticks[i].tile = ptiles[4];
+				pl.state = 0;
 			}
-		}*/
+		}
 	}
 }

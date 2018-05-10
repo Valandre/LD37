@@ -11,7 +11,7 @@ class Player extends Unit
 	}
 
 	function updateKeys() {
-		power.progress = 1;
+		//power.progress = 1;
 		if(power.isReady)
 			if((game.state.players.length == 1 && K.isPressed(K.SPACE)) || (controller != null && controller.pressed.A ))
 				power.start();
