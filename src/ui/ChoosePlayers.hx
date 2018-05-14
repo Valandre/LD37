@@ -300,7 +300,7 @@ class ChoosePlayers extends ui.Form
 		game.s3d.addChild(obj);
 		game.s3d.camera.follow = {pos : obj.getObjectByName("CamScreen"), target : obj.getObjectByName("CamScreen.Target")};
 		game.autoCameraKind = Choose;
-		game.s3d.lightSystem.ambientLight.setColor(0xFFFFFF);
+		//game.s3d.lightSystem.ambientLight.setColor(0xFFFFFF);
 
 		var i = 0;
 		while(true) {

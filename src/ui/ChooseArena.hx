@@ -43,7 +43,7 @@ class ChooseArena extends ui.Form
 		game.s3d.addChild(obj);
 		game.s3d.camera.follow = {pos : obj.getObjectByName("CamScreen"), target : obj.getObjectByName("CamScreen.Target")};
 		game.autoCameraKind = Choose;
-		game.s3d.lightSystem.ambientLight.setColor(0xFFFFFF);
+		//game.s3d.lightSystem.ambientLight.setColor(0xFFFFFF);
 
 		for(i in 0...6)
 			mthumbs.push(obj.getObjectByName("PosThumb0" + (i + 1)));

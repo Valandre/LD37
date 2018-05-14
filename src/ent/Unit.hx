@@ -369,13 +369,15 @@ class Unit extends Entity
 		}
 
 		for(c in game.world.collides) {
+			if(c.b.contains(new h3d.col.Point(sensor.px+sensor.lx, sensor.py+sensor.ly, sensor.pz+sensor.lz))) return 1;
+			/*
 			var r = sensor.clone();
 			r.transform(c.m);
 			d = c.c.rayIntersection(r, false);
 			if(d != -1){
 				if(d > ray) continue;
 				return d;
-			}
+			}*/
 		}
 
 		return d;

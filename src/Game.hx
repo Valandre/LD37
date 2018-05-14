@@ -128,8 +128,6 @@ class Game extends hxd.App {
 			return false;
 		});
 
-
-
 		//world = new map.World(size, 0);
 		entities = [];
 		players = [];
@@ -253,6 +251,8 @@ class Game extends hxd.App {
 		if(world != null) {
 			world.reset();
 			s3d.renderer = uiRenderer;
+			var dir = new h3d.Vector(-9.7, -1.25, -1.6);
+			new h3d.scene.DirLight(dir, s3d);
 		}
 	}
 
@@ -268,7 +268,7 @@ class Game extends hxd.App {
 			if(p.kind == Player) nbPlayers++;
 
 //nbPlayers = 4;
-
+ 
 		switch(nbPlayers) {
 			case 1 : worldRenderer.width = 0; worldRenderer.height = 0;
 			case 2 : worldRenderer.width = 1; worldRenderer.height = 0;

@@ -84,7 +84,7 @@ class IA extends Unit
 
 	override function changeDir(v:Int) {
 		super.changeDir(v);
-		time = 10;
+		time = 8;
 	}
 
 	override public function update(dt:Float) {

@@ -1,6 +1,5 @@
 package map;
 
-
 class World {
 
 	var game : Game;

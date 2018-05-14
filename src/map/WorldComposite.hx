@@ -57,9 +57,9 @@ class WorldComposite extends h3d.scene.DefaultRenderer {
 
 		ambient = new h3d.pass.ScreenFx(new shaders.Composite());
 
-		ambient.shader.hasDOF = true;
-		ambient.shader.hasFOG = true;
-		ambient.shader.hasBLOOM = true;
+		ambient.shader.hasDOF = false;
+		ambient.shader.hasFOG = false;
+		ambient.shader.hasBLOOM = false;
 
 		ambient.shader.global_brightness = 0.;
 		ambient.shader.global_contrast = 1.05;

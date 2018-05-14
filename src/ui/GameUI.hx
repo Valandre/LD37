@@ -231,7 +231,7 @@ class GameUI
 
 						game.event.wait(2, function() {
 							bmp.remove();
-							if(game.state.stars[pl.id - 1] == 5)
+							if(game.state.stars[pl.id - 1] == 1)
 								game.endGame();
 							else game.restart();
 						});
