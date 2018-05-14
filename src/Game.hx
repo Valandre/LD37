@@ -23,7 +23,7 @@ class MyModelCache extends h3d.prim.ModelCache {
 	override public function loadModel(res:hxd.res.Model):h3d.scene.Object {
 		var m = super.loadModel(res);
 		for( mat in m.getMaterials() )
-			mat.texture.filter = Nearest;
+			if(mat.texture != null) mat.texture.filter = Nearest;
 		return m;
 	}
 
