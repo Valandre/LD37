@@ -206,6 +206,12 @@
 					"shadows": false,
 					"culled": true,
 					"lighted": false
+				},
+				"Thumb04": {
+					"kind": "AlphaKill",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
 				}
 			}
 		},
@@ -267,6 +273,12 @@
 										"shadows": false,
 										"culled": true,
 										"lighted": false
+									},
+									"Thumb04": {
+										"kind": "Add",
+										"shadows": true,
+										"culled": true,
+										"lighted": true
 									}
 								}
 							}
