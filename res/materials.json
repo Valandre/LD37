@@ -49,18 +49,6 @@
 					"culled": true,
 					"lighted": false
 				},
-				"BG": {
-					"kind": "Alpha",
-					"shadows": false,
-					"culled": true,
-					"lighted": false
-				},
-				"Thumb01": {
-					"kind": "Alpha",
-					"shadows": false,
-					"culled": true,
-					"lighted": false
-				},
 				"Point": {
 					"kind": "Alpha",
 					"shadows": false,
@@ -74,6 +62,18 @@
 					"lighted": false
 				},
 				"Energy": {
+					"kind": "Alpha",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
+				"BG": {
+					"kind": "Alpha",
+					"shadows": false,
+					"culled": true,
+					"lighted": false
+				},
+				"Thumb01": {
 					"kind": "Alpha",
 					"shadows": false,
 					"culled": true,
@@ -223,6 +223,32 @@
 					"kind": "AlphaKill",
 					"shadows": false,
 					"culled": true,
+					"lighted": false
+				}
+			},
+			"Countdown": {
+				"Splatter01": {
+					"kind": "Alpha",
+					"shadows": false,
+					"culled": false,
+					"lighted": false
+				},
+				"Ready": {
+					"kind": "Alpha",
+					"shadows": false,
+					"culled": false,
+					"lighted": false
+				},
+				"Fight": {
+					"kind": "Alpha",
+					"shadows": false,
+					"culled": false,
+					"lighted": false
+				},
+				"Splatter02": {
+					"kind": "AlphaKill",
+					"shadows": false,
+					"culled": false,
 					"lighted": false
 				}
 			}
