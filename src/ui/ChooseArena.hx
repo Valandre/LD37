@@ -68,8 +68,10 @@ class ChooseArena extends ui.Form
 		var m = hxd.Res.UI.Selector.Model;
 		selector = game.modelCache.loadModel(m);
 		selector.visible = false;
-		for(m in selector.getMeshes())
+		for(m in selector.getMeshes()) {			
 			m.material.shadows = false;
+			m.visible = m.name == "SelectorP1";
+		}
 		game.s3d.addChild(selector);
 
 		updateView();

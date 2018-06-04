@@ -14,6 +14,8 @@ class PlayerSlot {
 	var faceTextures : Array<h3d.mat.Texture> = [];
 	var faceBlinking = false;
 
+	public var powerTex : h3d.mat.Texture;
+
 	public var pid : Int;
 	public var selectId(default, set) : Int;
 	public var state(default, set) : Int;
@@ -35,8 +37,8 @@ class PlayerSlot {
 		while(true) {
 			var id = chars[Std.random(chars.length)].selectId;
 			//if(id != Data.chars.get(Random).selectId) {
-				selectId = id;
-				break;
+			selectId = id;
+			break;
 			//}
 		}
 	}
@@ -102,6 +104,9 @@ class PlayerSlot {
 			}
 		}
 
+		powerTex = game.getTexFromPath("UI/CharacterSelect/Power" + Data.chars.get(charKind).powerId + ".png");
+
+
 		setOutline();
 	}
 
@@ -143,6 +148,7 @@ class PlayerSlot {
 	function set_selectId(v : Int) {
 		if(selectId == v) return v;
 		selectId = v;
+		
 		//if(selectId != Data.chars.get(Random).selectId)
 			updateModel();
 		return selectId;
@@ -258,8 +264,8 @@ class ChoosePlayers extends ui.Form
 	var pjoin : Array<h3d.scene.Mesh> = [];
 	var pstate : Array<h3d.scene.Mesh> = [];
 	var pslot : Array<h3d.scene.Mesh> = [];
+	var ppower : Array<h3d.scene.Mesh> = [];
 	var ppos : Array<h3d.scene.Object> = [];
-	var ppower : Array<h3d.scene.Object> = [];
 	var mthumbs : Array<h3d.scene.Object> = [];
 	var ready = false;
 
@@ -273,6 +279,7 @@ class ChoosePlayers extends ui.Form
 	var stateTex : Array<h3d.mat.Texture> = [];
 	var slotTex : Array<h3d.mat.Texture> = [];
 	var buttonTex : Array<Array<h3d.mat.Texture>> = [];
+	var readyAnim : Array<h3d.mat.Texture> = [];
 
 	var players : Array<PlayerSlot> = [];
 	var CharsIds : Array<Int> = [];
@@ -327,7 +334,6 @@ class ChoosePlayers extends ui.Form
 		for(i in 0...4)
 			stateTex.push(game.getTexFromPath("UI/CharacterSelect/StateP" + (i + 1) + ".png"));
 
-
 		for(i in 0...9)
 			slotTex.push(game.getTexFromPath("UI/CharacterSelect/Slot0" + (i + 1) + ".png"));
 		pslot[0].material.texture = slotTex[1];
@@ -335,6 +341,7 @@ class ChoosePlayers extends ui.Form
 		pslot[2].material.texture = slotTex[4];
 		pslot[3].material.texture = slotTex[7];
 
+		readyAnim = getAnim("PowerReady");
 
 		//
 		mSelect = obj.getObjectByName("ButtonA").toMesh();
@@ -350,6 +357,17 @@ class ChoosePlayers extends ui.Form
 		addPlayer(0, ppos[0]);
 
 		//game.setAmbient(0);
+	}
+
+	function getAnim(name : String) {
+		var frames = [];
+		while(true) {
+			var n = (frames.length < 9 ? "0" : "") + (frames.length + 1);
+			var tex = game.getTexFromPath("UI/CharacterSelect/PowerReady[" + n + "].png");
+			if(tex == null) break;
+			frames.push(tex);
+		}
+		return frames;
 	}
 
 	function addPlayer(id, o : h3d.scene.Object) {
@@ -454,9 +472,22 @@ class ChoosePlayers extends ui.Form
 			pjoin[i].visible = pl.state == 0;
 			pname[i].material.texture = nameTex[pl.selectId - 1];
 			pname[i].visible = pl.visible;
-			if(pl.state >= 2)
-				pstate[i].material.texture = game.getTexFromPath("UI/CharacterSelect/ButtonOk.png");
+			ppower[i].visible = pl.visible;
+			if(pl.state >= 2) {
+				if(ppower[i].material.texture == pl.powerTex) {
+					var t = 0.;
+					game.event.waitUntil(function(dt) {
+						if(pl.state < 2) return true;
+						t += dt;
+						var n = Std.int(30 * t / 60);
+						if(n >= readyAnim.length) return true;
+						ppower[i].material.texture = readyAnim[n];
+						return false;
+					});
+				}
+			}
 			else {
+				ppower[i].material.texture = pl.powerTex;
 				pstate[i].material.texture = stateTex[c != null && c.active ? i + 1 : 0];
 				pslot[i].material.texture = slotTex[pl.colorId];
 			}

@@ -155,7 +155,6 @@ class GameUI
 		countDown.y = cam.target.y;
 		countDown.z = cam.target.z;
 		countDown.rotate(0, 0, a);
-		countDown.setScale(0.5);
 
 		for(m in countDown.getMeshes()) {
 			m.material.shadows = false;

@@ -256,7 +256,7 @@ class Unit extends Entity
 		x = p.x; y = p.y; z = p.z;
 
 		var wall = lastWall;
-		if(wall != null && !isPowerActive(Ghost))
+		if(wall != null && !isPowerActive(Stealth))
 			wall.scaleX = hxd.Math.distance(x - wall.x + dir.x * wallSize * 2, y - wall.y + dir.y * wallSize * 2, z - wall.z + dir.z * wallSize * 2);
 
 		var tmp = dir.clone();
@@ -307,7 +307,7 @@ class Unit extends Entity
 		x = p.x; y = p.y; z = p.z;
 
 		var wall = lastWall;
-		if(wall != null && !isPowerActive(Ghost))
+		if(wall != null && !isPowerActive(Stealth))
 			wall.scaleX = hxd.Math.distance(x - wall.x + dir.x * wallSize * 0.5, y - wall.y + dir.y * wallSize * 0.5, z - wall.z + dir.z * wallSize * 0.5);
 		dir = setDir(dir, v);
 		createWall();
@@ -392,7 +392,7 @@ class Unit extends Entity
 		power.progress = 0;
 
 		var wall = lastWall;
-		if(wall != null && !isPowerActive(Ghost)) {
+		if(wall != null && !isPowerActive(Stealth)) {
 			wall.scaleX = hxd.Math.distance(x - wall.x, y - wall.y, z - wall.z);
 			/*
 			if(colWithWall != null) {
@@ -564,7 +564,7 @@ class Unit extends Entity
 			}
 		}
 
-		if(speedBonus > 0 && !isPowerActive(SpeedUp)) {
+		if(speedBonus > 0 && !isPowerActive(Boost)) {
 			if(speedBonus > 0) {
 				speedBonus *= Math.pow(0.92, dt);
 				autoPilot();
@@ -574,7 +574,7 @@ class Unit extends Entity
 
 		if(!power.active) return;
 		switch(power.kind) {
-			case SpeedUp:
+			case Boost:
 				power.time -= dt / 60;
 				if(power.time <= 0)
 					power.active = false;
@@ -627,7 +627,7 @@ class Unit extends Entity
 					else removeWall(wall);
 				}
 
-			case Ghost:
+			case Stealth:
 				power.time -= dt / 60;
 				if(power.time <= 0) {
 					power.active = false;
@@ -654,7 +654,7 @@ class Unit extends Entity
 		}
 		else wave.visible = false;
 
-		if(!isPowerActive(Ghost)) {
+		if(!isPowerActive(Stealth)) {
 			var wall = lastWall;
 			if(!dead && wall != null)
 				wall.scaleX = hxd.Math.distance(x - wall.x, y - wall.y, z - wall.z);
