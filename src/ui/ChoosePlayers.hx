@@ -279,7 +279,8 @@ class ChoosePlayers extends ui.Form
 	var stateTex : Array<h3d.mat.Texture> = [];
 	var slotTex : Array<h3d.mat.Texture> = [];
 	var buttonTex : Array<Array<h3d.mat.Texture>> = [];
-	var readyAnim : Array<h3d.mat.Texture> = [];
+
+	var texAnim : Map<String, {frames : Array<h3d.mat.Texture>, loop : Bool}> = new Map();
 
 	var players : Array<PlayerSlot> = [];
 	var CharsIds : Array<Int> = [];
@@ -341,7 +342,7 @@ class ChoosePlayers extends ui.Form
 		pslot[2].material.texture = slotTex[4];
 		pslot[3].material.texture = slotTex[7];
 
-		readyAnim = getAnim("PowerReady");
+		getAnim("PowerReady");
 
 		//
 		mSelect = obj.getObjectByName("ButtonA").toMesh();
@@ -361,13 +362,40 @@ class ChoosePlayers extends ui.Form
 
 	function getAnim(name : String) {
 		var frames = [];
+		var loop = false;
 		while(true) {
 			var n = (frames.length < 9 ? "0" : "") + (frames.length + 1);
-			var tex = game.getTexFromPath("UI/CharacterSelect/PowerReady[" + n + "].png");
+			var tex = null;
+			if(frames.length == 0) 
+				tex = game.getTexFromPath("UI/CharacterSelect/PowerReady[" + n + "L].png"); //has loop flag [xxL]?
+			if(tex != null)
+				loop = true;
+			else tex = game.getTexFromPath("UI/CharacterSelect/PowerReady[" + n + "].png");
 			if(tex == null) break;
 			frames.push(tex);
 		}
-		return frames;
+
+		texAnim.set(name, {frames : frames, loop : loop});
+	}
+
+	function playAnim(name : String, parent : h3d.scene.Mesh, ?onStop : Void -> Bool, ?onEnd : Void -> Void) {
+		var a = texAnim.get(name);
+		if(a == null) return;	
+					
+		var t = 0.;
+		game.event.waitUntil(function(dt) {
+			if(onStop != null && onStop()) return true;
+			t += dt / 60;
+			var n = Std.int(30 * t);
+			if(n >= a.frames.length) {
+				if(onEnd != null) onEnd();
+				if(!a.loop) return true;
+				n -= a.frames.length;
+				t = n * 30;
+			}
+			parent.material.texture = a.frames[n];
+			return false;
+		});
 	}
 
 	function addPlayer(id, o : h3d.scene.Object) {
@@ -474,17 +502,8 @@ class ChoosePlayers extends ui.Form
 			pname[i].visible = pl.visible;
 			ppower[i].visible = pl.visible;
 			if(pl.state >= 2) {
-				if(ppower[i].material.texture == pl.powerTex) {
-					var t = 0.;
-					game.event.waitUntil(function(dt) {
-						if(pl.state < 2) return true;
-						t += dt;
-						var n = Std.int(30 * t / 60);
-						if(n >= readyAnim.length) return true;
-						ppower[i].material.texture = readyAnim[n];
-						return false;
-					});
-				}
+				if(ppower[i].material.texture == pl.powerTex)
+					playAnim("PowerReady", ppower[i], function() {return pl.state < 2;});
 			}
 			else {
 				ppower[i].material.texture = pl.powerTex;
