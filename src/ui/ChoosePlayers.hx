@@ -259,6 +259,7 @@ class ChoosePlayers extends ui.Form
 	var pstate : Array<h3d.scene.Mesh> = [];
 	var pslot : Array<h3d.scene.Mesh> = [];
 	var ppos : Array<h3d.scene.Object> = [];
+	var ppower : Array<h3d.scene.Object> = [];
 	var mthumbs : Array<h3d.scene.Object> = [];
 	var ready = false;
 
@@ -318,6 +319,7 @@ class ChoosePlayers extends ui.Form
 			pjoin.push(obj.getObjectByName("JoinP" + (i + 1)).toMesh());
 			pslot.push(obj.getObjectByName("SlotP" + (i + 1)).toMesh());
 			pstate.push(obj.getObjectByName("StateP" + (i + 1)).toMesh());
+			ppower.push(obj.getObjectByName("PowerP" + (i + 1)).toMesh());
 			ppos.push(obj.getObjectByName("PosP" + (i + 1)));
 		}
 

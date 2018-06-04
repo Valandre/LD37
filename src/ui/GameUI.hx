@@ -185,7 +185,7 @@ class GameUI
 			return;
 		}
 
-		var t = hxd.Res.UI.Winner.toTile();
+		var t = hxd.Res.UI.winner.toTile();
 		var bmp = new h2d.Bitmap(t, game.s2d);
 		bmp.smooth = true;
 		var sc = 1;
