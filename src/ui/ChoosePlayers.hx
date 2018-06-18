@@ -367,7 +367,7 @@ class ChoosePlayers extends ui.Form
 			var n = (frames.length < 9 ? "0" : "") + (frames.length + 1);
 			var tex = null;
 			if(frames.length == 0) 
-				tex = game.getTexFromPath("UI/CharacterSelect/PowerReady[" + n + "]L.png"); //has loop flag [xxL]?
+				tex = game.getTexFromPath("UI/CharacterSelect/PowerReady[" + n + "]L.png"); //has loop flag [xx]L?
 			if(tex != null)
 				loop = true;
 			else tex = game.getTexFromPath("UI/CharacterSelect/PowerReady[" + n + "].png");

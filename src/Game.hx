@@ -93,7 +93,7 @@ class Game extends hxd.App {
 		uiRenderer = new map.UIComposite();
 		s3d.renderer = uiRenderer;
 
-		s3d.lightSystem = new h3d.pass.LightSystem();
+		//s3d.lightSystem = new h3d.pass.LightSystem();
 		var t = new shaders.CellShader();
 		t.shadowColor.setColor(0xD0BFDE);
 		@:privateAccess {

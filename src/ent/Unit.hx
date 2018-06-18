@@ -21,8 +21,7 @@ private class Power {
 	public var progress(default, set) : Float = 0;
 	public var active : Bool;
 	public var isReady(get, never) : Bool;
-
-	var data : Data.Power;
+	public var data : Data.Power;
 
 	public function new (k : Data.PowerKind) {
 		kind = k;
@@ -51,6 +50,8 @@ class Wall extends h3d.scene.Mesh {
 	public var dir : h3d.col.Point;
 	public function new (?prim, ?parent) {
 		super(prim, null, parent);
+		for(m in getMeshes())
+			m.material.shadows = false;
 	}
 }
 
@@ -92,6 +93,7 @@ class Unit extends Entity
 		this.props = props;
 
 		power = new Power(Data.chars.get(props.modelId).powerId);
+		power.progress = 1;
 
 		super(kind, x, y, z, scale);
 
@@ -275,17 +277,17 @@ class Unit extends Entity
 		var n = worldNormal;
 
 		if(n.z != 0) {
-			m.setRotate(0, 0, dir.x != 0 ? a * (dir.x - 1) : a * dir.y);
+			m.setRotation(0, 0, dir.x != 0 ? a * (dir.x - 1) : a * dir.y);
 			if(n.z < 0) m.rotate(dir.x * 2 * a, dir.y * 2 * a, 0);
 		}
 		else if(n.x != 0) {
-			m.setRotate(0, 0, 0);
+			m.setRotation(0, 0, 0);
 			if(n.x > 0) m.rotate(0, 0, 2 * a);
 			m.rotate(0, n.x * a, 0);
 			m.rotate( -dir.y * a + (dir.z < 0 ? 2 * a : 0), 0, 0);
 		}
 		else if(n.y != 0) {
-			m.setRotate(0, 0, 0);
+			m.setRotation(0, 0, 0);
 			m.rotate(0, -dir.z * a, -n.y * a);
 			if(dir.x != 0)	m.rotate(0, dir.x * a, n.y * dir.x * a);
 			if(dir.z < 0) m.rotate(0, 0, 2 * a);
@@ -514,9 +516,14 @@ class Unit extends Entity
 		return game.world.collide(this);
 	}
 
-	function useShield(w) {
-		shield.remove();
-		shield = null;
+	function useShield(?w) {
+		if(shield != null) {
+			shield.remove();
+			shield = null;
+		}
+		power.active = false;
+		if(w == null) return;
+			
 		ignoreWalls.push(w);
 
 		var ox = x;
@@ -582,20 +589,29 @@ class Unit extends Entity
 				autoPilot();
 
 			case Shield:
-				power.active = false;
-				if(shield != null) return;
+				power.time -= dt / 60;				
+				if(power.time <= 0) {					
+					useShield();
+					return;
+				}
+					
+				if(shield == null/* && power.time < power.data.time - power.value*/) {
+					var c = new h3d.prim.Sphere(2, 24, 24);
+					c.addUVs();
+					c.addNormals();
 
-				var c = new h3d.prim.Sphere(2, 24, 24);
-				c.addUVs();
-				c.addNormals();
-
-				shield = new h3d.scene.Mesh(c, obj);
-				shield.material.color.setColor(0x2080F0);
-				shield.material.blendMode = Alpha;
-				shield.material.color.w = 0.5;
+					shield = new h3d.scene.Mesh(c, obj);
+					shield.material.color.setColor(0x2080F0);
+					shield.material.blendMode = Alpha;
+					shield.material.color.w = 0.5;
+				}
 
 			case Rewind:
 				var wall = lastWall;
+				if(wall == null) {
+					power.active = false;
+					return;
+				}
 				worldNormal = wall.worldNormal.clone();
 				dir = wall.dir.clone();
 				meshRotate(obj);

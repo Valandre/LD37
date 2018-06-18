@@ -56,7 +56,7 @@ class Energy extends Entity
 		var n = worldNormal;
 		var a = Math.PI;
 
-		obj.setRotate(0, 0, 0);
+		obj.setRotation(0, 0, 0);
 		if(n.z != 0) {
 			if(n.z < 0) obj.rotate(a, 0, 0);
 		}
