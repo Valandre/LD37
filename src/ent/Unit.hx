@@ -55,6 +55,24 @@ class Wall extends h3d.scene.Mesh {
 	}
 }
 
+class Rocket extends h3d.scene.Mesh {	
+	var owner : ent.Unit;
+	var target : ent.Unit;
+
+	public function new (?prim, ?parent) {
+		super(prim, null, parent);
+		material.color.setColor(0x80F020);
+		scaleX = 1.5;
+	}
+
+	public function searchTarget(owner : ent.Unit) {
+		this.owner = owner;
+		x = owner.x;
+		y = owner.y;
+		z = owner.z;
+	}
+}
+
 class Unit extends Entity
 {
 	public var dir : h3d.col.Point;
@@ -81,6 +99,8 @@ class Unit extends Entity
 	var wallTex : h3d.mat.Texture;
 
 	var shield : h3d.scene.Mesh;
+	var rockets : Array<Rocket> = [];
+
 	var sensor : h3d.col.Ray;
 	var boxCollide : h3d.scene.Box;
 	var outlineShader : shaders.Outline;
@@ -570,13 +590,13 @@ class Unit extends Entity
 			}
 		}
 
-		if(speedBonus > 0 && !isPowerActive(Boost)) {
-			if(speedBonus > 0) {
+		if(speedBonus > 0) {
+			autoPilot();
+			if(!isPowerActive(Boost)) {
 				speedBonus *= Math.pow(0.92, dt);
-				autoPilot();
+				if(speedBonus < 0.01)  speedBonus = 0;
 			}
-			if(speedBonus < 0.01)  speedBonus = 0;
-		}
+		}		
 
 		if(!power.active) return;
 		switch(power.kind) {
@@ -585,7 +605,6 @@ class Unit extends Entity
 				if(power.time <= 0)
 					power.active = false;
 				else speedBonus += (power.value - speedBonus) * 0.25 * dt;
-				autoPilot();
 
 			case Shield:
 				power.time -= dt / 60;				
@@ -652,6 +671,21 @@ class Unit extends Entity
 					return;
 				}
 				enableWalls = false;
+
+			case Rocket:
+				power.active = false;
+				/*
+				if(rockets.length == 0)
+					for(i in 0...Std.int(power.value)) {	
+						game.event.wait(i * 0.1, function() {				
+							var c = new h3d.prim.Sphere(0.5, 4, 4);
+							c.addUVs();
+							c.addNormals();		
+							var r = new Rocket(c, game.s3d);
+							r.searchTarget(this);
+							rockets.push(r);
+						});
+					}*/
 		}
 	}
 
