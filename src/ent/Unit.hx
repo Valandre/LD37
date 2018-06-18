@@ -93,7 +93,6 @@ class Unit extends Entity
 		this.props = props;
 
 		power = new Power(Data.chars.get(props.modelId).powerId);
-		power.progress = 1;
 
 		super(kind, x, y, z, scale);
 
