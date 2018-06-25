@@ -44,7 +44,14 @@ class World {
 			m.material.shadows = false;
 			m.material.allocPass("depth");
 			m.material.allocPass("normal");
+			trace(m.name, m.material.name);
+			if(m.material.name == "Objects01" || m.material.name == "Lantern01")		
+				m.material.mainPass.culling = Back;
+			trace(m.name, m.material.name);
+			if(m.material.name == "Ecume01")		
+				m.material.blendMode = Add;
 		}
+
 
 		var w = size - 1;
 		bounds = new h3d.col.Bounds();

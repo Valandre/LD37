@@ -33,8 +33,6 @@ class Form extends h2d.Sprite
 				a.speed = 0.15;
 				bg.playAnimation(a);
 			}
-			for(m in bg.getMeshes())
-				m.material.shadows = false;
 
 			bg.setScale(1.1);
 			var t = 0.;

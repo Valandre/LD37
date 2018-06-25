@@ -557,6 +557,9 @@ class Game extends hxd.App {
 
 	public static var inst : Game;
 	static function main() {
+
+		h3d.mat.MaterialSetup.current = new WorldMaterial.MyMaterialSetup();
+
 		hxd.res.Resource.LIVE_UPDATE = true;
 		hxd.Res.initLocal();
 		Data.load(hxd.Res.data.entry.getText());

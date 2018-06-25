@@ -157,7 +157,6 @@ class GameUI
 		countDown.rotate(0, 0, a);
 
 		for(m in countDown.getMeshes()) {
-			m.material.shadows = false;
 			if(m.name != "Square")
 				m.material.mainPass.depthWrite = false;
 		}

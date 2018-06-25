@@ -48,28 +48,127 @@ class Wall extends h3d.scene.Mesh {
 	public var prev : Wall;
 	public var worldNormal : h3d.col.Point;
 	public var dir : h3d.col.Point;
-	public function new (?prim, ?parent) {
+	public function new (tex : h3d.mat.Texture, ?prim, ?parent) {
 		super(prim, null, parent);
-		for(m in getMeshes())
-			m.material.shadows = false;
+		for(m in getMaterials()) {
+			m.blendMode = Alpha;
+			m.texture = tex;
+			m.texture.wrap = Repeat;
+		}
 	}
 }
 
 class Rocket extends h3d.scene.Mesh {	
+	var game : Game;
 	var owner : ent.Unit;
-	var target : ent.Unit;
+	var target : ent.Unit;	
+	var dir : h3d.Vector;
+	var targetDir : h3d.Vector;
+	var destroyed = false;
+	var speed = 0.1;
+	var speedMax = 1.4;
+	var ray = 4.;
+	var canCollide = false;
 
-	public function new (?prim, ?parent) {
+	public function new (owner, ?prim, ?parent) {
 		super(prim, null, parent);
-		material.color.setColor(0x80F020);
-		scaleX = 1.5;
-	}
+		game = Game.inst;
+		material.color.setColor(0xFFFF00FF);
+		material.mainPass.enableLights = true;
+		scaleX = 2;
 
-	public function searchTarget(owner : ent.Unit) {
 		this.owner = owner;
 		x = owner.x;
 		y = owner.y;
 		z = owner.z;
+		dir = owner.worldNormal.toVector().clone();
+		dir.x += owner.dir.x == 0 ? hxd.Math.srand(0.2) : owner.dir.x;
+		dir.y += owner.dir.y == 0 ? hxd.Math.srand(0.2) : owner.dir.y;
+		dir.z += owner.dir.z == 0 ? hxd.Math.srand(0.2) : owner.dir.z;
+		targetDir = dir.clone();
+		setDirection(dir);
+
+		game.event.wait(0.3, function() {
+			searchTarget();
+			canCollide = true;
+		});		
+		game.event.waitUntil(function(dt) { 
+			update(dt);
+			return destroyed;
+		});					
+	}
+
+	function searchTarget() {
+		var targets = [for(p in game.players) if(p != owner) p];
+		target = targets[Std.random(targets.length)];
+		/*
+		var d = 1e9;
+		for(p in game.players) {
+			if(p == owner) continue;
+			var dist = hxd.Math.distance(p.x-x, p.y-y, p.z-z);
+			if(dist < d) {
+				target = p;
+				d = dist;
+			}
+		}*/
+	}
+
+
+	function worldCollide() {	
+		var sensor = h3d.col.Ray.fromValues(x, y, z, dir.x, dir.y, dir.z);
+		for(w in game.world.walls) {
+			var d = w.w.getBounds().rayIntersection(sensor, false);
+			if(d > 0 && d < 1)
+				return true;
+		}
+
+		var pt = new h3d.col.Point(x, y, z);
+		if(!game.world.bounds.contains(pt)) return true;
+		for(c in game.world.collides) 
+			if(c.b.contains(pt)) return  true;
+
+		return false;
+	}
+
+	override function onRemove() {
+		super.onRemove();
+		onRemoved();
+	}
+
+	public dynamic function onRemoved() {}
+
+	function explode() {
+		destroyed = true;
+
+		for(p in game.players) {
+			if(hxd.Math.distance(p.x-x, p.y-y, p.z-z) < ray)
+				p.destroy();
+		}
+		remove();
+	}
+
+	function update(dt : Float) {
+		if(destroyed) return;
+		if(target != null) {
+			targetDir.x = target.x-x;
+			targetDir.y = target.y-y;
+			targetDir.z = target.z-z;		
+			targetDir.normalize();
+
+			dir.x += (targetDir.x-dir.x)*0.1*dt;	
+			dir.y += (targetDir.y-dir.y)*0.1*dt;	
+			dir.z += (targetDir.z-dir.z)*0.1*dt;	
+			dir.normalize();
+			setDirection(dir);
+		}
+
+		speed = Math.min(speedMax, speed+0.01*dt);
+		x += speed*dir.x*dt;
+		y += speed*dir.y*dt;
+		z += speed*dir.z*dt;
+
+		if(canCollide && worldCollide()) 
+			explode();
 	}
 }
 
@@ -210,9 +309,12 @@ class Unit extends Entity
 		wave.playAnimation(a);
 		wave.visible = false;
 
-		var tex =  game.getTexFromPath("Fx/Wave01/texture0" + (props.colorId + 1) + ".png");
-		for(m in wave.getMeshes())
-			m.material.texture = tex;
+		var tex = game.getTexFromPath("Fx/Wave01/texture0" + (props.colorId + 1) + ".png");
+		for(m in wave.getMaterials()) {
+			m.texture = tex;			
+			m.mainPass.depthWrite = false;
+			m.mainPass.culling = None;
+		}
 	}
 
 	public function createWall() {
@@ -223,25 +325,17 @@ class Unit extends Entity
 		c.addUVs();
 		c.translate(0, -wallSize * 0.5, -0.5);
 
-		var wall = new Wall(c, game.s3d);
+		var wall = new Wall(wallTex, c, game.s3d);
 		wall.prev = lastWall;
 		wall.worldNormal = worldNormal.clone();
 		wall.dir = dir.clone();
-
-
-		wall.material.mainPass.culling = None;
-		wall.material.blendMode = Alpha;
-		wall.material.texture = wallTex;
-		wall.material.texture.wrap = Repeat;
 		wall.scaleX = 0;
-
 		wall.x = x - dir.x * wallSize * 0.5;
 		wall.y = y - dir.y * wallSize * 0.5;
 		wall.z = z - dir.z * wallSize * 0.5;
 
 		walls.push(wall);
 		game.world.walls.push({w : wall, n : n.clone()});
-
 		meshRotate(wall);
 	}
 
@@ -408,7 +502,7 @@ class Unit extends Entity
 		power.progress += 0.2;
 	}
 
-	function destroy() {
+	public function destroy() {
 		dead = true;
 		power.progress = 0;
 
@@ -673,19 +767,18 @@ class Unit extends Entity
 				enableWalls = false;
 
 			case Rocket:
-				power.active = false;
-				/*
+				power.active = false;				
 				if(rockets.length == 0)
 					for(i in 0...Std.int(power.value)) {	
-						game.event.wait(i * 0.1, function() {				
+						game.event.wait(i * 0.05, function() {				
 							var c = new h3d.prim.Sphere(0.5, 4, 4);
 							c.addUVs();
 							c.addNormals();		
-							var r = new Rocket(c, game.s3d);
-							r.searchTarget(this);
+							var r = new Rocket(this, c, game.s3d);
+							r.onRemoved = function() { rockets.remove(r); };
 							rockets.push(r);
 						});
-					}*/
+					}
 		}
 	}
 

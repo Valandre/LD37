@@ -82,10 +82,13 @@ class PlayerSlot {
 		obj.currentAnimation.speed *= 1 - hxd.Math.random(0.1);
 		obj.follow = follow;
 		game.s3d.addChild(obj);
-/*
-		for(m in obj.getMeshes())
-			m.material.shadows = false;
-*/
+
+		for(m in obj.getMaterials()) {
+			m.mainPass.enableLights = true;
+			m.receiveShadows = true;
+			m.mainPass.culling = Back;
+		}		
+
 		var tex = game.getTexFromPath("Chars/" + charKind + "01/Texture01_normal.png");
 		if(tex != null)
 			for(m in obj.getMeshes())
@@ -172,10 +175,8 @@ class PlayerSlot {
 		if(selector != null) return;
 		var m = hxd.Res.UI.Selector.Model;
 		selector = game.modelCache.loadModel(m);
-		for(m in selector.getMeshes()) {
-			m.material.shadows = false;
+		for(m in selector.getMeshes()) 
 			m.material.texture = game.getTexFromPath("UI/Selector/SelectorP" + (pid + 1) + ".png");
-		}
 		game.s3d.addChild(selector);
 		selector.visible = false;
 	}
@@ -302,8 +303,9 @@ class ChoosePlayers extends ui.Form
 		else ready = true;
 /*
 		for(m in obj.getMeshes())
-			m.material.shadows = false;
+			m.material.receiveShadows = false;
 */
+
 		addBg();
 
 		game.s3d.addChild(obj);

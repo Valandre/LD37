@@ -84,6 +84,9 @@ class Energy extends Entity
 		var a = game.modelCache.loadAnimation(model);
 		a.loop = true;
 		obj.playAnimation(a);
+		
+		for(m in obj.getMaterials())
+			m.mainPass.culling = Back;
 		meshRotate();
 	}
 
