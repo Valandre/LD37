@@ -50,7 +50,6 @@ class Game extends hxd.App {
 	public var players : Array<ent.Unit>;
 	public var bonus : Array<ent.Energy>;
 	public var worldRenderer : map.WorldComposite;
-	public var uiRenderer : map.UIComposite;
 	public var customScene : map.CustomScene;
 
 	public var size = 60;
@@ -89,11 +88,8 @@ class Game extends hxd.App {
 		customScene = new map.CustomScene();
 		setScene(customScene);
 		worldRenderer = new map.WorldComposite();
+		s3d.renderer = worldRenderer;
 
-		uiRenderer = new map.UIComposite();
-		s3d.renderer = uiRenderer;
-
-		//s3d.lightSystem = new h3d.pass.LightSystem();
 		var t = new shaders.CellShader();
 		t.shadowColor.setColor(0xD0BFDE);
 		@:privateAccess {
@@ -103,15 +99,6 @@ class Game extends hxd.App {
 
 		var dir = new h3d.Vector(-9.7, -1.25, -1.6);
 		new h3d.scene.DirLight(dir, s3d);
-
-		/*
-		try {
-			ambient.push(haxe.Json.parse(hxd.Res.load("title.js").entry.getText()));
-			ambient.push(haxe.Json.parse(hxd.Res.load("ambient.js").entry.getText()));
-			ambientId = 0;
-		}
-		catch(e : hxd.res.NotFound) {};
-		*/
 
 		modelCache = new MyModelCache();
 		event = new hxd.WaitEvent();
@@ -250,7 +237,6 @@ class Game extends hxd.App {
 
 		if(world != null) {
 			world.reset();
-			s3d.renderer = uiRenderer;
 			var dir = new h3d.Vector(-9.7, -1.25, -1.6);
 			new h3d.scene.DirLight(dir, s3d);
 		}
@@ -261,7 +247,6 @@ class Game extends hxd.App {
 		autoCameraKind = null;
 		if(world != null) world.remove();
 		world = new map.World(size, state.arenaId );
-		s3d.renderer = worldRenderer;
 
 		var nbPlayers = 0;
 		for(p in state.players)
