@@ -141,7 +141,7 @@ class Controller {
 	}
 
 	public static var defaultPadConfig = {
-		var c = hxd.Pad.CONFIG_SDL;
+		var c = hxd.Pad.DEFAULT_CONFIG;
 		{
 			A : c.A,
 			B : c.B,

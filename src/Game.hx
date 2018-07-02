@@ -392,7 +392,6 @@ class Game extends hxd.App {
 		cam.up.y += (pn.y - cam.up.y) * sp * 0.5;
 		cam.up.z += (pn.z - cam.up.z) * sp * 0.5;
 
-
 		cam.target.x += pshake.x;
 		cam.pos.x += pshake.y;
 		cam.target.y += pshake.y;

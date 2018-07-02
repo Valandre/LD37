@@ -71,7 +71,6 @@ class WorldComposite extends h3d.scene.DefaultRenderer {
 		ambient.shader.dofStart = 0.1;
 		ambient.shader.dofPower = 2;
 		ambient.shader.dofAmount = 0.8;
-		ambient.shader.envColorAmount = 0.3;
 		ambient.shader.fogColor.setColor(0x8EB0C3);
 
 		sao.pass.shader.sampleRadius = 1;
@@ -144,11 +143,6 @@ class WorldComposite extends h3d.scene.DefaultRenderer {
 		setTarget(colorTex);
 		clear(0, 1);
 
-		var envColor = allocTarget("envColor", envColorScale, false);
-		h3d.pass.Copy.run(colorTex, envColor);
-		envColorBlur.apply(envColor, allocTarget("envColorBlur", envColorScale, false));
-		setTarget(colorTex);
-
 		draw("default");
 		draw("outline");
 		def.draw(getSort("alpha"));
@@ -158,20 +152,8 @@ class WorldComposite extends h3d.scene.DefaultRenderer {
 		clear(0);
 		draw("additive");
 
-	// blur
-		setTarget(colorTex);
-		draw("env");
-
-		var colorBlurTex = allocTarget("colorBlur", colorBlurScale, false);
-		h3d.pass.Copy.run(colorTex, colorBlurTex);
-		h3d.pass.Copy.run(addTex, colorBlurTex, Add);
-		colorBlur.apply(colorBlurTex, allocTarget("colorBlurTmp", colorBlurScale, false));
-
-
 	// ambient
 		ambient.shader.color = colorTex;
-		ambient.shader.envColor = envColor;
-		ambient.shader.colorBlur = colorBlurTex;
 		ambient.shader.additive = addTex;
 		ambient.shader.depth = depthTex;
 		var dist = game.s3d.camera.pos.sub(game.s3d.camera.target).length();

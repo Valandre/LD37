@@ -16,7 +16,6 @@ class Composite extends h3d.shader.ScreenShader {
 		@ignore @param var colorBlur : Sampler2D;
 		@ignore @param var depth : Sampler2D;
 		@param var envColor : Sampler2D;
-		@range(0,0.5) @param var envColorAmount : Float;
 
 		@range(0,1) @param var dofStart : Float;
 		@range(0,5) @param var dofPower : Float;
@@ -56,7 +55,7 @@ class Composite extends h3d.shader.ScreenShader {
 		}
 
 		function getPosition( uv : Vec2, depth : Float ) : Vec3 {
-			var uv2 = (uv - 0.5) * vec2(2, -2);
+			var uv2 = uvToScreen(uv);
 			var temp = vec4(uv2, depth, 1) * cameraInverseViewProj;
 			var originWS = temp.xyz / temp.w;
 			return originWS;
@@ -94,10 +93,6 @@ class Composite extends h3d.shader.ScreenShader {
 			// additive
 			var addColor = additive.get(input.uv);
 			pColor += addColor;
-
-			// env
-			var eColor = envColor.get(input.uv + vec2(0,0.05));
-			pColor += eColor * envColorAmount * abs(eColor - pColor) * (1 - pColor);
 
 			// bloom
 			if(hasBLOOM) {
