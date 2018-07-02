@@ -6,7 +6,6 @@ class WorldComposite extends h3d.scene.DefaultRenderer {
 	var game : Game;
 	@ignore var antiAliasing = new h3d.pass.FXAA();
 	var ambient : h3d.pass.ScreenFx<shaders.Composite>;
-	var uiAmbient : h3d.pass.ScreenFx<shaders.Composite>;
 
 	public var finalTex : h3d.mat.Texture;
 
@@ -18,12 +17,9 @@ class WorldComposite extends h3d.scene.DefaultRenderer {
 		super();
 
 		ambient = new h3d.pass.ScreenFx(new shaders.Composite());
-
 		ambient.shader.global_brightness = 0.;
 		ambient.shader.global_contrast = 1.05;
 		ambient.shader.global_saturation = 1.;
-
-		uiAmbient = new h3d.pass.ScreenFx(new shaders.Composite());
 	}
 
 	override function render() {
