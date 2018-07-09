@@ -182,23 +182,48 @@ class GameUI
 			return;
 		}
 
+
 		var m = hxd.Res.UI.Winner.Model;
 		var winner = game.modelCache.loadModel(m);
-		game.s3d.addChild(winner);
+		game.s3d.addChild(winner);		
 
 		var a = game.modelCache.loadAnimation(m);
 		a.loop = false;
 		winner.playAnimation(a);
-		winner.name = "ui";
+		winner.name = "ui";		
 
-		var cam = game.s3d.camera;
-		var a = hxd.Math.atan2(cam.pos.y - cam.target.y, cam.pos.x - cam.target.x);
-		winner.x = cam.target.x;
-		winner.y = cam.target.y;
-		winner.z = cam.target.z;
-		winner.rotate(0, 0, a);
+		var res = hxd.Res.load("Chars/" + pl.props.modelId + "01/Model.FBX").toModel();
+		if(res != null) {
+			var m = game.modelCache.loadModel(res);
+			m.inheritCulled = true;			
+			for(m in m.getMeshes()) {
+				m.material.mainPass.enableLights = true;
+				m.material.shadows = false;
+				m.material.mainPass.culling = Back;
+			}	
+			
+			var path = res.entry.directory + "/Anim_stand";
+			var a = game.modelCache.loadAnimation(hxd.Res.loader.load(path+".FBX").toModel());
+			a.loop = true;
+			m.playAnimation(a);
+			setOutline(m, pl.getColor());
 
-		game.event.waitUntil(function(dt) {
+			var o = winner.getObjectByName("PosSushi");
+			if(o != null) 
+				o.addChild(m);
+		}
+
+
+
+		game.event.waitUntil(function(dt) {		
+
+			var cam = game.s3d.camera;
+			var a = hxd.Math.atan2(cam.pos.y - cam.target.y, cam.pos.x - cam.target.x);
+			winner.x = cam.target.x;
+			winner.y = cam.target.y;
+			winner.z = cam.target.z;
+			winner.rotate(0, 0, a);
+
 			if(winner.currentAnimation.frame >= winner.currentAnimation.frameCount - 1) {
 				game.state.stars[pl.id - 1]++;
 				var s = scores[pl.id - 1];
@@ -213,6 +238,33 @@ class GameUI
 			}
 			return false;
 		});
+	}
+
+
+	function setOutline(obj : h3d.scene.Object, color : Int) {
+		var outlineShader = new shaders.Outline();
+		outlineShader.size = 0.06;
+		outlineShader.distance = 0.001;
+		outlineShader.color.setColor(color);
+
+		for( m in obj.getMeshes() ) {
+			if( m.material.name != null && StringTools.startsWith(m.material.name, "FX") )
+				continue;
+
+			var p : h3d.prim.HMDModel = Std.instance(m.primitive, h3d.prim.HMDModel);
+			if( p == null )
+				continue;
+
+			if( !p.hasBuffer("logicNormal") )
+				p.recomputeNormals("logicNormal");
+
+			var multi = Std.instance(m, h3d.scene.MultiMaterial);
+			for( m in (multi != null ? multi.materials : [m.material]) ) {
+				var p = m.allocPass("outline");
+				p.culling = None;
+				p.addShader(outlineShader);
+			}
+		}
 	}
 
 	public function update(dt : Float) {

@@ -225,7 +225,7 @@ class Unit extends Entity
 		this.z += w * 0.5;
 	}
 
-	function getColor() {
+	public function getColor() {
 		var res = try { hxd.Res.load("wall0" + (props.colorId + 1) + ".png").toImage(); } catch(e : hxd.res.NotFound) { null; };
 		var color = res == null ? 0 : res.toBitmap().getPixel(0, 0);
 		return color;
