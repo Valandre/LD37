@@ -103,8 +103,6 @@ class GameUI
 	var scores : Array<PlayerScore> = [];
 
 	var root : h3d.scene.Object;
-	var countDown : h3d.scene.Object;
-
 	var maxStars = 5;
 
 	public function new() {
@@ -143,7 +141,7 @@ class GameUI
 
 	function startRace() {
 		var m = hxd.Res.UI.Countdown.Model_fbx;
-		countDown = game.modelCache.loadModel(m);
+		var countDown = game.modelCache.loadModel(m);
 		game.s3d.addChild(countDown);
 
 		var a = game.modelCache.loadAnimation(m);
@@ -176,7 +174,6 @@ class GameUI
 	}
 
 	public function nextRound(pl : ent.Unit) {
-
 		if(pl == null) {
 			//mort simultanée : pas de gagnant
 			game.event.wait(2, function() {
@@ -185,59 +182,32 @@ class GameUI
 			return;
 		}
 
-		var t = hxd.Res.UI.winner.toTile();
-		var bmp = new h2d.Bitmap(t, game.s2d);
-		bmp.smooth = true;
-		var sc = 1;
-		bmp.setScale(sc);
+		var m = hxd.Res.UI.Winner.Model;
+		var winner = game.modelCache.loadModel(m);
+		game.s3d.addChild(winner);
 
-		var d = 25;
-		var to = 0.;
-		switch(pl.id) {
-			case 1 :
-				bmp.x = -t.width * sc - 100;
-				bmp.y = 100 + d;
-				to = d;
-			case 2 :
-				bmp.x = game.s2d.width + 100;
-				bmp.y = 100 + d;
-				to = game.s2d.width - t.width * sc - d;
-			case 3 :
-				bmp.x = -t.width * sc - 100;
-				bmp.y = game.s2d.height - 100 - t.height * sc - d;
-				to = d;
-			case 4 :
-				bmp.x = game.s2d.width + 100;
-				bmp.y = game.s2d.height - 100 - t.height * sc - d;
-				to = game.s2d.width - t.width * sc - d;
-			default :
-		}
+		var a = game.modelCache.loadAnimation(m);
+		a.loop = false;
+		winner.playAnimation(a);
+		winner.name = "ui";
+
+		var cam = game.s3d.camera;
+		var a = hxd.Math.atan2(cam.pos.y - cam.target.y, cam.pos.x - cam.target.x);
+		winner.x = cam.target.x;
+		winner.y = cam.target.y;
+		winner.z = cam.target.z;
+		winner.rotate(0, 0, a);
 
 		game.event.waitUntil(function(dt) {
-			bmp.x += (to - bmp.x) * 0.25 * dt;
-			if(Math.abs(to - bmp.x) < 1) {
-				var c = 1.;
-				bmp.colorAdd = new h3d.Vector(c, c, c);
-				game.event.waitUntil(function(dt) {
-					c -= 0.05 * dt;
-					bmp.colorAdd.x = bmp.colorAdd.y = bmp.colorAdd.y = c;
-					if(c <= 0) {
-						bmp.colorAdd = null;
-
-						//Sounds.play("Winner");
-						game.state.stars[pl.id - 1]++;
-						var s = scores[pl.id - 1];
-						s.counterUpdate();
-
-						game.event.wait(2, function() {
-							bmp.remove();
-							if(game.state.stars[pl.id - 1] == maxStars)
-								game.endGame();
-							else game.restart();
-						});
-						return true;
-					}
-					return false;
+			if(winner.currentAnimation.frame >= winner.currentAnimation.frameCount - 1) {
+				game.state.stars[pl.id - 1]++;
+				var s = scores[pl.id - 1];
+				s.counterUpdate();
+				game.event.wait(2, function() {
+					winner.remove();
+					if(game.state.stars[pl.id - 1] == maxStars)
+						game.endGame();
+					else game.restart();
 				});
 				return true;
 			}

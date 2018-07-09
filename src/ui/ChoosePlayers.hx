@@ -134,7 +134,6 @@ class PlayerSlot {
 				for( m in (multi != null ? multi.materials : [m.material]) ) {
 					var p = m.allocPass("outline");
 					p.culling = None;
-					p.depthWrite = false;
 					p.addShader(outlineShader);
 				}
 			}
