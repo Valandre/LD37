@@ -196,10 +196,10 @@ class GameUI
 		if(res != null) {
 			var m = game.modelCache.loadModel(res);
 			m.inheritCulled = true;			
-			for(m in m.getMeshes()) {
-				m.material.mainPass.enableLights = true;
-				m.material.shadows = false;
-				m.material.mainPass.culling = None;
+			for(m in m.getMaterials()) {
+				m.mainPass.enableLights = true;
+				m.shadows = false;
+				m.mainPass.culling = None;
 			}	
 			
 			var path = res.entry.directory + "/Anim_stand";
