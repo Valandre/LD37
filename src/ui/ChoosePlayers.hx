@@ -290,7 +290,7 @@ class ChoosePlayers extends ui.Form
 		super.init();
 
 		//init scene
-		var m = hxd.Res.UI.CharacterSelect.Model;
+		var m = hxd.Res.UI.CharacterSelect.Model_fbx;
 		obj = game.modelCache.loadModel(m);
 		var a = game.modelCache.loadAnimation(m);
 		if(a != null) {
@@ -301,17 +301,12 @@ class ChoosePlayers extends ui.Form
 			}
 		}
 		else ready = true;
-/*
-		for(m in obj.getMeshes())
-			m.material.receiveShadows = false;
-*/
 
 		addBg();
 
 		game.s3d.addChild(obj);
 		game.s3d.camera.follow = {pos : obj.getObjectByName("CamScreen"), target : obj.getObjectByName("CamScreen.Target")};
 		game.autoCameraKind = Choose;
-		//game.s3d.lightSystem.ambientLight.setColor(0xFFFFFF);
 
 		var i = 0;
 		while(true) {

@@ -60,7 +60,7 @@ class WorldComposite extends h3d.scene.DefaultRenderer {
 		ambient.shader.color = colorTex;
 		ambient.shader.additive = addTex;
 
-		finalTex = allocTarget("final", 0, true);
+		finalTex = allocTarget("final", true);
 		setTarget(finalTex);
 		ambient.setGlobals(ctx);
 		ambient.render();
@@ -93,7 +93,7 @@ class WorldComposite extends h3d.scene.DefaultRenderer {
 		ambient.shader.color = colorTex;
 		ambient.shader.additive = addTex;
 
-		finalTex = allocTarget("final", 0, true);
+		finalTex = allocTarget("final", true);
 		setTarget(finalTex);
 		ambient.setGlobals(ctx);
 		ambient.render();

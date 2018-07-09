@@ -105,6 +105,8 @@ class GameUI
 	var root : h3d.scene.Object;
 	var countDown : h3d.scene.Object;
 
+	var maxStars = 5;
+
 	public function new() {
 		game = Game.inst;
 		game.setAmbient(1);
@@ -140,7 +142,7 @@ class GameUI
 	}
 
 	function startRace() {
-		var m = hxd.Res.UI.Countdown.Model;
+		var m = hxd.Res.UI.Countdown.Model_fbx;
 		countDown = game.modelCache.loadModel(m);
 		game.s3d.addChild(countDown);
 
@@ -229,7 +231,7 @@ class GameUI
 
 						game.event.wait(2, function() {
 							bmp.remove();
-							if(game.state.stars[pl.id - 1] == 1)
+							if(game.state.stars[pl.id - 1] == maxStars)
 								game.endGame();
 							else game.restart();
 						});
