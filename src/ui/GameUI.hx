@@ -199,7 +199,7 @@ class GameUI
 			for(m in m.getMeshes()) {
 				m.material.mainPass.enableLights = true;
 				m.material.shadows = false;
-				m.material.mainPass.culling = Back;
+				m.material.mainPass.culling = None;
 			}	
 			
 			var path = res.entry.directory + "/Anim_stand";
@@ -212,9 +212,7 @@ class GameUI
 			if(o != null) 
 				o.addChild(m);
 		}
-
-
-
+		
 		game.event.waitUntil(function(dt) {		
 
 			var cam = game.s3d.camera;
