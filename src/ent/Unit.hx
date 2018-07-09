@@ -58,6 +58,88 @@ class Wall extends h3d.scene.Mesh {
 	}
 }
 
+class Missile extends h3d.scene.Mesh {	
+	var game : Game;
+	var owner : ent.Unit;
+	var target : ent.Unit;	
+	var dir : h3d.Vector;
+	var destroyed = false;
+	var speed = 0.4;
+	var speedMax = 1.7;
+	var ray = 4.;
+	var canCollide = false;
+
+	public function new (owner, dir : h3d.Vector, ?prim, ?parent) {
+		super(prim, null, parent);
+		game = Game.inst;
+		material.color.setColor(0xFF00FFFF);
+		material.mainPass.enableLights = true;
+		scaleX = 2;
+
+		this.owner = owner;
+		x = owner.x;
+		y = owner.y;
+		z = owner.z;
+		this.dir = dir;
+		setDirection(dir);
+
+		game.event.wait(0.3, function() {
+			canCollide = true;
+		});		
+		game.event.waitUntil(function(dt) { 
+			update(dt);
+			return destroyed;
+		});					
+	}
+
+	function worldCollide() {	
+		var sensor = h3d.col.Ray.fromValues(x, y, z, dir.x, dir.y, dir.z);
+		for(w in game.world.walls) {
+			var d = w.w.getBounds().rayIntersection(sensor, false);
+			if(d > 0 && d < 1)
+				return true;
+		}
+
+		var pt = new h3d.col.Point(x, y, z);
+		if(!game.world.bounds.contains(pt)) return true;
+		for(c in game.world.collides) 
+			if(c.b.contains(pt)) return  true;
+
+		return false;
+	}
+
+	override function onRemove() {
+		super.onRemove();
+		onRemoved();
+	}
+
+	public dynamic function onRemoved() {}
+
+	function explode() {
+		destroyed = true;
+
+		for(p in game.players) {
+			if(p == owner) continue;
+			if(hxd.Math.distance(p.x-x, p.y-y, p.z-z) < ray)
+				p.destroy();
+		}
+		remove();
+	}
+
+	function update(dt : Float) {
+		if(destroyed) return;
+		
+		speed = Math.min(speedMax, speed+0.01*dt);
+		x += speed*dir.x*dt;
+		y += speed*dir.y*dt;
+		z += speed*dir.z*dt;
+
+		if(canCollide && worldCollide()) 
+			explode();
+	}
+}
+
+
 class Rocket extends h3d.scene.Mesh {	
 	var game : Game;
 	var owner : ent.Unit;
@@ -199,6 +281,7 @@ class Unit extends Entity
 
 	var shield : h3d.scene.Mesh;
 	var rockets : Array<Rocket> = [];
+	var missiles : Array<Missile> = [];
 
 	var sensor : h3d.col.Ray;
 	var boxCollide : h3d.scene.Box;
@@ -778,6 +861,40 @@ class Unit extends Entity
 							r.onRemoved = function() { rockets.remove(r); };
 							rockets.push(r);
 						});
+					}
+				enableWalls = false;
+
+			case Missile:
+				power.active = false;				
+				if(missiles.length == 0)
+					for(i in 0...Std.int(power.value)) {	
+						var c = new h3d.prim.Sphere(0.5, 4, 4);
+						c.addUVs();
+						c.addNormals();	
+
+						var mdir = dir.toVector().clone();
+						if(i != 0) {
+							var ang = 0.25 * (i == 1 ? 1 : -1);
+							if(mdir.x != 0) {
+								if(worldNormal.z!=0)
+									mdir.y += ang;
+								else mdir.z += ang;
+							}
+							else if(mdir.y != 0) {
+								if(worldNormal.z!=0)
+									mdir.x += ang;
+								else mdir.z += ang;
+							}
+							else if(mdir.z != 0) {
+								if(worldNormal.x!=0)
+									mdir.y += ang;
+								else mdir.x += ang;
+							}
+						}
+
+						var m = new Missile(this, mdir, c, game.s3d);
+						m.onRemoved = function() { missiles.remove(m); };
+						missiles.push(m);
 					}
 		}
 	}

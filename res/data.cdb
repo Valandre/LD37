@@ -61,7 +61,7 @@
 				{
 					"id": "Takkun",
 					"selectId": 6,
-					"power": "Shield",
+					"power": "Missile",
 					"index": 5,
 					"name": "Takkun"
 				},
@@ -134,11 +134,6 @@
 					"name": "id"
 				},
 				{
-					"typeStr": "1",
-					"name": "name",
-					"display": null
-				},
-				{
 					"typeStr": "4",
 					"name": "time",
 					"display": null
@@ -152,33 +147,33 @@
 			"lines": [
 				{
 					"id": "Shield",
-					"name": "Shield",
 					"time": 5,
 					"value": 2
 				},
 				{
 					"id": "Boost",
-					"name": "Boost",
 					"time": 0.2,
 					"value": 0.9
 				},
 				{
 					"id": "Rewind",
-					"name": "Rewind",
 					"time": 1,
 					"value": 4
 				},
 				{
 					"id": "Stealth",
-					"name": "Stealth",
 					"time": 3,
 					"value": 0
 				},
 				{
 					"id": "Rocket",
-					"name": "Rocket",
 					"time": 0,
 					"value": 1
+				},
+				{
+					"id": "Missile",
+					"time": 0,
+					"value": 3
 				}
 			],
 			"separators": [],
