@@ -174,10 +174,17 @@ class PlayerSlot {
 		if(selector != null) return;
 		var m = hxd.Res.UI.Selector.Model;
 		selector = game.modelCache.loadModel(m);
+
 		for(m in selector.getMeshes()) 
 			m.material.texture = game.getTexFromPath("UI/Selector/SelectorP" + (pid + 1) + ".png");
 		game.s3d.addChild(selector);
 		selector.visible = false;
+
+/*
+		ChoosePlayers.getAnim("UI/Selector/SelectorP"+ (pid + 1));
+		ChoosePlayers.playAnim("SelectorP"+ (pid + 1), selector.getObjectByName("SelectorP"+ (pid + 1)).toMesh());
+		trace(ChoosePlayers.texAnim.get("SelectorP"+ (pid + 1)));
+	*/
 	}
 
 	function removeSelector(){
@@ -280,7 +287,7 @@ class ChoosePlayers extends ui.Form
 	var slotTex : Array<h3d.mat.Texture> = [];
 	var buttonTex : Array<Array<h3d.mat.Texture>> = [];
 
-	var texAnim : Map<String, {frames : Array<h3d.mat.Texture>, loop : Bool}> = new Map();
+	public static var texAnim : Map<String, {frames : Array<h3d.mat.Texture>, loop : Bool}> = new Map();
 
 	var players : Array<PlayerSlot> = [];
 	var CharsIds : Array<Int> = [];
@@ -338,7 +345,7 @@ class ChoosePlayers extends ui.Form
 		pslot[2].material.texture = slotTex[4];
 		pslot[3].material.texture = slotTex[7];
 
-		getAnim("PowerReady");
+		getAnim("UI/CharacterSelect/PowerReady");
 
 		//
 		mSelect = obj.getObjectByName("ButtonA").toMesh();
@@ -356,17 +363,18 @@ class ChoosePlayers extends ui.Form
 		//game.setAmbient(0);
 	}
 
-	function getAnim(name : String) {
+	public static function getAnim(path : String) {
+		var name = path.split("/").pop();
 		var frames = [];
 		var loop = false;
 		while(true) {
 			var n = (frames.length < 9 ? "0" : "") + (frames.length + 1);
 			var tex = null;
 			if(frames.length == 0) 
-				tex = game.getTexFromPath("UI/CharacterSelect/PowerReady[" + n + "]L.png"); //has loop flag [xx]L?
+				tex = Game.inst.getTexFromPath(path+"[" + n + "]L.png"); //has loop flag [xx]L?
 			if(tex != null)
 				loop = true;
-			else tex = game.getTexFromPath("UI/CharacterSelect/PowerReady[" + n + "].png");
+			else tex = Game.inst.getTexFromPath(path+"[" + n + "].png");
 			if(tex == null) break;
 			frames.push(tex);
 		}
@@ -374,12 +382,12 @@ class ChoosePlayers extends ui.Form
 		texAnim.set(name, {frames : frames, loop : loop});
 	}
 
-	function playAnim(name : String, parent : h3d.scene.Mesh, ?onStop : Void -> Bool, ?onEnd : Void -> Void) {
+	public static function playAnim(name : String, parent : h3d.scene.Mesh, ?onStop : Void -> Bool, ?onEnd : Void -> Void) {
 		var a = texAnim.get(name);
-		if(a == null) return;	
+		if(a == null) return;
 					
 		var t = 0.;
-		game.event.waitUntil(function(dt) {
+		Game.inst.event.waitUntil(function(dt) {
 			if(onStop != null && onStop()) return true;
 			t += dt / 60;
 			var n = Std.int(30 * t);

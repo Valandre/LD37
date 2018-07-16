@@ -5,7 +5,6 @@ import hxd.Key in K;
 class ChooseArena extends ui.Form
 {
 	var selector : h3d.scene.Object;
-
 	var ready = false;
 
 	var mview : h3d.scene.Mesh;

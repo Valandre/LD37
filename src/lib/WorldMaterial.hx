@@ -6,7 +6,7 @@ class MyMaterial extends h3d.mat.Material {
 
 class MyMaterialSetup extends h3d.mat.MaterialSetup {
 	public function new() {
-		super("MyMaterial");
+		super("Default");
 	}
 	override function createMaterial() {
 		return @:privateAccess new MyMaterial();

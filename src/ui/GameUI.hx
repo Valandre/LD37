@@ -103,7 +103,7 @@ class GameUI
 	var scores : Array<PlayerScore> = [];
 
 	var root : h3d.scene.Object;
-	var maxStars = 5;
+	var maxStars = 1;
 
 	public function new() {
 		game = Game.inst;
@@ -140,7 +140,7 @@ class GameUI
 	}
 
 	function startRace() {
-		var m = hxd.Res.UI.Countdown.Model_fbx;
+		var m = hxd.Res.UI.Countdown.Model;
 		var countDown = game.modelCache.loadModel(m);
 		game.s3d.addChild(countDown);
 
@@ -160,7 +160,7 @@ class GameUI
 			if(m.name != "Square")
 				m.material.mainPass.depthWrite = false;
 		}
-
+		
 		game.event.waitUntil(function(dt) {
 			if(countDown.currentAnimation.frame >= countDown.currentAnimation.frameCount - 1) {
 				game.gameOver = false;
@@ -181,8 +181,6 @@ class GameUI
 			});
 			return;
 		}
-
-
 		var m = hxd.Res.UI.Winner.Model;
 		var winner = game.modelCache.loadModel(m);
 		game.s3d.addChild(winner);		
