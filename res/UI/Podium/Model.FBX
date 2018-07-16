@@ -2097,7 +2097,7 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 1959737492128, "Model::posPlaceN1", "Null" {
+	Model: 1959737492128, "Model::PosPlaceN1", "Null" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -2117,7 +2117,7 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 1959737496512, "Model::Place01", "Mesh" {
+	Model: 1959737496512, "Model::PlaceN1", "Mesh" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -4109,7 +4109,7 @@ Connections:  {
 	;Model::PosPlaceN4, Model::RootNode
 	C: "OO",1959737505280,0
 	
-	;Model::posPlaceN1, Model::RootNode
+	;Model::PosPlaceN1, Model::RootNode
 	C: "OO",1959737492128,0
 	
 	;Model::PosPlaceN2, Model::RootNode
@@ -4466,25 +4466,25 @@ Connections:  {
 	;AnimCurveNode::S, Model::PlaceN4
 	C: "OP",1958784390272,1959737507472, "Lcl Scaling"
 	
-	;Model::Place01, Model::posPlaceN1
+	;Model::PlaceN1, Model::PosPlaceN1
 	C: "OO",1959737496512,1959737492128
 	
-	;NodeAttribute::, Model::posPlaceN1
+	;NodeAttribute::, Model::PosPlaceN1
 	C: "OO",1959677840432,1959737492128
 	
-	;AnimCurveNode::T, Model::posPlaceN1
+	;AnimCurveNode::T, Model::PosPlaceN1
 	C: "OP",1960337134480,1959737492128, "Lcl Translation"
 	
-	;Geometry::, Model::Place01
+	;Geometry::, Model::PlaceN1
 	C: "OO",1959726160000,1959737496512
 	
-	;Material::PlaceN1, Model::Place01
+	;Material::PlaceN1, Model::PlaceN1
 	C: "OO",1960344409216,1959737496512
 	
-	;AnimCurveNode::T, Model::Place01
+	;AnimCurveNode::T, Model::PlaceN1
 	C: "OP",1960337141344,1959737496512, "Lcl Translation"
 	
-	;AnimCurveNode::S, Model::Place01
+	;AnimCurveNode::S, Model::PlaceN1
 	C: "OP",1958784381952,1959737496512, "Lcl Scaling"
 	
 	;Model::PlaceN2, Model::PosPlaceN2
@@ -4715,10 +4715,10 @@ Connections:  {
 	;Model::PosPlaceN2, DisplayLayer::Scene
 	C: "OO",1959723558144,1959146257088
 	
-	;Model::Place01, DisplayLayer::Scene
+	;Model::PlaceN1, DisplayLayer::Scene
 	C: "OO",1959737496512,1959146257088
 	
-	;Model::posPlaceN1, DisplayLayer::Scene
+	;Model::PosPlaceN1, DisplayLayer::Scene
 	C: "OO",1959737492128,1959146257088
 	
 	;Model::PlaceN4, DisplayLayer::Scene
