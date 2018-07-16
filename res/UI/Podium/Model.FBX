@@ -2097,7 +2097,7 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 1959737492128, "Model::PosPlace01", "Null" {
+	Model: 1959737492128, "Model::posPlaceN1", "Null" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -4109,7 +4109,7 @@ Connections:  {
 	;Model::PosPlaceN4, Model::RootNode
 	C: "OO",1959737505280,0
 	
-	;Model::PosPlace01, Model::RootNode
+	;Model::posPlaceN1, Model::RootNode
 	C: "OO",1959737492128,0
 	
 	;Model::PosPlaceN2, Model::RootNode
@@ -4466,13 +4466,13 @@ Connections:  {
 	;AnimCurveNode::S, Model::PlaceN4
 	C: "OP",1958784390272,1959737507472, "Lcl Scaling"
 	
-	;Model::Place01, Model::PosPlace01
+	;Model::Place01, Model::posPlaceN1
 	C: "OO",1959737496512,1959737492128
 	
-	;NodeAttribute::, Model::PosPlace01
+	;NodeAttribute::, Model::posPlaceN1
 	C: "OO",1959677840432,1959737492128
 	
-	;AnimCurveNode::T, Model::PosPlace01
+	;AnimCurveNode::T, Model::posPlaceN1
 	C: "OP",1960337134480,1959737492128, "Lcl Translation"
 	
 	;Geometry::, Model::Place01
@@ -4718,7 +4718,7 @@ Connections:  {
 	;Model::Place01, DisplayLayer::Scene
 	C: "OO",1959737496512,1959146257088
 	
-	;Model::PosPlace01, DisplayLayer::Scene
+	;Model::posPlaceN1, DisplayLayer::Scene
 	C: "OO",1959737492128,1959146257088
 	
 	;Model::PlaceN4, DisplayLayer::Scene
