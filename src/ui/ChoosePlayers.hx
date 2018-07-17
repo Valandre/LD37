@@ -175,16 +175,21 @@ class PlayerSlot {
 		var m = hxd.Res.UI.Selector.Model;
 		selector = game.modelCache.loadModel(m);
 
+		var name = "SelectorP" + (pid + 1);
+
 		for(m in selector.getMeshes()) 
-			m.material.texture = game.getTexFromPath("UI/Selector/SelectorP" + (pid + 1) + ".png");
+			m.material.texture = game.getTexFromPath("UI/Selector/"+ name + ".png");
 		game.s3d.addChild(selector);
 		selector.visible = false;
+		
+		ChoosePlayers.getAnim("UI/Selector/"+name);
+		ChoosePlayers.playAnim(name, selector.getObjectByName(name).toMesh());	
 
-/*
-		ChoosePlayers.getAnim("UI/Selector/SelectorP"+ (pid + 1));
-		ChoosePlayers.playAnim("SelectorP"+ (pid + 1), selector.getObjectByName("SelectorP"+ (pid + 1)).toMesh());
-		trace(ChoosePlayers.texAnim.get("SelectorP"+ (pid + 1)));
-	*/
+		for(i in 0...4) {
+			var o = selector.getObjectByName("SelectorP"+(i+1));
+			if(o != null)
+				o.visible = pid == i;
+		}
 	}
 
 	function removeSelector(){
@@ -193,7 +198,6 @@ class PlayerSlot {
 		selector = null;
 	}
 
-	//var posInitialized = false;
 	public function setPos(o : h3d.scene.Object) {
 		if(selector == null) return;
 		var pos = o.getAbsPos();
@@ -201,26 +205,7 @@ class PlayerSlot {
 		selector.x = pos.tx;
 		selector.y = pos.ty;
 		selector.z = pos.tz;
-
-/*
-		if(!posInitialized) {
-			posInitialized = true;
-			selector.x = pos.tx;
-			selector.y = pos.ty;
-			selector.z = pos.tz;
-			return;
-		}
-
-		game.event.waitUntil(function(dt) {
-			if(curId != selectId || selector == null) return true;
-			selector.x += (pos.tx - selector.x) * 0.5 * dt;
-			selector.y += (pos.ty - selector.y) * 0.5 * dt;
-			selector.z += (pos.tz - selector.z) * 0.5 * dt;
-
-			return(pos.tx - selector.x < 0.01 && pos.ty - selector.y < 0.01 && pos.tz - selector.z < 0.01);
-		});*/
 	}
-
 
 	var blinkRnd = 0.;
 	function faceBlink() {
