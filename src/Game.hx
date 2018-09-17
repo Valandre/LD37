@@ -135,8 +135,8 @@ class Game extends hxd.App {
 			Sounds.play("Loop");*/
 
 		transition(function() {
-			//new ui.Menu();
-			new ui.ChoosePlayers();
+			new ui.Title();
+			//new ui.ChoosePlayers();
 		} ,false);
 	}
 

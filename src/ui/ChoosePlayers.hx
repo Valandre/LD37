@@ -473,8 +473,14 @@ class ChoosePlayers extends ui.Form
 							}
 						}*/
 					}
-					if(c.pressed.B)
+					if(c.pressed.B) {
+						if(i == 0 && pl.state == 0) {
+							//main player : back to menu
+							new ui.Title();
+							remove();
+						}						
 						pl.state = hxd.Math.imax(0, pl.state - 1);
+					}
 					if(pl.state != 0)
 						pl.setPos(mthumbs[pl.selectId - 1]);
 				}
