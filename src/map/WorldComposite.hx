@@ -65,6 +65,7 @@ class WorldComposite extends h3d.scene.DefaultRenderer {
 		ambient.setGlobals(ctx);
 		ambient.render();
 
+		setTarget(null);
 		h3d.pass.Copy.run(finalTex, null);
 	}
 
