@@ -11,8 +11,8 @@ FBXHeaderExtension:  {
 		Day: 17
 		Hour: 19
 		Minute: 12
-		Second: 17
-		Millisecond: 535
+		Second: 58
+		Millisecond: 221
 	}
 	Creator: "FBX SDK/FBX Plugins version 2018.1"
 	SceneInfo: "SceneInfo::GlobalInfo", "UserData" {
@@ -34,13 +34,13 @@ FBXHeaderExtension:  {
 			P: "Original|ApplicationVendor", "KString", "", "", "Autodesk"
 			P: "Original|ApplicationName", "KString", "", "", "3ds Max"
 			P: "Original|ApplicationVersion", "KString", "", "", "2018"
-			P: "Original|DateTime_GMT", "DateTime", "", "", "17/09/2018 17:12:17.534"
+			P: "Original|DateTime_GMT", "DateTime", "", "", "17/09/2018 17:12:58.220"
 			P: "Original|FileName", "KString", "", "", "D:\Projects\LD37\trunk\res\UI\Title\Model.FBX"
 			P: "LastSaved", "Compound", "", ""
 			P: "LastSaved|ApplicationVendor", "KString", "", "", "Autodesk"
 			P: "LastSaved|ApplicationName", "KString", "", "", "3ds Max"
 			P: "LastSaved|ApplicationVersion", "KString", "", "", "2018"
-			P: "LastSaved|DateTime_GMT", "DateTime", "", "", "17/09/2018 17:12:17.534"
+			P: "LastSaved|DateTime_GMT", "DateTime", "", "", "17/09/2018 17:12:58.220"
 			P: "Original|ApplicationActiveProject", "KString", "", "", "C:\Users\Emak\Documents\3dsMax"
 			P: "Original|ApplicationNativeFile", "KString", "", "", "E:\Sushi\UI\Title\Model.max"
 		}
@@ -77,7 +77,7 @@ GlobalSettings:  {
 
 Documents:  {
 	Count: 1
-	Document: 2815816083856, "", "Scene" {
+	Document: 2815816084880, "", "Scene" {
 		Properties70:  {
 			P: "SourceObject", "object", "", ""
 			P: "ActiveAnimStackName", "KString", "", "", ""
@@ -97,7 +97,7 @@ References:  {
 
 Definitions:  {
 	Version: 100
-	Count: 17
+	Count: 18
 	ObjectType: "GlobalSettings" {
 		Count: 1
 	}
@@ -192,7 +192,7 @@ Definitions:  {
 		}
 	}
 	ObjectType: "NodeAttribute" {
-		Count: 1
+		Count: 2
 		PropertyTemplate: "FbxNull" {
 			Properties70:  {
 				P: "Color", "ColorRGB", "Color", "",0.8,0.8,0.8
@@ -310,10 +310,35 @@ Definitions:  {
 ;------------------------------------------------------------------
 
 Objects:  {
-	NodeAttribute: 2815500627696, "NodeAttribute::", "Null" {
+	NodeAttribute: 2817239714192, "NodeAttribute::", "Null" {
 		TypeFlags: "Null"
 	}
-	Geometry: 2815942354848, "Geometry::", "Mesh" {
+	NodeAttribute: 2817211807200, "NodeAttribute::", "Camera" {
+		Properties70:  {
+			P: "Color", "ColorRGB", "Color", "",0.0196078431372549,0.211764705882353,0.701960784313725
+			P: "UpVector", "Vector", "", "A",0,0,1
+			P: "BackgroundColor", "Color", "", "A",0,0,0
+			P: "AspectWidth", "double", "Number", "",1920
+			P: "AspectHeight", "double", "Number", "",1080
+			P: "FilmWidth", "double", "Number", "",1.41732287406921
+			P: "FilmHeight", "double", "Number", "",0.797244131565094
+			P: "FilmAspectRatio", "double", "Number", "",1.77777774454962
+			P: "ApertureMode", "enum", "", "",1
+			P: "FieldOfView", "FieldOfView", "", "A",19.9999994181858
+			P: "FocalLength", "Number", "", "A",102.083078623456
+			P: "AutoComputeClipPanes", "bool", "", "",1
+		}
+		TypeFlags: "Camera"
+		GeometryVersion: 124
+		Position: 0,0,0
+		Up: 0,0,1
+		LookAt: 0,0,0
+		ShowInfoOnMoving: 1
+		ShowAudio: 0
+		AudioColor: 0,1,0
+		CameraOrthoZoom: 1
+	}
+	Geometry: 2815942334176, "Geometry::", "Mesh" {
 		Properties70:  {
 			P: "Color", "ColorRGB", "Color", "",0.6,0.894117647058823,0.6
 		}
@@ -410,7 +435,7 @@ Objects:  {
 			}
 		}
 	}
-	Geometry: 2815942337984, "Geometry::", "Mesh" {
+	Geometry: 2815942358112, "Geometry::", "Mesh" {
 		Properties70:  {
 			P: "Color", "ColorRGB", "Color", "",0.6,0.894117647058823,0.6
 		}
@@ -483,7 +508,7 @@ Objects:  {
 			}
 		}
 	}
-	Model: 2815934022192, "Model::Root", "Null" {
+	Model: 2815939881280, "Model::Root", "Null" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -501,12 +526,14 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 2815934024384, "Model::CamScreen", "Null" {
+	Model: 2815939883472, "Model::CamScreen", "Camera" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
-			P: "Lcl Translation", "Lcl Translation", "", "A",-28.6199989318848,0,0
+			P: "LookAtProperty", "object", "", ""
+			P: "DefaultAttributeIndex", "int", "Integer", "",0
+			P: "Lcl Translation", "Lcl Translation", "", "A+",-28.6199989318848,0,0
 			P: "Lcl Rotation", "Lcl Rotation", "", "A",90,-0,-90
 			P: "mr displacement use global settings", "Bool", "", "AU",1
 			P: "mr displacement view dependent", "Bool", "", "AU",1
@@ -520,7 +547,7 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 2815934011232, "Model::CamScreen.Target", "Null" {
+	Model: 2815939892240, "Model::CamScreen.Target", "Null" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
@@ -538,35 +565,35 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 2815939885664, "Model::Title", "Mesh" {
+	Model: 2815816067632, "Model::Title", "Mesh" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "GeometricTranslation", "Vector3D", "Vector", "",0.110028423368931,0.449656844139099,-0.546515345573425
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",0,0,0.699999988079071
+			P: "Lcl Translation", "Lcl Translation", "", "A+",0,0,0.699999988079071
 			P: "Lcl Scaling", "Lcl Scaling", "", "A",3.25427508354187,3.25427508354187,3.25427508354187
 			P: "MaxHandle", "int", "Integer", "UH",4467
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 2815939890048, "Model::TxtStart", "Mesh" {
+	Model: 2815816069824, "Model::TxtStart", "Mesh" {
 		Version: 232
 		Properties70:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "GeometricTranslation", "Vector3D", "Vector", "",0.110028386116028,-0.617655694484711,-1.12246870994568
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",0,0,-2
+			P: "Lcl Translation", "Lcl Translation", "", "A+",0,0,-2
 			P: "Lcl Scaling", "Lcl Scaling", "", "A",3.25427508354187,3.25427508354187,3.25427508354187
 			P: "MaxHandle", "int", "Integer", "UH",4468
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Material: 2815935424960, "Material::Title", "" {
+	Material: 2815935426880, "Material::Title", "" {
 		Version: 102
 		ShadingModel: "phong"
 		MultiLayer: 0
@@ -610,7 +637,7 @@ Objects:  {
 			P: "Reflectivity", "double", "Number", "",0
 		}
 	}
-	Video: 2815935424480, "Video::Map Title", "Clip" {
+	Video: 2815935422560, "Video::Map Title", "Clip" {
 		Type: "Clip"
 		Properties70:  {
 			P: "Path", "KString", "XRefUrl", "", "D:\Projects\LD37\trunk\res\UI\Title\Title.png"
@@ -630,7 +657,7 @@ Objects:  {
 		Filename: "D:\Projects\LD37\trunk\res\UI\Title\TxtStart.png"
 		RelativeFilename: "TxtStart.png"
 	}
-	Texture: 2815935422560, "Texture::Map Title", "" {
+	Texture: 2815935424480, "Texture::Map Title", "" {
 		Type: "TextureVideoClip"
 		Version: 202
 		TextureName: "Texture::Map Title"
@@ -647,7 +674,7 @@ Objects:  {
 		Texture_Alpha_Source: "Alpha_Black"
 		Cropping: 0,0,0,0
 	}
-	Texture: 2815935426880, "Texture::Map TxtStart", "" {
+	Texture: 2815935427840, "Texture::Map TxtStart", "" {
 		Type: "TextureVideoClip"
 		Version: 202
 		TextureName: "Texture::Map TxtStart"
@@ -664,13 +691,13 @@ Objects:  {
 		Texture_Alpha_Source: "Alpha_Black"
 		Cropping: 0,0,0,0
 	}
-	AnimationStack: 2817328161376, "AnimStack::Model", "" {
+	AnimationStack: 2817328166368, "AnimStack::Model", "" {
 		Properties70:  {
 			P: "LocalStop", "KTime", "Time", "",46186158000
 			P: "ReferenceStop", "KTime", "Time", "",46186158000
 		}
 	}
-	CollectionExclusive: 2815500433632, "DisplayLayer::Scene", "DisplayLayer" {
+	CollectionExclusive: 2815500421152, "DisplayLayer::Scene", "DisplayLayer" {
 		Properties70:  {
 			P: "Color", "ColorRGB", "Color", "",0.549019607843137,0.345098039215686,0.882352941176471
 		}
@@ -683,65 +710,71 @@ Objects:  {
 Connections:  {
 	
 	;Model::Root, Model::RootNode
-	C: "OO",2815934022192,0
+	C: "OO",2815939881280,0
 	
 	;Model::CamScreen, Model::Root
-	C: "OO",2815934024384,2815934022192
+	C: "OO",2815939883472,2815939881280
 	
 	;Model::CamScreen.Target, Model::Root
-	C: "OO",2815934011232,2815934022192
+	C: "OO",2815939892240,2815939881280
 	
 	;Model::Title, Model::Root
-	C: "OO",2815939885664,2815934022192
+	C: "OO",2815816067632,2815939881280
 	
 	;Model::TxtStart, Model::Root
-	C: "OO",2815939890048,2815934022192
+	C: "OO",2815816069824,2815939881280
 	
 	;NodeAttribute::, Model::Root
-	C: "OO",2815500627696,2815934022192
+	C: "OO",2817239714192,2815939881280
+	
+	;NodeAttribute::, Model::CamScreen
+	C: "OO",2817211807200,2815939883472
+	
+	;Model::CamScreen.Target, Model::CamScreen
+	C: "OP",2815939892240,2815939883472, "LookAtProperty"
 	
 	;Geometry::, Model::Title
-	C: "OO",2815942354848,2815939885664
+	C: "OO",2815942334176,2815816067632
 	
 	;Material::Title, Model::Title
-	C: "OO",2815935424960,2815939885664
+	C: "OO",2815935426880,2815816067632
 	
 	;Geometry::, Model::TxtStart
-	C: "OO",2815942337984,2815939890048
+	C: "OO",2815942358112,2815816069824
 	
 	;Material::TxtStart, Model::TxtStart
-	C: "OO",2815935427360,2815939890048
+	C: "OO",2815935427360,2815816069824
 	
 	;Texture::Map Title, Material::Title
-	C: "OP",2815935422560,2815935424960, "DiffuseColor"
+	C: "OP",2815935424480,2815935426880, "DiffuseColor"
 	
 	;Texture::Map Title, Material::Title
-	C: "OP",2815935422560,2815935424960, "TransparentColor"
+	C: "OP",2815935424480,2815935426880, "TransparentColor"
 	
 	;Video::Map Title, Texture::Map Title
-	C: "OO",2815935424480,2815935422560
+	C: "OO",2815935422560,2815935424480
 	
 	;Texture::Map TxtStart, Material::TxtStart
-	C: "OP",2815935426880,2815935427360, "DiffuseColor"
+	C: "OP",2815935427840,2815935427360, "DiffuseColor"
 	
 	;Texture::Map TxtStart, Material::TxtStart
-	C: "OP",2815935426880,2815935427360, "TransparentColor"
+	C: "OP",2815935427840,2815935427360, "TransparentColor"
 	
 	;Video::Map TxtStart, Texture::Map TxtStart
-	C: "OO",2815935423520,2815935426880
+	C: "OO",2815935423520,2815935427840
 	
 	;Model::TxtStart, DisplayLayer::Scene
-	C: "OO",2815939890048,2815500433632
+	C: "OO",2815816069824,2815500421152
 	
 	;Model::Title, DisplayLayer::Scene
-	C: "OO",2815939885664,2815500433632
+	C: "OO",2815816067632,2815500421152
 	
 	;Model::CamScreen.Target, DisplayLayer::Scene
-	C: "OO",2815934011232,2815500433632
+	C: "OO",2815939892240,2815500421152
 	
 	;Model::CamScreen, DisplayLayer::Scene
-	C: "OO",2815934024384,2815500433632
+	C: "OO",2815939883472,2815500421152
 	
 	;Model::Root, DisplayLayer::Scene
-	C: "OO",2815934022192,2815500433632
+	C: "OO",2815939881280,2815500421152
 }
