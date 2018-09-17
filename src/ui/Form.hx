@@ -30,7 +30,7 @@ class Form extends h2d.Sprite
 			var a = game.modelCache.loadAnimation(m);
 			if(a != null) {
 				a.loop = true;
-				a.speed = 0.15;
+				a.speed = 0.05;
 				bg.playAnimation(a);
 			}
 
@@ -38,7 +38,7 @@ class Form extends h2d.Sprite
 			var t = 0.;
 			game.event.waitUntil(function(dt) {
 				t += 0.015 * dt;
-				bg.z = 0.03 * Math.sin(t);
+				bg.z = 0.01 * Math.sin(t);
 				return bg == null;
 			});
 		}

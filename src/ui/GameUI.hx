@@ -103,7 +103,7 @@ class GameUI
 	var scores : Array<PlayerScore> = [];
 
 	var root : h3d.scene.Object;
-	var maxStars = 1;
+	var maxStars = 5;
 
 	public function new() {
 		game = Game.inst;
