@@ -896,6 +896,37 @@ class Unit extends Entity
 						m.onRemoved = function() { missiles.remove(m); };
 						missiles.push(m);
 					}
+			
+			case Electrocute:
+				for(p in game.players) {
+					if(p == this) continue;
+					if(hxd.Math.distance(p.x-x, p.y-y, p.z-z) < power.value) {
+						trace("TODO", hxd.Math.distance(p.x-x, p.y-y, p.z-z));
+						//p.electrocute(power.time);
+					}
+				}
+				if(power.active ) {
+					var c = new h3d.prim.Sphere(power.value, 24, 24);
+					c.addUVs();
+					c.addNormals();
+
+					var aoe = new h3d.scene.Mesh(c, obj);
+					aoe.material.color.setColor(0x8080F0);
+					aoe.material.blendMode = Alpha;
+
+					var v = 1.;
+					game.event.waitUntil(function(dt) {
+						v -= 0.05 * dt;
+						aoe.material.color.w = v;
+						if(v <= 0) {
+							aoe.remove();
+							return true;
+						}
+						return false;
+					});
+				}
+				power.active = false;
+
 			default:
 		}
 	}
