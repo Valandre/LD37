@@ -28,12 +28,12 @@
 					"selectId": 1,
 					"index": 0,
 					"name": "Maguro",
-					"power": "Boost"
+					"power": "Shield"
 				},
 				{
 					"id": "Ikura",
 					"selectId": 2,
-					"power": "Shield",
+					"power": "Missile",
 					"index": 1,
 					"name": "Ikura"
 				},
@@ -47,7 +47,7 @@
 				{
 					"id": "KappaMaki",
 					"selectId": 4,
-					"power": "Stealth",
+					"power": "Duplicate",
 					"index": 3,
 					"name": "KappaMaki"
 				},
@@ -56,33 +56,33 @@
 					"selectId": 5,
 					"index": 4,
 					"name": "Tamago",
-					"power": "Rocket"
+					"power": "Stealth"
 				},
 				{
 					"id": "Takkun",
 					"selectId": 6,
-					"power": "Missile",
+					"power": "Tentacules",
 					"index": 5,
-					"name": "Takkun"
+					"name": "Takko"
 				},
 				{
 					"id": "Ebi",
 					"selectId": 7,
 					"index": 6,
 					"name": "Ebi",
-					"power": "Shield"
+					"power": "Boost"
 				},
 				{
 					"id": "Idako",
 					"selectId": 8,
-					"power": "Shield",
+					"power": "Rocket",
 					"index": 7,
 					"name": "Idako"
 				},
 				{
 					"id": "Unagi",
 					"selectId": 9,
-					"power": "Shield",
+					"power": "Electrocute",
 					"index": 8,
 					"name": "Unagi"
 				}
@@ -134,6 +134,12 @@
 					"name": "id"
 				},
 				{
+					"typeStr": "1",
+					"name": "desc",
+					"opt": true,
+					"display": null
+				},
+				{
 					"typeStr": "4",
 					"name": "time",
 					"display": null
@@ -148,32 +154,56 @@
 				{
 					"id": "Shield",
 					"time": 5,
-					"value": 2
+					"value": 2,
+					"desc": "protege automatiquement du 1er mur percuté par le joueur"
 				},
 				{
 					"id": "Boost",
 					"time": 0.2,
-					"value": 0.9
+					"value": 0.9,
+					"desc": "augmente la vitesse pendant un laps de temps très court"
 				},
 				{
 					"id": "Rewind",
 					"time": 1,
-					"value": 4
+					"value": 4,
+					"desc": "Le joueur revient sur ses pas et annule ses propres murs pendant un court instant"
 				},
 				{
 					"id": "Stealth",
 					"time": 3,
-					"value": 0
+					"value": 0,
+					"desc": "le joueur est invisible pour les autres joueurs et ne génère pas de mur pendant un court instant"
 				},
 				{
 					"id": "Rocket",
 					"time": 0,
-					"value": 1
+					"value": 1,
+					"desc": "Une roquette à tête chercheuse s'en prend à un joueur adverse au hasard"
 				},
 				{
 					"id": "Missile",
 					"time": 0,
-					"value": 3
+					"value": 3,
+					"desc": "des missiles partent du joueur et accelerent en ligne droite pour exploser sur le 1er obstacle rencontré"
+				},
+				{
+					"id": "Electrocute",
+					"time": 0,
+					"value": 0,
+					"desc": "Les commandes des joueurs autour sont inversées"
+				},
+				{
+					"id": "Tentacules",
+					"time": 0,
+					"value": 0,
+					"desc": "X tentacules sortent du sol un peu partout et font obstacles aux joueurs."
+				},
+				{
+					"id": "Duplicate",
+					"time": 0,
+					"value": 0,
+					"desc": "le joueur se multiplie et creer un mur à sa gauche et à sa droite sur quelques metres."
 				}
 			],
 			"separators": [],

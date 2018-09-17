@@ -896,6 +896,7 @@ class Unit extends Entity
 						m.onRemoved = function() { missiles.remove(m); };
 						missiles.push(m);
 					}
+			default:
 		}
 	}
 

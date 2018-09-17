@@ -8,7 +8,7 @@ class Player extends Unit
 		this.dir = dir;
 		var size = game.size >> 1;
 		super(Player, props, -size * 0.65 * dir.x, -size * 0.65 * dir.y, -size, scale, id);
-		power.progress = 1;
+		power.progress = 0;
 	}
 
 	function updateKeys() {
