@@ -263,6 +263,8 @@ class Unit extends Entity
 	public var enableWalls = true;
 	public var enableCollides = true;
 	public var canMove = false;
+	public var lastChance = false;
+	public var lastChanceEnd = 0.;
 	public var attractRay = 3;
 
 	public var props : Props;
@@ -282,6 +284,7 @@ class Unit extends Entity
 	var shield : h3d.scene.Mesh;
 	var rockets : Array<Rocket> = [];
 	var missiles : Array<Missile> = [];
+	var tentacles : Array<Tentacle> = [];
 
 	var reverseTimeEnd : Float;
 	var turnReverse = false;
@@ -506,6 +509,10 @@ class Unit extends Entity
 	function changeDir(v : Int) {
 		if(v == 0) return;
 		if(turnReverse) v = -v;
+		if(lastChance) {
+			canMove = true;
+			lastChance = false;
+		}
 		
 		var p = getSizedPos();
 		x = p.x; y = p.y; z = p.z;
@@ -578,7 +585,7 @@ class Unit extends Entity
 			var r = sensor.clone();
 			r.transform(c.m);
 			d = c.c.rayIntersection(r, false);
-			if(d != -1){
+			if(d != -1) {
 				if(d > ray) continue;
 				return d;
 			}*/
@@ -982,6 +989,21 @@ class Unit extends Entity
 			
 				power.active = false;
 
+			case Tentacles:
+			/*
+
+				for(p in game.players) {
+					if(p == this) continue;
+					var c = new h3d.prim.Cube(power.value, power.value, power.value);
+					c.addUVs();
+					c.addNormals();	
+					//TODO !!! WIP !!!
+					var m = new Tentacle(this, p.worldNormal.clone(), c, game.s3d);
+					m.onRemoved = function() { tentacles.remove(m); };
+					tentacles.push(m);
+				}	
+			*/			
+				power.active = false;
 
 			default:
 		}
@@ -992,12 +1014,32 @@ class Unit extends Entity
 		
 		turnReverse = reverseTimeEnd > haxe.Timer.stamp();
 
+		if(lastChance) {
+			x = oldPos.x;
+			y = oldPos.y;
+			z = oldPos.z;
+			if(lastChanceEnd < haxe.Timer.stamp()){
+				canMove = false;
+				destroy();
+			}
+			return;
+		}
+
 		if(canMove && !dead) {
 			play("run");
 			if(hitTest()) {
-				destroy();
+				lastChance = true;
+				lastChanceEnd = haxe.Timer.stamp() + 0.05;
+				//var p = getSizedPos();
+				//x = p.x; y = p.y; z = p.z;
+				while(hitTest()) {
+					x -= dir.x*wallSize;
+					y -= dir.y*wallSize;
+					z -= dir.z*wallSize;
+				}
 				return;
 			}
+			
 			oldPos = getSizedPos();
 			wave.visible = true;
 		}

@@ -22,12 +22,12 @@ class Player extends Unit
 		if(v == 0) return;
 		changeDir(v);
 	}
-
+/*
 	override function hitTest() {
 		var b = super.hitTest();
 		if(b) canMove = false;
 		return b;
-	}
+	}*/
 
 	function getNonIAPlayersCount() {
 		var count = 0;
