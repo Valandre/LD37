@@ -283,6 +283,9 @@ class Unit extends Entity
 	var rockets : Array<Rocket> = [];
 	var missiles : Array<Missile> = [];
 
+	var reverseTimeEnd : Float;
+	var turnReverse = false;
+
 	var sensor : h3d.col.Ray;
 	var boxCollide : h3d.scene.Box;
 	var outlineShader : shaders.Outline;
@@ -401,7 +404,7 @@ class Unit extends Entity
 	}
 
 	public function createWall() {
-
+ 		if(!enableWalls) return;
 		var n = worldNormal;
 		var c = new h3d.prim.Cube(1, wallSize, 1);
 		c.addNormals();
@@ -468,9 +471,10 @@ class Unit extends Entity
 	}
 
 
-	function meshRotate(m : h3d.scene.Object) {
+	function meshRotate(m : h3d.scene.Object, ?dir) {
 		var a = Math.PI * 0.5;
 		var n = worldNormal;
+		if(dir == null) dir = this.dir;
 
 		if(n.z != 0) {
 			m.setRotation(0, 0, dir.x != 0 ? a * (dir.x - 1) : a * dir.y);
@@ -501,6 +505,8 @@ class Unit extends Entity
 
 	function changeDir(v : Int) {
 		if(v == 0) return;
+		if(turnReverse) v = -v;
+		
 		var p = getSizedPos();
 		x = p.x; y = p.y; z = p.z;
 
@@ -582,7 +588,7 @@ class Unit extends Entity
 	}
 
 	public function hitEnergy() {
-		power.progress += 0.2;
+		power.progress += 1 / power.data.energy;
 	}
 
 	public function destroy() {
@@ -735,6 +741,10 @@ class Unit extends Entity
 		});
 	}
 
+	public function electrocute(time : Float) {
+		reverseTimeEnd = time + haxe.Timer.stamp();
+	}
+
 	public function isPowerActive(k : Data.PowerKind) {
 		return power.active && power.kind == k;
 	}
@@ -862,7 +872,6 @@ class Unit extends Entity
 							rockets.push(r);
 						});
 					}
-				enableWalls = false;
 
 			case Missile:
 				power.active = false;				
@@ -900,10 +909,9 @@ class Unit extends Entity
 			case Electrocute:
 				for(p in game.players) {
 					if(p == this) continue;
-					if(hxd.Math.distance(p.x-x, p.y-y, p.z-z) < power.value) {
-						trace("TODO", hxd.Math.distance(p.x-x, p.y-y, p.z-z));
-						//p.electrocute(power.time);
-					}
+					if(hxd.Math.distance(p.x-x, p.y-y, p.z-z) < power.value) 
+						p.electrocute(power.time);
+					
 				}
 				if(power.active ) {
 					var c = new h3d.prim.Sphere(power.value, 24, 24);
@@ -927,12 +935,62 @@ class Unit extends Entity
 				}
 				power.active = false;
 
+			case Duplicate:
+
+				inline function addWall(v : Int, distMax : Float) {
+					var n = worldNormal;
+					var c = new h3d.prim.Cube(1, wallSize, 1);
+					c.addNormals();
+					c.addUVs();
+					c.translate(0, -wallSize * 0.5, -0.5);
+					
+					var p = getSizedPos();
+					var d = setDir(dir, v);
+
+					var wall = new Wall(wallTex, c, game.s3d);
+					wall.prev = lastWall;
+					wall.worldNormal = worldNormal.clone();
+					wall.dir = d;
+					wall.scaleX = 0;
+					wall.x = p.x - dir.x * wallSize;
+					wall.y = p.y - dir.y * wallSize;
+					wall.z = p.z - dir.z * wallSize;								
+					walls.unshift(wall);
+					game.world.walls.unshift({w : wall, n : n.clone()});
+					meshRotate(wall, d);
+
+					game.event.waitUntil(function(dt) {
+						var sc = wall.scaleX + speed * 1.5 * dt;
+						wall.scaleX = sc;
+						
+						var pt = new h3d.col.Point(wall.x+d.x*wall.scaleX, wall.y+d.y*wall.scaleX, wall.z+d.z*wall.scaleX);
+						var col = false;
+						if(!game.world.bounds.contains(pt)) col = true;
+						for(c in game.world.collides) 
+							if(c.b.contains(pt)) col = true;
+
+						if(sc >= distMax || col) {
+							wall.scaleX = Std.int(sc) + Std.int((sc % 1) / wallSize) * wallSize;
+							return true;
+						}					
+						return false;
+					});
+				}
+
+				addWall(-1, power.value);
+				addWall(1, power.value);
+			
+				power.active = false;
+
+
 			default:
 		}
 	}
 
 	override public function update(dt : Float) {
 		super.update(dt);
+		
+		turnReverse = reverseTimeEnd > haxe.Timer.stamp();
 
 		if(canMove && !dead) {
 			play("run");
@@ -950,7 +1008,7 @@ class Unit extends Entity
 			if(!dead && wall != null)
 				wall.scaleX = hxd.Math.distance(x - wall.x, y - wall.y, z - wall.z);
 
-			if(!dead && canMove && wall == null && enableWalls) {
+			if(!dead && canMove && wall == null) {
 				createWall();
 				if(fxParts != null) {
 					var fx = fxParts.get("TrailStart");

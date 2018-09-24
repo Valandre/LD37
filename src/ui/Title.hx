@@ -4,7 +4,7 @@ package ui;
 class Title extends ui.Form
 {
 	var creditsBmp : h2d.Bitmap;
-	var container: h2d.Sprite;
+	var container: h2d.Object;
 	var ready = false;
 
 	var mStart : h3d.scene.Mesh;

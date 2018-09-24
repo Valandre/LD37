@@ -114,6 +114,10 @@
 					"typeStr": "4",
 					"name": "value",
 					"display": null
+				},
+				{
+					"typeStr": "3",
+					"name": "energy"
 				}
 			],
 			"lines": [
@@ -121,55 +125,64 @@
 					"id": "Shield",
 					"time": 5,
 					"value": 2,
-					"desc": "protege automatiquement du 1er mur percuté par le joueur"
+					"desc": "protege automatiquement du 1er mur percuté par le joueur",
+					"energy": 5
 				},
 				{
 					"id": "Boost",
 					"time": 0.2,
 					"value": 0.9,
-					"desc": "augmente la vitesse pendant un laps de temps très court"
+					"desc": "augmente la vitesse pendant un laps de temps très court",
+					"energy": 5
 				},
 				{
 					"id": "Rewind",
 					"time": 1,
 					"value": 4,
-					"desc": "Le joueur revient sur ses pas et annule ses propres murs pendant un court instant"
+					"desc": "Le joueur revient sur ses pas et annule ses propres murs pendant un court instant",
+					"energy": 5
 				},
 				{
 					"id": "Stealth",
 					"time": 3,
 					"value": 0,
-					"desc": "le joueur est invisible pour les autres joueurs et ne génère pas de mur pendant un court instant"
+					"desc": "le joueur est invisible pour les autres joueurs et ne génère pas de mur pendant un court instant",
+					"energy": 5
 				},
 				{
 					"id": "Rocket",
 					"time": 0,
 					"value": 1,
-					"desc": "Une roquette à tête chercheuse s'en prend à un joueur adverse au hasard"
+					"desc": "Une roquette à tête chercheuse s'en prend à un joueur adverse au hasard",
+					"energy": 5
 				},
 				{
 					"id": "Missile",
 					"time": 0,
 					"value": 3,
-					"desc": "des missiles partent du joueur et accelerent en ligne droite pour exploser sur le 1er obstacle rencontré"
+					"desc": "des missiles partent du joueur et accelerent en ligne droite pour exploser sur le 1er obstacle rencontré",
+					"energy": 5
 				},
 				{
 					"id": "Electrocute",
-					"time": 2,
-					"value": 6,
-					"desc": "Les commandes des joueurs pris dans le rayon sont inversées"
+					"time": 3,
+					"value": 8,
+					"desc": "Les commandes des joueurs pris dans le rayon sont inversées",
+					"energy": 5
+				},
+				{
+					"id": "Duplicate",
+					"time": 0,
+					"value": 10,
+					"desc": "le joueur se multiplie et creer un mur à sa gauche et à sa droite sur quelques metres.",
+					"energy": 5
 				},
 				{
 					"id": "Tentacles",
 					"time": 0,
 					"value": 0,
-					"desc": "X tentacules sortent du sol un peu partout et font obstacles aux joueurs."
-				},
-				{
-					"id": "Duplicate",
-					"time": 0,
-					"value": 0,
-					"desc": "le joueur se multiplie et creer un mur à sa gauche et à sa droite sur quelques metres."
+					"desc": "X tentacules sortent du sol un peu partout et font obstacles aux joueurs.",
+					"energy": 5
 				}
 			],
 			"separators": [],

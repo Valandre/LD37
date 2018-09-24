@@ -1,7 +1,7 @@
 package ui;
 //import Sounds;
 
-class Form extends h2d.Sprite
+class Form extends h2d.Object
 {
 	var game : Game;
 	var obj : h3d.scene.Object;
