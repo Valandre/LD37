@@ -117,7 +117,7 @@ class Tentacle extends h3d.scene.Mesh {
 }
 
 
-class Missile extends h3d.scene.Mesh {	
+class Missile {	
 	var game : Game;
 	var owner : ent.Unit;
 	var target : ent.Unit;	
@@ -127,20 +127,21 @@ class Missile extends h3d.scene.Mesh {
 	var speedMax = 1.7;
 	var ray = 4.;
 	var canCollide = false;
+	var obj : h3d.scene.Object;
 
-	public function new (owner, dir : h3d.Vector, ?prim, ?parent) {
-		super(prim, null, parent);
+	public function new (owner, dir : h3d.Vector, ?parent) {
 		game = Game.inst;
-		material.color.setColor(0xFF00FFFF);
-		material.mainPass.enableLights = true;
-		scaleX = 2;
+
+		var res = hxd.Res.load("Fx/Missile01/Model.FBX").toModel();
+		obj = game.modelCache.loadModel(res);			
+		game.s3d.addChild(obj);
 
 		this.owner = owner;
-		x = owner.x;
-		y = owner.y;
-		z = owner.z;
+		obj.x = owner.x;
+		obj.y = owner.y;
+		obj.z = owner.z;
 		this.dir = dir;
-		setDirection(dir);
+		obj.setDirection(dir);
 
 		game.event.wait(0.3, function() {
 			canCollide = true;
@@ -152,18 +153,18 @@ class Missile extends h3d.scene.Mesh {
 	}
 
 	function worldCollide() {	
-		var sensor = h3d.col.Ray.fromValues(x, y, z, dir.x, dir.y, dir.z);
+		var sensor = h3d.col.Ray.fromValues(obj.x, obj.y, obj.z, dir.x, dir.y, dir.z);
 		for(w in game.world.walls) {
 			var d = w.w.getBounds().rayIntersection(sensor, false);
 			if(d > 0 && d < 1)
 				return true;
 		}
 
-		return game.world.collide(new h3d.col.Point(x, y, z), true);
+		return game.world.collide(new h3d.col.Point(obj.x, obj.y, obj.z), true);
 	}
 
-	override function onRemove() {
-		super.onRemove();
+	function remove() {
+		obj.remove();
 		onRemoved();
 	}
 
@@ -171,22 +172,22 @@ class Missile extends h3d.scene.Mesh {
 
 	function explode() {
 		destroyed = true;
+		remove();
 
 		for(p in game.players) {
 			if(p == owner || p.dead) continue;
-			if(hxd.Math.distance(p.x-x, p.y-y, p.z-z) < ray)
+			if(hxd.Math.distance(p.x-obj.x, p.y-obj.y, p.z-obj.z) < ray)
 				p.destroy();
 		}
-		remove();
 	}
 
 	function update(dt : Float) {
 		if(destroyed) return;
 		
 		speed = Math.min(speedMax, speed+0.01*dt);
-		x += speed*dir.x*dt;
-		y += speed*dir.y*dt;
-		z += speed*dir.z*dt;
+		obj.x += speed*dir.x*dt;
+		obj.y += speed*dir.y*dt;
+		obj.z += speed*dir.z*dt;
 
 		if(canCollide && worldCollide()) 
 			explode();
@@ -922,11 +923,7 @@ class Unit extends Entity
 			case Missile:
 				power.active = false;				
 				if(missiles.length == 0)
-					for(i in 0...Std.int(power.value)) {	
-						var c = new h3d.prim.Sphere(0.5, 4, 4);
-						c.addUVs();
-						c.addNormals();	
-
+					for(i in 0...Std.int(power.value)) {
 						var mdir = dir.toVector().clone();
 						if(i != 0) {
 							var ang = 0.25 * (i == 1 ? 1 : -1);
@@ -947,7 +944,7 @@ class Unit extends Entity
 							}
 						}
 
-						var m = new Missile(this, mdir, c, game.s3d);
+						var m = new Missile(this, mdir, game.s3d);
 						m.onRemoved = function() { missiles.remove(m); };
 						missiles.push(m);
 					}
@@ -960,6 +957,7 @@ class Unit extends Entity
 					
 				}
 				if(power.active ) {
+					/*
 					var c = new h3d.prim.Sphere(power.value, 24, 24);
 					c.addUVs();
 					c.addNormals();
@@ -977,7 +975,16 @@ class Unit extends Entity
 							return true;
 						}
 						return false;
-					});
+					});*/
+
+					var res = hxd.Res.load("Fx/Raijin01/Model.FBX").toModel();
+					var fx = game.modelCache.loadModel(res);
+					fx.x = x;
+					fx.y = y;
+					fx.z = z;	
+					fx.playAnimation(game.modelCache.loadAnimation(res));
+					fx.currentAnimation.onAnimEnd = fx.remove;
+					game.s3d.addChild(fx);					
 				}
 				power.active = false;
 

@@ -169,6 +169,7 @@ class GameUI
 				countDown.remove();
 				return true;
 			}
+
 			return false;
 		});
 	}
