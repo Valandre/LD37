@@ -11,7 +11,7 @@ class World {
 	public var bounds : h3d.col.Bounds;
 	public var walls : Array<{w : h3d.scene.Mesh, n : h3d.col.Point}>;
 	public var lights : Array<h3d.scene.PointLight>;
-	public var collides : Array<{b : h3d.col.Bounds, m : h3d.Matrix, c : h3d.col.Collider}>;
+	public var collides : Array<h3d.scene.Mesh>;
 
 	public function new(size : Int, arenaId : Int) {
 		game = Game.inst;
@@ -35,9 +35,9 @@ class World {
 
 		for(m in room.getMeshes()) {
 			if(m.name.substr(0, 7) == "Collide") {
-				collides.push({b : m.getBounds(), m : m.getInvPos(), c : m.primitive.getCollider()});
+				collides.push(m);
 				//new h3d.scene.Box(0xFF00FF, m.getBounds(), game.s3d);
-				m.remove();
+				m.visible = false;
 				continue;
 			}
 			m.material.mainPass.enableLights = true;
@@ -79,13 +79,10 @@ class World {
 			}
 	}
 
-	var pt = new h3d.col.Point();
-	public function collide(e : ent.Unit) {
-		for(c in collides) {
-			//if(e.getBounds().collide(c.b)) return true;
-			if(c.b.contains(new h3d.col.Point(e.x, e.y, e.z))) return true;
-		}
-
+	public function collide(pt : h3d.col.Point, ?checkWorldBounds = false) {
+		if(checkWorldBounds && !bounds.contains(pt)) return true;
+		for(c in collides) 
+			if(c.getBounds().contains(pt)) return true;
 		return false;
 	}
 
@@ -93,14 +90,15 @@ class World {
 		if(!inBoundsBox(b)) return false;
 
 		for(c in collides) {
-			if(c.c.contains(new h3d.col.Point(b.xMin, b.yMin, b.zMin))) return true;
-			if(c.c.contains(new h3d.col.Point(b.xMin, b.yMin, b.zMax))) return true;
-			if(c.c.contains(new h3d.col.Point(b.xMin, b.yMax, b.zMin))) return true;
-			if(c.c.contains(new h3d.col.Point(b.xMin, b.yMax, b.zMax))) return true;
-			if(c.c.contains(new h3d.col.Point(b.xMax, b.yMin, b.zMin))) return true;
-			if(c.c.contains(new h3d.col.Point(b.xMax, b.yMin, b.zMax))) return true;
-			if(c.c.contains(new h3d.col.Point(b.xMax, b.yMax, b.zMin))) return true;
-			if(c.c.contains(new h3d.col.Point(b.xMax, b.yMax, b.zMax))) return true;
+			var collider = c.primitive.getCollider();
+			if(collider.contains(new h3d.col.Point(b.xMin, b.yMin, b.zMin))) return true;
+			if(collider.contains(new h3d.col.Point(b.xMin, b.yMin, b.zMax))) return true;
+			if(collider.contains(new h3d.col.Point(b.xMin, b.yMax, b.zMin))) return true;
+			if(collider.contains(new h3d.col.Point(b.xMin, b.yMax, b.zMax))) return true;
+			if(collider.contains(new h3d.col.Point(b.xMax, b.yMin, b.zMin))) return true;
+			if(collider.contains(new h3d.col.Point(b.xMax, b.yMin, b.zMax))) return true;
+			if(collider.contains(new h3d.col.Point(b.xMax, b.yMax, b.zMin))) return true;
+			if(collider.contains(new h3d.col.Point(b.xMax, b.yMax, b.zMax))) return true;
 		}
 
 		return false;

@@ -58,6 +58,64 @@ class Wall extends h3d.scene.Mesh {
 	}
 }
 
+class Tentacle extends h3d.scene.Mesh {	
+	var game : Game;
+	var owner : ent.Unit;
+	var target : ent.Unit;	
+	var dir : h3d.Vector;
+	var removed = false;
+	var time = 0.;
+	var pt = new h3d.col.Point();
+	
+	public function new (owner, time : Float, ?prim, ?parent) {
+		super(prim, null, parent);
+		game = Game.inst;
+		material.color.setColor(0xFFFF00FF);
+		material.mainPass.enableLights = true;
+
+		this.time = time * 60;
+		this.owner = owner;
+		this.dir = owner.worldNormal.toVector().clone();
+
+		var dist = 16;
+		x = owner.x + dist * owner.dir.x;
+		y = owner.y + dist * owner.dir.y;
+		z = owner.z + dist * owner.dir.z;
+		setDirection(dir);
+
+		game.world.collides.push(this);
+			
+		game.event.waitUntil(function(dt) { 
+			update(dt);
+			return removed;
+		});
+	}
+
+	override function onRemove() {
+		super.onRemove();
+		game.world.collides.remove(this);
+		onRemoved();
+	}
+
+	public dynamic function onRemoved() {}
+
+	function update(dt : Float) {
+		if(removed) return;		
+
+		for(p in game.players) {
+			if(p == owner || p.dead) continue;
+			pt.x = p.x; pt.y = p.y; pt.z = p.z;
+			if(getBounds().contains(pt)) 		
+				p.destroy();
+		}	
+
+		time -= dt;
+		if(time < 0)
+			remove();	
+	}
+}
+
+
 class Missile extends h3d.scene.Mesh {	
 	var game : Game;
 	var owner : ent.Unit;
@@ -100,12 +158,7 @@ class Missile extends h3d.scene.Mesh {
 				return true;
 		}
 
-		var pt = new h3d.col.Point(x, y, z);
-		if(!game.world.bounds.contains(pt)) return true;
-		for(c in game.world.collides) 
-			if(c.b.contains(pt)) return  true;
-
-		return false;
+		return game.world.collide(new h3d.col.Point(x, y, z), true);
 	}
 
 	override function onRemove() {
@@ -119,7 +172,7 @@ class Missile extends h3d.scene.Mesh {
 		destroyed = true;
 
 		for(p in game.players) {
-			if(p == owner) continue;
+			if(p == owner || p.dead) continue;
 			if(hxd.Math.distance(p.x-x, p.y-y, p.z-z) < ray)
 				p.destroy();
 		}
@@ -204,12 +257,7 @@ class Rocket extends h3d.scene.Mesh {
 				return true;
 		}
 
-		var pt = new h3d.col.Point(x, y, z);
-		if(!game.world.bounds.contains(pt)) return true;
-		for(c in game.world.collides) 
-			if(c.b.contains(pt)) return  true;
-
-		return false;
+		return game.world.collide(new h3d.col.Point(x, y, z), true);
 	}
 
 	override function onRemove() {
@@ -579,18 +627,8 @@ class Unit extends Entity
 				return d;
 		}
 
-		for(c in game.world.collides) {
-			if(c.b.contains(new h3d.col.Point(sensor.px+sensor.lx, sensor.py+sensor.ly, sensor.pz+sensor.lz))) return 1;
-			/*
-			var r = sensor.clone();
-			r.transform(c.m);
-			d = c.c.rayIntersection(r, false);
-			if(d != -1) {
-				if(d > ray) continue;
-				return d;
-			}*/
-		}
-
+		var pt = new h3d.col.Point(sensor.px+sensor.lx, sensor.py+sensor.ly, sensor.pz+sensor.lz);
+		if(game.world.collide(pt)) return 1;
 		return d;
 	}
 
@@ -722,7 +760,7 @@ class Unit extends Entity
 			}
 		}
 
-		return game.world.collide(this);
+		return game.world.collide(new h3d.col.Point(x, y, z));
 	}
 
 	function useShield(?w) {
@@ -972,9 +1010,8 @@ class Unit extends Entity
 						
 						var pt = new h3d.col.Point(wall.x+d.x*wall.scaleX, wall.y+d.y*wall.scaleX, wall.z+d.z*wall.scaleX);
 						var col = false;
-						if(!game.world.bounds.contains(pt)) col = true;
-						for(c in game.world.collides) 
-							if(c.b.contains(pt)) col = true;
+						if(game.world.collide(pt, true))
+							col = true;
 
 						if(sc >= distMax || col) {
 							wall.scaleX = Std.int(sc) + Std.int((sc % 1) / wallSize) * wallSize;
@@ -990,19 +1027,19 @@ class Unit extends Entity
 				power.active = false;
 
 			case Tentacles:
-			/*
-
 				for(p in game.players) {
 					if(p == this) continue;
-					var c = new h3d.prim.Cube(power.value, power.value, power.value);
+					var size = power.value;
+					var c = new h3d.prim.Cube(size, size, size);
 					c.addUVs();
 					c.addNormals();	
-					//TODO !!! WIP !!!
-					var m = new Tentacle(this, p.worldNormal.clone(), c, game.s3d);
+					c.translate(-size*0.5, -size*0.5, -size*0.5);
+					
+					var m = new Tentacle(p, power.time, c, game.s3d);
 					m.onRemoved = function() { tentacles.remove(m); };
-					tentacles.push(m);
+					tentacles.push(m);			
 				}	
-			*/			
+			
 				power.active = false;
 
 			default:
