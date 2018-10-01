@@ -21,7 +21,6 @@ class World {
 		walls = [];
 		collides = [];
 		lights = [];
-
 		init();
 	}
 

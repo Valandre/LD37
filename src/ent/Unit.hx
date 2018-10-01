@@ -83,8 +83,7 @@ class Tentacle extends h3d.scene.Mesh {
 		z = owner.z + dist * owner.dir.z;
 		setDirection(dir);
 
-		game.world.collides.push(this);
-			
+		game.world.collides.push(this);		
 		game.event.waitUntil(function(dt) { 
 			update(dt);
 			return removed;
@@ -93,7 +92,7 @@ class Tentacle extends h3d.scene.Mesh {
 
 	override function onRemove() {
 		super.onRemove();
-		game.world.collides.remove(this);
+		removed = true;
 		onRemoved();
 	}
 
@@ -110,8 +109,10 @@ class Tentacle extends h3d.scene.Mesh {
 		}	
 
 		time -= dt;
-		if(time < 0)
+		if(time < 0) {			
+			game.world.collides.remove(this);
 			remove();	
+		}
 	}
 }
 
