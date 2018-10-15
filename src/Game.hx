@@ -310,6 +310,7 @@ class Game extends hxd.App {
 
 	public function initCamera(pl : ent.Unit) {
 		setCameraValues(pl);
+
 		var cam = new h3d.Camera();
 		cam.pos.x = camPos.x;
 		cam.pos.y = camPos.y;
@@ -351,7 +352,6 @@ class Game extends hxd.App {
 
 		var pn = pl.worldNormal;
 		var decal = camZ * 0.75;
-
 		var sp = 0.15 * dt;
 		var v = customScene.getView(pl.id);
 		if(v == null) return null;
@@ -427,7 +427,9 @@ class Game extends hxd.App {
 
 	}
 
-	override function update(dt:Float) {
+	override function update(dt:Float) {	
+		dt *= 60;
+
 		for(c in controllers)
 			c.update(dt);
 
@@ -437,7 +439,6 @@ class Game extends hxd.App {
 		//admin
 		if( K.isDown(K.SHIFT)) {
 			var speed = K.isDown(K.CTRL) ? 0.1 : 5;
-			hxd.Timer.deltaT *= speed;
 			hxd.Timer.tmod *= speed;
 			dt *= speed;
 		}
@@ -543,7 +544,7 @@ class Game extends hxd.App {
 	static function main() {
 
 		h3d.mat.MaterialSetup.current = new WorldMaterial.MyMaterialSetup();
-
+		hxd.Timer.smoothFactor = 0.95;
 		hxd.res.Resource.LIVE_UPDATE = true;
 		hxd.Res.initLocal();
 		Data.load(hxd.Res.data.entry.getText());
