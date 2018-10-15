@@ -129,7 +129,7 @@ class Missile {
 	var canCollide = false;
 	var obj : h3d.scene.Object;
 
-	public function new (owner, dir : h3d.Vector, ?parent) {
+	public function new (owner, dir : h3d.Vector) {
 		game = Game.inst;
 
 		var res = hxd.Res.load("Fx/Missile01/Model.FBX").toModel();
@@ -195,7 +195,7 @@ class Missile {
 }
 
 
-class Rocket extends h3d.scene.Mesh {	
+class Rocket {	
 	var game : Game;
 	var owner : ent.Unit;
 	var target : ent.Unit;	
@@ -206,24 +206,26 @@ class Rocket extends h3d.scene.Mesh {
 	var speedMax = 1.4;
 	var ray = 4.;
 	var canCollide = false;
+	var obj : h3d.scene.Object;
 
-	public function new (owner, ?prim, ?parent) {
-		super(prim, null, parent);
+	public function new (owner, ?prim) {
 		game = Game.inst;
-		material.color.setColor(0xFFFF00FF);
-		material.mainPass.enableLights = true;
-		scaleX = 2;
+
+		var res = hxd.Res.load("Fx/Rocket01/Model.FBX").toModel();
+		obj = game.modelCache.loadModel(res);			
+		game.s3d.addChild(obj);
 
 		this.owner = owner;
-		x = owner.x;
-		y = owner.y;
-		z = owner.z;
+		obj.x = owner.x;
+		obj.y = owner.y;
+		obj.z = owner.z;
+
 		dir = owner.worldNormal.toVector().clone();
 		dir.x += owner.dir.x == 0 ? hxd.Math.srand(0.2) : owner.dir.x;
 		dir.y += owner.dir.y == 0 ? hxd.Math.srand(0.2) : owner.dir.y;
 		dir.z += owner.dir.z == 0 ? hxd.Math.srand(0.2) : owner.dir.z;
 		targetDir = dir.clone();
-		setDirection(dir);
+		obj.setDirection(dir);
 
 		game.event.wait(0.3, function() {
 			searchTarget();
@@ -252,18 +254,18 @@ class Rocket extends h3d.scene.Mesh {
 
 
 	function worldCollide() {	
-		var sensor = h3d.col.Ray.fromValues(x, y, z, dir.x, dir.y, dir.z);
+		var sensor = h3d.col.Ray.fromValues(obj.x, obj.y, obj.z, dir.x, dir.y, dir.z);
 		for(w in game.world.walls) {
 			var d = w.w.getBounds().rayIntersection(sensor, false);
 			if(d > 0 && d < 1)
 				return true;
 		}
 
-		return game.world.collide(new h3d.col.Point(x, y, z), true);
+		return game.world.collide(new h3d.col.Point(obj.x, obj.y, obj.z), true);
 	}
 
-	override function onRemove() {
-		super.onRemove();
+	function remove() {
+		obj.remove();
 		onRemoved();
 	}
 
@@ -273,7 +275,7 @@ class Rocket extends h3d.scene.Mesh {
 		destroyed = true;
 
 		for(p in game.players) {
-			if(hxd.Math.distance(p.x-x, p.y-y, p.z-z) < ray)
+			if(hxd.Math.distance(p.x-obj.x, p.y-obj.y, p.z-obj.z) < ray)
 				p.destroy();
 		}
 		remove();
@@ -282,22 +284,22 @@ class Rocket extends h3d.scene.Mesh {
 	function update(dt : Float) {
 		if(destroyed) return;
 		if(target != null) {
-			targetDir.x = target.x-x;
-			targetDir.y = target.y-y;
-			targetDir.z = target.z-z;		
+			targetDir.x = target.x-obj.x;
+			targetDir.y = target.y-obj.y;
+			targetDir.z = target.z-obj.z;		
 			targetDir.normalize();
 
 			dir.x += (targetDir.x-dir.x)*0.1*dt;	
 			dir.y += (targetDir.y-dir.y)*0.1*dt;	
 			dir.z += (targetDir.z-dir.z)*0.1*dt;	
 			dir.normalize();
-			setDirection(dir);
+			obj.setDirection(dir);
 		}
 
 		speed = Math.min(speedMax, speed+0.01*dt);
-		x += speed*dir.x*dt;
-		y += speed*dir.y*dt;
-		z += speed*dir.z*dt;
+		obj.x += speed*dir.x*dt;
+		obj.y += speed*dir.y*dt;
+		obj.z += speed*dir.z*dt;
 
 		if(canCollide && worldCollide()) 
 			explode();
@@ -789,6 +791,7 @@ class Unit extends Entity
 	}
 
 	public function electrocute(time : Float) {
+		if(!turnReverse) playStunFx();
 		reverseTimeEnd = time + haxe.Timer.stamp();
 	}
 
@@ -830,7 +833,7 @@ class Unit extends Entity
 				speedBonus *= Math.pow(0.92, dt);
 				if(speedBonus < 0.01)  speedBonus = 0;
 			}
-		}		
+		}
 
 		if(!power.active) return;
 		switch(power.kind) {
@@ -901,9 +904,13 @@ class Unit extends Entity
 					power.active = false;
 					enableWalls = true;
 					createWall();
+					playStealthFx();
 					lastWall.prev = null;
 					return;
 				}
+
+				if(enableWalls) 
+					playStealthFx();
 				enableWalls = false;
 
 			case Rocket:
@@ -911,10 +918,7 @@ class Unit extends Entity
 				if(rockets.length == 0)
 					for(i in 0...Std.int(power.value)) {	
 						game.event.wait(i * 0.05, function() {				
-							var c = new h3d.prim.Sphere(0.5, 4, 4);
-							c.addUVs();
-							c.addNormals();		
-							var r = new Rocket(this, c, game.s3d);
+							var r = new Rocket(this);
 							r.onRemoved = function() { rockets.remove(r); };
 							rockets.push(r);
 						});
@@ -944,7 +948,7 @@ class Unit extends Entity
 							}
 						}
 
-						var m = new Missile(this, mdir, game.s3d);
+						var m = new Missile(this, mdir);
 						m.onRemoved = function() { missiles.remove(m); };
 						missiles.push(m);
 					}
@@ -952,9 +956,8 @@ class Unit extends Entity
 			case Electrocute:
 				for(p in game.players) {
 					if(p == this) continue;
-					if(hxd.Math.distance(p.x-x, p.y-y, p.z-z) < power.value) 
+					if(hxd.Math.distance(p.x-x, p.y-y, p.z-z) < power.value)  
 						p.electrocute(power.time);
-					
 				}
 				if(power.active ) {
 					/*
@@ -1052,6 +1055,45 @@ class Unit extends Entity
 
 			default:
 		}
+	}
+
+	function playStealthFx() {
+		var res = hxd.Res.load("Fx/Stealth01/Model.FBX").toModel();
+		var fx = game.modelCache.loadModel(res);			
+		game.s3d.addChild(fx);
+		fx.x = x;
+		fx.y = y;
+		fx.z = z;
+		//fx.setDirection(worldNormal.toVector());
+		meshRotate(fx);
+
+		var a = game.modelCache.loadAnimation(res);
+		a.loop = false;
+		a.onAnimEnd = fx.remove;
+		fx.playAnimation(a);
+	}
+
+	public function playStunFx() {
+		var res = hxd.Res.load("Fx/Stun01/Model.FBX").toModel();
+		var fx = game.modelCache.loadModel(res);
+		obj.addChild(fx);
+		/*			
+		game.s3d.addChild(fx);
+		fx.x = x;
+		fx.y = y;
+		fx.z = z;
+		//fx.setDirection(worldNormal.toVector());
+		meshRotate(fx);*/
+
+		var a = game.modelCache.loadAnimation(res);
+		fx.playAnimation(a);
+		game.event.waitUntil(function(dt) {
+			if(!turnReverse) {
+				fx.remove();
+				return true;
+			}
+			return false;
+		});
 	}
 
 	override public function update(dt : Float) {

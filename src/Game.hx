@@ -44,7 +44,7 @@ class Game extends hxd.App {
 	}
 
 	public var modelCache : MyModelCache;
-	public var event : hxd.WaitEvent;
+	public var event : WaitEvent;
 	public var world : map.World;
 	public var entities : Array<ent.Entity>;
 	public var players : Array<ent.Unit>;
@@ -101,7 +101,7 @@ class Game extends hxd.App {
 		new h3d.scene.DirLight(dir, s3d);
 
 		modelCache = new MyModelCache();
-		event = new hxd.WaitEvent();
+		event = new WaitEvent();
 
 		event.waitUntil(function(dt) {
 			if(hxd.Key.isDown(K.NUMPAD_1)) { dir.x -= 0.02 * dt;	trace(dir); };
