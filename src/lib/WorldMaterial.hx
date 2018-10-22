@@ -1,6 +1,12 @@
 class MyMaterial extends h3d.mat.Material {
 	override function getDefaultProps(?type:String):Any {
-		return super.getDefaultProps("ui");
+		var props = {
+			kind : "Alpha",
+			shadows : false,
+			culling : true,
+			light : false,
+		};
+		return props;
 	}
 }
 
