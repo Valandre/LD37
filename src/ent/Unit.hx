@@ -58,254 +58,6 @@ class Wall extends h3d.scene.Mesh {
 	}
 }
 
-class Tentacle extends h3d.scene.Mesh {	
-	var game : Game;
-	var owner : ent.Unit;
-	var target : ent.Unit;	
-	var dir : h3d.Vector;
-	var removed = false;
-	var time = 0.;
-	var pt = new h3d.col.Point();
-	
-	public function new (owner, time : Float, ?prim, ?parent) {
-		super(prim, null, parent);
-		game = Game.inst;
-		material.color.setColor(0xFFFF00FF);
-		material.mainPass.enableLights = true;
-
-		this.time = time * 60;
-		this.owner = owner;
-		this.dir = owner.worldNormal.toVector().clone();
-
-		var dist = 16;
-		x = owner.x + dist * owner.dir.x;
-		y = owner.y + dist * owner.dir.y;
-		z = owner.z + dist * owner.dir.z;
-		setDirection(dir);
-
-		game.world.collides.push(this);		
-		game.event.waitUntil(function(dt) { 
-			update(dt);
-			return removed;
-		});
-	}
-
-	override function onRemove() {
-		super.onRemove();
-		removed = true;
-		onRemoved();
-	}
-
-	public dynamic function onRemoved() {}
-
-	function update(dt : Float) {
-		if(removed) return;		
-
-		for(p in game.players) {
-			if(p == owner || p.dead) continue;
-			pt.x = p.x; pt.y = p.y; pt.z = p.z;
-			if(getBounds().contains(pt)) 		
-				p.destroy();
-		}	
-
-		time -= dt;
-		if(time < 0) {			
-			game.world.collides.remove(this);
-			remove();	
-		}
-	}
-}
-
-
-class Missile {	
-	var game : Game;
-	var owner : ent.Unit;
-	var target : ent.Unit;	
-	var dir : h3d.Vector;
-	var destroyed = false;
-	var speed = 0.4;
-	var speedMax = 1.7;
-	var ray = 4.;
-	var canCollide = false;
-	var obj : h3d.scene.Object;
-
-	public function new (owner, dir : h3d.Vector) {
-		game = Game.inst;
-
-		var res = hxd.Res.load("Fx/Missile01/Model.FBX").toModel();
-		obj = game.modelCache.loadModel(res);			
-		game.s3d.addChild(obj);
-
-		this.owner = owner;
-		obj.x = owner.x;
-		obj.y = owner.y;
-		obj.z = owner.z;
-		this.dir = dir;
-		obj.setDirection(dir);
-
-		game.event.wait(0.3, function() {
-			canCollide = true;
-		});		
-		game.event.waitUntil(function(dt) { 
-			update(dt);
-			return destroyed;
-		});					
-	}
-
-	function worldCollide() {	
-		var sensor = h3d.col.Ray.fromValues(obj.x, obj.y, obj.z, dir.x, dir.y, dir.z);
-		for(w in game.world.walls) {
-			var d = w.w.getBounds().rayIntersection(sensor, false);
-			if(d > 0 && d < 1)
-				return true;
-		}
-
-		return game.world.collide(new h3d.col.Point(obj.x, obj.y, obj.z), true);
-	}
-
-	function remove() {
-		obj.remove();
-		onRemoved();
-	}
-
-	public dynamic function onRemoved() {}
-
-	function explode() {
-		destroyed = true;
-		remove();
-
-		for(p in game.players) {
-			if(p == owner || p.dead) continue;
-			if(hxd.Math.distance(p.x-obj.x, p.y-obj.y, p.z-obj.z) < ray)
-				p.destroy();
-		}
-	}
-
-	function update(dt : Float) {
-		if(destroyed) return;
-		
-		speed = Math.min(speedMax, speed+0.01*dt);
-		obj.x += speed*dir.x*dt;
-		obj.y += speed*dir.y*dt;
-		obj.z += speed*dir.z*dt;
-
-		if(canCollide && worldCollide()) 
-			explode();
-	}
-}
-
-
-class Rocket {	
-	var game : Game;
-	var owner : ent.Unit;
-	var target : ent.Unit;	
-	var dir : h3d.Vector;
-	var targetDir : h3d.Vector;
-	var destroyed = false;
-	var speed = 0.1;
-	var speedMax = 1.4;
-	var ray = 4.;
-	var canCollide = false;
-	var obj : h3d.scene.Object;
-
-	public function new (owner, ?prim) {
-		game = Game.inst;
-
-		var res = hxd.Res.load("Fx/Rocket01/Model.FBX").toModel();
-		obj = game.modelCache.loadModel(res);			
-		game.s3d.addChild(obj);
-
-		this.owner = owner;
-		obj.x = owner.x;
-		obj.y = owner.y;
-		obj.z = owner.z;
-
-		dir = owner.worldNormal.toVector().clone();
-		dir.x += owner.dir.x == 0 ? hxd.Math.srand(0.2) : owner.dir.x;
-		dir.y += owner.dir.y == 0 ? hxd.Math.srand(0.2) : owner.dir.y;
-		dir.z += owner.dir.z == 0 ? hxd.Math.srand(0.2) : owner.dir.z;
-		targetDir = dir.clone();
-		obj.setDirection(dir);
-
-		game.event.wait(0.3, function() {
-			searchTarget();
-			canCollide = true;
-		});		
-		game.event.waitUntil(function(dt) { 
-			update(dt);
-			return destroyed;
-		});					
-	}
-
-	function searchTarget() {
-		var targets = [for(p in game.players) if(p != owner) p];
-		target = targets[Std.random(targets.length)];
-		/*
-		var d = 1e9;
-		for(p in game.players) {
-			if(p == owner) continue;
-			var dist = hxd.Math.distance(p.x-x, p.y-y, p.z-z);
-			if(dist < d) {
-				target = p;
-				d = dist;
-			}
-		}*/
-	}
-
-
-	function worldCollide() {	
-		var sensor = h3d.col.Ray.fromValues(obj.x, obj.y, obj.z, dir.x, dir.y, dir.z);
-		for(w in game.world.walls) {
-			var d = w.w.getBounds().rayIntersection(sensor, false);
-			if(d > 0 && d < 1)
-				return true;
-		}
-
-		return game.world.collide(new h3d.col.Point(obj.x, obj.y, obj.z), true);
-	}
-
-	function remove() {
-		obj.remove();
-		onRemoved();
-	}
-
-	public dynamic function onRemoved() {}
-
-	function explode() {
-		destroyed = true;
-
-		for(p in game.players) {
-			if(hxd.Math.distance(p.x-obj.x, p.y-obj.y, p.z-obj.z) < ray)
-				p.destroy();
-		}
-		remove();
-	}
-
-	function update(dt : Float) {
-		if(destroyed) return;
-		if(target != null) {
-			targetDir.x = target.x-obj.x;
-			targetDir.y = target.y-obj.y;
-			targetDir.z = target.z-obj.z;		
-			targetDir.normalize();
-
-			dir.x += (targetDir.x-dir.x)*0.1*dt;	
-			dir.y += (targetDir.y-dir.y)*0.1*dt;	
-			dir.z += (targetDir.z-dir.z)*0.1*dt;	
-			dir.normalize();
-			obj.setDirection(dir);
-		}
-
-		speed = Math.min(speedMax, speed+0.01*dt);
-		obj.x += speed*dir.x*dt;
-		obj.y += speed*dir.y*dt;
-		obj.z += speed*dir.z*dt;
-
-		if(canCollide && worldCollide()) 
-			explode();
-	}
-}
-
 class Unit extends Entity
 {
 	public var dir : h3d.col.Point;
@@ -334,9 +86,9 @@ class Unit extends Entity
 	var wallTex : h3d.mat.Texture;
 
 	var shield : h3d.scene.Mesh;
-	var rockets : Array<Rocket> = [];
-	var missiles : Array<Missile> = [];
-	var tentacles : Array<Tentacle> = [];
+	var rockets : Array<ent.power.Rocket> = [];
+	var missiles : Array<ent.power.Missile> = [];
+	var tentacles : Array<ent.power.Tentacle> = [];
 
 	var reverseTimeEnd : Float;
 	var turnReverse = false;
@@ -918,7 +670,7 @@ class Unit extends Entity
 				if(rockets.length == 0)
 					for(i in 0...Std.int(power.value)) {	
 						game.event.wait(i * 0.05, function() {				
-							var r = new Rocket(this);
+							var r = new ent.power.Rocket(this);
 							r.onRemoved = function() { rockets.remove(r); };
 							rockets.push(r);
 						});
@@ -948,7 +700,7 @@ class Unit extends Entity
 							}
 						}
 
-						var m = new Missile(this, mdir);
+						var m = new ent.power.Missile(this, mdir);
 						m.onRemoved = function() { missiles.remove(m); };
 						missiles.push(m);
 					}
@@ -992,7 +744,6 @@ class Unit extends Entity
 				power.active = false;
 
 			case Duplicate:
-
 				inline function addWall(v : Int, distMax : Float) {
 					var n = worldNormal;
 					var c = new h3d.prim.Cube(1, wallSize, 1);
@@ -1039,18 +790,11 @@ class Unit extends Entity
 
 			case Tentacles:
 				for(p in game.players) {
-					if(p == this) continue;
-					var size = power.value;
-					var c = new h3d.prim.Cube(size, size, size);
-					c.addUVs();
-					c.addNormals();	
-					c.translate(-size*0.5, -size*0.5, -size*0.5);
-					
-					var m = new Tentacle(p, power.time, c, game.s3d);
+					if(p == this) continue;					
+					var m = new ent.power.Tentacle(p, power.time, power.value, game.s3d);
 					m.onRemoved = function() { tentacles.remove(m); };
 					tentacles.push(m);			
 				}	
-			
 				power.active = false;
 
 			default:
