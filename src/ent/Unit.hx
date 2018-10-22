@@ -712,26 +712,6 @@ class Unit extends Entity
 						p.electrocute(power.time);
 				}
 				if(power.active ) {
-					/*
-					var c = new h3d.prim.Sphere(power.value, 24, 24);
-					c.addUVs();
-					c.addNormals();
-
-					var aoe = new h3d.scene.Mesh(c, obj);
-					aoe.material.color.setColor(0x8080F0);
-					aoe.material.blendMode = Alpha;
-
-					var v = 1.;
-					game.event.waitUntil(function(dt) {
-						v -= 0.05 * dt;
-						aoe.material.color.w = v;
-						if(v <= 0) {
-							aoe.remove();
-							return true;
-						}
-						return false;
-					});*/
-
 					var res = hxd.Res.load("Fx/Raijin01/Model.FBX").toModel();
 					var fx = game.modelCache.loadModel(res);
 					fx.x = x;
@@ -744,48 +724,8 @@ class Unit extends Entity
 				power.active = false;
 
 			case Duplicate:
-				inline function addWall(v : Int, distMax : Float) {
-					var n = worldNormal;
-					var c = new h3d.prim.Cube(1, wallSize, 1);
-					c.addNormals();
-					c.addUVs();
-					c.translate(0, -wallSize * 0.5, -0.5);
-					
-					var p = getSizedPos();
-					var d = setDir(dir, v);
-
-					var wall = new Wall(wallTex, c, game.s3d);
-					wall.prev = lastWall;
-					wall.worldNormal = worldNormal.clone();
-					wall.dir = d;
-					wall.scaleX = 0;
-					wall.x = p.x - dir.x * wallSize;
-					wall.y = p.y - dir.y * wallSize;
-					wall.z = p.z - dir.z * wallSize;								
-					walls.unshift(wall);
-					game.world.walls.unshift({w : wall, n : n.clone()});
-					meshRotate(wall, d);
-
-					game.event.waitUntil(function(dt) {
-						var sc = wall.scaleX + speed * 1.5 * dt;
-						wall.scaleX = sc;
-						
-						var pt = new h3d.col.Point(wall.x+d.x*wall.scaleX, wall.y+d.y*wall.scaleX, wall.z+d.z*wall.scaleX);
-						var col = false;
-						if(game.world.collide(pt, true))
-							col = true;
-
-						if(sc >= distMax || col) {
-							wall.scaleX = Std.int(sc) + Std.int((sc % 1) / wallSize) * wallSize;
-							return true;
-						}					
-						return false;
-					});
-				}
-
-				addWall(-1, power.value);
-				addWall(1, power.value);
-			
+				new ent.power.Duplicate(-1, power.value, this);
+				new ent.power.Duplicate(1, power.value, this);			
 				power.active = false;
 
 			case Tentacles:
@@ -808,7 +748,6 @@ class Unit extends Entity
 		fx.x = x;
 		fx.y = y;
 		fx.z = z;
-		//fx.setDirection(worldNormal.toVector());
 		meshRotate(fx);
 
 		var a = game.modelCache.loadAnimation(res);

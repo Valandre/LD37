@@ -193,11 +193,9 @@ class GameUI
 		var res = hxd.Res.load("Chars/" + pl.props.modelId + "01/Model.FBX").toModel();
 		if(res != null) {
 			var m = game.modelCache.loadModel(res);
-			m.inheritCulled = true;			
 			for(m in m.getMaterials()) {
 				m.mainPass.enableLights = true;
 				m.shadows = false;
-				m.mainPass.culling = None;
 			}	
 			
 			var path = res.entry.directory + "/Anim_stand";
