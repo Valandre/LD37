@@ -18,17 +18,16 @@ class Duplicate {
 			wsize = p.wallSize;		
 			dir = p.setDir(p.dir, orient);
 			speed = p.speed;
-			worldNormal = p.worldNormal.clone();
-			lastWall = p.lastWall;						
+			worldNormal = p.worldNormal.clone();	
 			
 			var res = hxd.Res.load("Fx/Copycat01/Model.FBX").toModel();
 			obj = game.modelCache.loadModel(res);
-			obj.x = p.x;
-			obj.y = p.y;
-			obj.z = p.z;	
+			obj.x = p.x-wsize*p.dir.x;
+			obj.y = p.y-wsize*p.dir.y;
+			obj.z = p.z-wsize*p.dir.z;	
 			obj.playAnimation(game.modelCache.loadAnimation(res));
 			game.s3d.addChild(obj);	
-			p.meshRotate(obj);
+			meshRotate(obj);
 
 			wall = createWall();				
 
@@ -40,7 +39,6 @@ class Duplicate {
 				obj.x = pt.x;
 				obj.y = pt.y;
 				obj.z = pt.z;	
-
 
 				if(checkFaceHit()) 
 					faceRotate();
@@ -74,15 +72,38 @@ class Duplicate {
 			wall.worldNormal = worldNormal;
 			wall.dir = dir;
 			wall.scaleX = 0;
-			wall.x = pos.x - p.dir.x * wsize;
-			wall.y = pos.y - p.dir.y * wsize;
-			wall.z = pos.z - p.dir.z * wsize;		
+			wall.x = pos.x - dir.x * wsize;
+			wall.y = pos.y - dir.y * wsize;
+			wall.z = pos.z - dir.z * wsize;		
 			lastWall = wall;						
 			p.walls.unshift(wall);
 			game.world.walls.unshift({w : wall, n : worldNormal.clone()});
-			p.meshRotate(wall, dir);
+			meshRotate(wall, dir);
 
 			return wall;
+		}
+	}
+
+	function meshRotate(m : h3d.scene.Object, ?dir) {
+		var a = Math.PI * 0.5;
+		var n = worldNormal;
+		if(dir == null) dir = this.dir;
+
+		if(n.z != 0) {
+			m.setRotation(0, 0, dir.x != 0 ? a * (dir.x - 1) : a * dir.y);
+			if(n.z < 0) m.rotate(dir.x * 2 * a, dir.y * 2 * a, 0);
+		}
+		else if(n.x != 0) {
+			m.setRotation(0, 0, 0);
+			if(n.x > 0) m.rotate(0, 0, 2 * a);
+			m.rotate(0, n.x * a, 0);
+			m.rotate( -dir.y * a + (dir.z < 0 ? 2 * a : 0), 0, 0);
+		}
+		else if(n.y != 0) {
+			m.setRotation(0, 0, 0);
+			m.rotate(0, -dir.z * a, -n.y * a);
+			if(dir.x != 0)	m.rotate(0, dir.x * a, n.y * dir.x * a);
+			if(dir.z < 0) m.rotate(0, 0, 2 * a);
 		}
 	}
 
@@ -119,7 +140,6 @@ class Duplicate {
 		worldNormal = tmp;
 		speed = @:privateAccess p.speedRef * 0.5;
 		wall = createWall();
-
-		@:privateAccess p.meshRotate(obj);
+		meshRotate(obj);
 	}
 }
